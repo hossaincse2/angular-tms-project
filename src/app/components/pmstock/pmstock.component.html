@@ -1,0 +1,68 @@
+<div class="header_section"></div>
+<div class="content100vh">
+    <section>
+        <div class="container">
+            <form #condimentDemandForm="ngForm" class="form-inline">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/pmDashBoard"
+                                        title="Back"><img style="width: 24px;" src="./../../assets/image/back.svg"></a>
+                                </h3>
+                                <h3 class="center-heading text-center">PM Stock</h3>
+                                <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+                            </div>
+                            <div class="panel-body">
+                                <!-- <div class="form-group">
+                                    <label for="pwd">তারিখ হইতেঃ</label>
+                                    <input type="date" required [ngModel]="objQueryObject.FromDate | date:'yyyy-MM-dd'"
+                                        (ngModelChange)="objQueryObject.FromDate = $event" class="form-control"
+                                        name="fromDate">
+                                </div>
+                                <div class="form-group">
+                                    <label for="pwd">তারিখ প্রতিঃ</label>
+                                    <input type="date" required [ngModel]="objQueryObject.ToDate | date:'yyyy-MM-dd'"
+                                        (ngModelChange)="objQueryObject.ToDate = $event" class="form-control"
+                                        name="toDate">
+                                </div>
+
+                                <div class="form-group">
+                                    <button [disabled]='!condimentDemandForm.valid' (click)="savePmStock()"
+                                        class="btn btn-primary"> Search
+                                    </button>
+                                </div> -->
+                                <button type="button" (click)="printPmStock()" id="printMePM" class="btn btn-primary">Print</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="table-responsive" id="printPmList">
+                            <h4 id="Printheading" style="text-align:center;display: none">PM Stock</h4>
+                            <table class="table table-hover" style="text-align:center; border: 1px solid #565656;width: 100%">
+                                <tr>
+                                    <th>মোরকের নাম</th>
+                                    <th>বিতরণ</th>
+                                    <th>গ্রহণ</th>
+                                    <th>ইউনিট এর কাছে প্রাপ্য</th>
+                                    <th>নিলাম</th>
+                                    <th>মজুদ</th>
+                                </tr>
+                                <tr *ngFor="let pmDetail of lstVMPMReceivable; let i=index" class="dark-row">
+                           
+                                    <td>{{pmDetail.MaterialName}}</td>
+                                    <td>{{pmDetail.Distribution}}</td>
+                                    <td>{{pmDetail.Receieved}}</td>
+                                    <td>{{pmDetail.Balance}}</td>
+                                    <td>{{pmDetail.AuctionQty}}</td>
+                                    <td>{{pmDetail.Stock}}</td>                                  
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+    </section>

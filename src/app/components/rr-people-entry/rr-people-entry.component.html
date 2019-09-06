@@ -1,0 +1,93 @@
+<div class="header_section"> </div>
+<div class="settings unit content100vh">
+  <div class="container">
+
+    <div class="row">
+      <div class="row top-bar">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/rrManagement" title="Back"><img
+                  style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+            <h3 class="center-heading text-center">RR Man Power Entry</h3>
+            <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+          </div>
+          <div class="panel-body">
+            <form #unitForm="ngForm">
+
+              <div class="col-md-12" style="padding:0px">
+                <div class="form-group col-md-3">
+                  <label for="email">ইউনিটঃ</label>
+                  <select  [(ngModel)]="objRRP.UnitID" (change)="getFilteredExistingRRPeople()" required name="fromUnitID" id="fromUnitID" class="form-control">
+                    <option value='undefined'>-Select-</option>
+                    <option *ngFor="let vmUnit of lstVMUnit" [value]="vmUnit.Unit.UnitID">
+                      {{vmUnit.Unit.UnitName}}
+                    </option>
+                  </select>
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="pwd">Year</label>
+
+                  <select [(ngModel)]="objRRP.Year" (change)="getFilteredExistingRRPeople()" required name="year" id="year" class="form-control">
+                    <option value='undefined'>-Select-</option>
+                    <option *ngFor="let year of lstYear" [value]="year.id">
+                      {{year.name}}
+                    </option>
+                  </select>
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="pwd">Month</label>
+                  <select [(ngModel)]="objRRP.Month" (change)="getFilteredExistingRRPeople()" required name="month" id="month" class="form-control">
+                    <option value='undefined'>-Select-</option>
+                    <option *ngFor="let month of lstMonth" [value]="month.id">
+                      {{month.name}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div style="clear:both"></div>
+              <div class="container">
+                <div class="row">
+                  <div class="table-responsive">
+                    <table class="table tableFixHead" style="width:100%">
+                      <tr>
+                        <th>দিন </th>
+                        <th>এফ আর এ</th>
+                        <th> সৈনিক মেস</th>
+                        <th> মোট</th>
+                        <!-- <th> Action</th> -->
+                      </tr>
+                      <tr *ngFor="let rDetail of lstRRPeopleDetail; let i = index;">
+                        <td>
+                          {{rDetail.ConsumtionDate | date:'yyyy-MM-dd'}}
+                        </td>
+
+                        <td> <input name="FRA{{i}}" (change)="onResourceChange()" type="number"
+                            [(ngModel)]="rDetail.FRA" class="form-control">
+                        </td>
+                        <td><input name="SMatch{{i}}" (change)="onResourceChange()" type="number"
+                            [(ngModel)]="rDetail.SMatch" class="form-control" placeholder=""></td>
+                        <td>
+                          <input name="Total{{i}}" type="text" disabled [(ngModel)]="rDetail.Total" class="form-control"
+                            placeholder="">
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-12 text-right" style="padding-top:15px">
+                    <button [disabled]='!unitForm.valid' (click)="saveRRPeople()" class="btn btn-primary"> Save
+                    </button>
+                    <button class="btn btn-success" (click)="close()">Close</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,250 @@
+<div class="header_section"></div>
+<div [hidden]="!showEntry" class="settings content100vh">
+  <div class="container">
+
+    <div class="row">
+      <div class="col-md-12 text-left">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title pull-left"> <a class="btn btn-success" (click)="close()" title="Back"><img
+                  style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+            <h3 class="center-heading text-center">আইটেম</h3>
+            <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+          </div>
+          <div class="panel-body">
+            <form #itemForm="ngForm">
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="col-md-3">
+                    <label for="">পণ্যের ধরন</label>
+                  </div>
+
+                  <div class="col-md-9 pl0">
+                    <select [(ngModel)]="objItem.ItemTypeID" required name="ItemType" class="form-control">
+                      <option value='undefined'>-Select-</option>
+                      <option *ngFor="let itemType of lstDemandItemType" [value]="itemType.id">
+                        {{itemType.name}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3">
+                    <label for="">পণ্যের নাম</label>
+                  </div>
+
+                  <div class="col-md-9 pl0">
+                    <input [(ngModel)]="objItem.ItemName" required name="ItemName" type="text" class="form-control">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3">
+                    <label for="">পরিমাপের একক</label>
+                  </div>
+                  <div class="col-md-9 pl0">
+                    <select [(ngModel)]="objItem.UnitOfMesure" required name="demandTypeID" class="form-control">
+                      <option value='undefined'>-Select-</option>
+                      <option *ngFor="let unitOfMeasure of lstUnitOfMeasure" [value]="unitOfMeasure.UnitOfMeasureID">
+                        {{unitOfMeasure.Name}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3">
+                    <label for="">বর্ণনা</label>
+                  </div>
+
+                  <div class="col-md-9 pl0">
+                    <!-- <input type="text" class="form-control"> -->
+                    <textarea [(ngModel)]="objItem.Description" name="Description" class="form-control" id="" cols="30"
+                      rows="2"></textarea>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 pl0">
+                    <label class="checkbox-inline" for="demandItem">ডিমান্ড আইটেম</label>
+                    <input style="margin-top: 10px;" id="demandItem" class="form-control-checkbox"
+                      [(ngModel)]="objItem.IsDemandItem" [checked]="objItem.IsDemandItem" name="isDemandItem"
+                      type="checkbox">
+
+                    <label class="checkbox-inline" for="showInDistribution">শো ইন ডিস্ট্রিবিউশন</label>
+                    <input style="margin-top: 10px;" id="showInDistribution" class="form-control-checkbox"
+                      [(ngModel)]="objItem.ShownInDistribution" [checked]="objItem.ShownInDistribution"
+                      name="showInDistribution" type="checkbox">
+
+                    <label class="checkbox-inline" for="BellowThreeScale">তিন বছরের নিচের জন্য প্রযোজ্য</label>
+                    <input style="margin-top: 10px;" id="BellowThreeScale" class="form-control-checkbox"
+                      [(ngModel)]="objItem.IsBellowThree" [checked]="objItem.IsBellowThree" name="isBellowThree"
+                      type="checkbox">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3">
+                    <label class="checkbox-inline" for="FeePayment">বিনামূল্যে</label>
+                    <input class="form-control-checkbox" id="FeePayment" [(ngModel)]="objItem.FeePayment"
+                      name="freePayment" [checked]="objItem.FeePayment" type="checkbox">
+                  </div>
+                  <div class="col-md-3">
+                    <label class="checkbox-inline" for="GeneralPayment">সাধারণ দরে</label>
+                    <input class="form-control-checkbox" id="GeneralPayment" [(ngModel)]="objItem.GeneralPayment"
+                      name="generalPayment" [checked]="objItem.GeneralPayment" type="checkbox">
+                  </div>
+                  <div class="col-md-4">
+                    <label class="checkbox-inline" for="VortukiPayment">ভর্তুকি দরে</label>
+                    <input class="form-control-checkbox" id="VortukiPayment" [(ngModel)]="objItem.VortukiPayment"
+                      name="vortukiPayment" [checked]="objItem.VortukiPayment" type="checkbox">
+                  </div>
+                  <div class="col-md-4">
+                    <label class="checkbox-inline" for="newAdmision">নতুন ভর্তি</label>
+                    <input class="form-control-checkbox" id="newAdmision" [(ngModel)]="objItem.NewAdmission"
+                      name="newAdmision" [checked]="objItem.NewAdmission" type="checkbox">
+                  </div>
+                  <div class="col-md-4">
+                    <label class="checkbox-inline" for="newAdmision">পৃথক পরিবার</label>
+                    <input class="form-control-checkbox" id="seperateFamily" [(ngModel)]="objItem.SeperateFamily"
+                      name="seperateFamily" [checked]="objItem.SeperateFamily" type="checkbox">
+                  </div>
+                </div>
+
+
+              </div>
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="col-md-3">
+                    <label for="">বিনামূল্যে স্কেল</label>
+                  </div>
+
+                  <div class="col-md-9 pl0">
+                    <input [(ngModel)]="objItem.FreeScale" name="freeScale" type="text" class="form-control">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3">
+                    <label for="">সাধারণ স্কেল</label>
+                  </div>
+                  <div class="col-md-9 pl0">
+                    <input [(ngModel)]="objItem.GeneralScale" required name="generalScale" type="text"
+                      class="form-control">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3">
+                    <label for="">ভর্তুকি স্কেল</label>
+                  </div>
+                  <div class="col-md-9 pl0">
+                    <input [(ngModel)]="objItem.VortukiScale" required name="vortukiScale" type="text"
+                      class="form-control">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3">
+                    <label for=""> তিন বছরের নিচে স্কেল</label>
+                  </div>
+                  <div class="col-md-9 pl0">
+                    <input [(ngModel)]="objItem.BellowThreeScale" required name="bellowThreeScale" type="text"
+                      class="form-control">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3">
+                    <label for=""> বার বছরের নিচে স্কেল</label>
+                  </div>
+                  <div class="col-md-9 pl0">
+                    <input [(ngModel)]="objItem.BellowTwelveScale" required name="bellowTwelveScale" type="text"
+                      class="form-control">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12 text-right">
+                  <button [disabled]='!itemForm.valid' (click)="saveItem()" class="btn btn-primary"> Save
+                  </button>
+                  <button class="btn btn-success" (click)="close()">Close</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+<div [hidden]="showEntry" class="content100vh">
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/smsDashboard" title="Back"><img
+                  style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+            <h3 class="center-heading text-center">আইটেম</h3>
+            <span class="pull-right clickable"> <a class="btn btn-success add-new-btn" (click)="addNew()">Add
+                New</a></span>
+          </div>
+          <div class="panel-body">
+            <form #searchForm="ngForm" class="form-inline">
+              <div class="form-group">
+                <label for="pwd">Item Type</label>
+                <!-- <input type="text" required [(ngModel)]="objQueryObject.Type" class="form-control" name="Type"> -->
+                <select [(ngModel)]="searchItemType" (change)="searchByItemType()" name="searchItemType"
+                  class="form-control">
+                  <option value='undefined'>-Select-</option>
+                  <option *ngFor="let itemType of lstDemandItemType" [value]="itemType.id">
+                    {{itemType.name}}
+                  </option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="pwd">Item Name</label>
+                <!-- <input type="text" required [(ngModel)]="objQueryObject.Type" class="form-control" name="Type"> -->
+                <input type="text" required class="form-control" name="Type">
+              </div>
+              <div class="form-group">
+                <button [disabled]='!searchForm.valid' class="btn btn-success search-btn" type="submit">Serach</button>
+              </div>
+            </form>
+            <div class="table-responsive">
+              <table class="table table-hover tableFixHead" style="border: 1px solid #565656;">
+                <tr>
+                  <th>Item Type</th>
+                  <th>Item Name</th>
+                  <th>Description</th>
+                  <th>Free Scale</th>
+                  <th>General Scale</th>
+                  <th>Vortuki Scale</th>
+                  <th>Action</th>
+
+                </tr>
+                <tr *ngFor="let item of lstItem">
+                  <td>{{item.TypeName}}</td>
+                  <td>{{item.ItemName}}</td>
+                  <td>{{item.Description}}</td>
+                  <td>{{item.FreeScale}}</td>
+                  <td>{{item.GeneralScale}}</td>
+                  <td>{{item.VortukiScale}}</td>
+                  <td>
+                    <a title="Edit" (click)="editItemType(item)" class="edit"><i class='fa fa-edit'
+                        style="font-size: 20px; margin-right:20px"></i></a>
+                    <a title="Delete" (click)="deleteItemType(item)" class="delete"><i class="fa fa-trash"
+                        style="font-size: 20px"></i></a>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>

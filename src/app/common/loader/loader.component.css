@@ -1,0 +1,42 @@
+.spinner {
+  position: fixed;
+  padding: 0px;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 99999;
+  background: rgba(0, 0, 0, 0.39);
+  opacity: 1;
+  transition: opacity 0.3s linear;
+  visibility: visible;
+}
+.loading-text {
+  position: fixed;
+  margin-top: 10%;
+  width: 100%;
+  height: 100px;
+  color: white;
+  background: transparent;
+  font-size: 20px;
+  left: 50%;
+  margin-left: -50px;
+  padding-top: 110px;
+  opacity: 0.8;
+}
+.spinner img {
+  position: fixed;
+  left: 50%;
+  margin-left: -50px;
+  margin-top: 10%;
+  width: 100px;
+  height: 100px;
+  z-index: 10;
+  background: transparent;
+  transition: opacity 0.3s linear;
+}
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 0.3s, opacity 0.3s linear;
+}

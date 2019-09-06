@@ -1,0 +1,95 @@
+<div class="header_section"> </div>
+<div class="settings unit content100vh">
+  <div class="container">
+
+    <div class="row">
+      <div class="row top-bar">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/unitDemand" title="Back"><img
+                  style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+            <h3 class="center-heading text-center">Hospital Item Scale Setup</h3>
+            <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+          </div>
+          <div class="panel-body">
+            <form #unitForm="ngForm">
+
+              <div class="container">
+                <div class="row">
+                  <div class="table-responsive">
+                    <table class="table tableFixHead" style="width:100%">
+                      <tr>
+                        <th style="width: 10%;">Item Name</th>
+                        <th style="width: 10%;">High Calories</th>
+                        <th style="width: 10%;">Standard </th>
+                        <th style="width: 10%;">Children</th>
+                        <th style="width: 10%;">Carbohydrate Restricted</th>
+                        <th style="width: 10%;">Infant</th>
+                        <th style="width: 10%;">Soft</th>
+                        <th style="width: 10%;">Fat Restricted</th>
+                        <th style="width: 10%;">Protein Restricted</th>
+                        <th style="width: 10%;">Liquid</th>                     
+                      </tr>
+                      <tr *ngFor="let hDetail of lstHospitalItemScaleDetail; let i = index;">
+                        <td>
+                          {{hDetail.ItemName}}
+                        </td>
+                        <td>
+                          <input name="highCalorie{{i}}" type="number" [(ngModel)]="hDetail.HighCalorie"
+                            class="form-control" placeholder="">
+                        </td>
+                        <td>
+                          <input name="standard{{i}}" type="number" [(ngModel)]="hDetail.Standard" class="form-control"
+                            placeholder="">
+                        </td>
+                        <td>
+                          <input name="children{{i}}" type="number" [(ngModel)]="hDetail.Children" class="form-control">
+                        </td>
+                        <td>
+                          <input name="carbohydrate{{i}}" type="number" [(ngModel)]="hDetail.Carbohydrate"
+                            class="form-control" placeholder="">
+                        </td>
+                        <td>
+                          <input name="infant{{i}}" type="number" [(ngModel)]="hDetail.Infant" class="form-control"
+                            placeholder="">
+                        </td>
+
+                        <td>
+                          <input name="soft{{i}}" type="number" [(ngModel)]="hDetail.Soft" class="form-control"
+                            placeholder="">
+                        </td>
+                        <td>
+                          <input name="fatRestricted{{i}}" type="number" [(ngModel)]="hDetail.FatRestricted"
+                            class="form-control" placeholder="">
+                        </td>
+                        <td>
+                          <input name="proteinRestricted{{i}}" type="number" [(ngModel)]="hDetail.ProteinRestricted"
+                            class="form-control" placeholder="">
+                        </td>
+                        <td>
+                          <input name="liquid{{i}}" type="number" [(ngModel)]="hDetail.Liquid" class="form-control"
+                            placeholder="">
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-12 text-right" style="padding-top:15px">
+                    <button [disabled]='!unitForm.valid' (click)="saveHospitalItemScale()" class="btn btn-primary"> Save
+                    </button>                 
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+</div>

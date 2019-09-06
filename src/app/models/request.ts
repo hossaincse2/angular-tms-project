@@ -1,0 +1,37 @@
+export class Request {
+    RequestID: number;
+    RequestDate: Date;
+    VehicleNumber: number;
+    VehicleType: number;
+    RequestType: number;
+    RequestTypeName: string;
+    BANo: string;
+    UserID: string;
+    DemandDate: Date;
+    DemandTime: string;
+    DemandPlace: string;
+    DestinationPlace: string;
+    Description: string;
+    PeopleDescription: string;
+    RestOfVehicle: number;
+    SonbucktokNo: string;
+    TikaNo: string;
+    PodNo: string;
+    CollectedPlace: string;
+    CollectedDate: Date;
+    ApproverLevelTwo: string;
+    ApprovedLevelTwoDate: Date;
+    ApproverLevelThree: string;
+    ApprovedLevelThreeDate: Date;
+    ApproverLevelFour: string;
+    ApprovedLevelFourDate: Date;
+    Status: number;
+    StatusName: string;
+    OfficerName: string;
+    RequestSign: string;
+    UnitAuhoritySign: string;
+    HQAuhoritySign: string;
+    STOSign: string;
+    CancelReason: number;
+    OtherCancelReason: string;
+}

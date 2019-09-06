@@ -1,0 +1,68 @@
+<!-- <a style="position: fixed;left: 0px;top: 50%;" href="#"><img style="width:25px" src="./../../assets/image/settings.svg" alt=""></a>  -->
+<nav id="cms_bar" class="floating-menu">
+    <ul class="main-menu">
+
+        <li>
+            <a routerLink="/home" class="ripple">
+                <i class="fas fa-home fa-lg"></i>
+            </a>
+        </li>
+        <li>
+            <a routerLink="/login" class="ripple">
+                <i class="far fa-user fa-lg"></i>
+            </a>
+        </li>
+        <li>
+            <a routerLink="/smsLogin" class="ripple">
+                <i class="far fa-address-card fa-lg"></i>
+            </a>
+        </li>
+    </ul>
+    <div class="menu-bg"></div>
+</nav>
+
+<div  class="navbar navbar-inverse navbar-static-top">
+
+    <div class="container">
+
+        <a href="#" class="navbar-brand"> SSD Ghatail</a>
+        <button class="navbar-toggle" data-toggle="collapse" data-target=".navHeaderCollapse"></button>
+
+        <div class="collapse navbar-collapse navHeaderCollapse">
+            <ul  class="nav navbar-nav navbar-right">
+                <li class="active"><a routerLink="/smsDashboard">Home</a></li>
+                <!-- <li><a>About</a></li> -->
+                <li id="settingMenu" class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Setting</a>
+
+                    <ul class="dropdown-menu">
+                        <li><a routerLink="/unit">Unit</a></li>
+                        <li><a routerLink="/supplyPlace">Supply Place</a></li>
+                        <li><a routerLink="/contactor">Contactor</a></li>
+                        <li><a routerLink="/item">Item</a></li>
+                        <li><a routerLink="/unitofMeasure">Unit of Measure</a></li>
+                        <li><a routerLink="/packingMatrial">Packing Matrial</a></li>
+                        <li><a routerLink="/hospitalItemScale">Hospital Item Scale</a></li>
+                        <li><a routerLink="/adcSetup">ADC Setup</a></li>
+                        <li><a routerLink="/ssdStockPossitionHead">SSD Stock Possition for Head</a></li>
+                    </ul>
+                </li>
+                <li id="securityMenu" class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Security</a>
+
+                    <ul class="dropdown-menu">
+                        <!-- <li><a routerLink="/userRole">User Role</a></li>
+                        <li><a routerLink="/userPermission">User Permission</a></li>
+                        <li><a routerLink="/userAccessRight">User Access Right</a></li> -->
+                        <li><a routerLink="/userChangePassword">Change Password</a></li>
+                        <li><a routerLink="/userList">Users</a></li>
+                    </ul>
+                </li>
+                <li><a id="loginUserTitle" routerLink="/userProfile">{{loginUserName}}</a></li>
+                <li style="color:white">
+                    <a (click)="logout()" title="Logout"> <img src="./../../assets/image/logout.svg" alt="Logout"></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

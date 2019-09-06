@@ -1,0 +1,418 @@
+<div class="content100vh">
+  <div class="header_section"></div>
+  <div class="container">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/dashboard" title="Back"><img
+              style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+        <h3 style="color: #ffffff; font-family: Arial,sans-serif; font-size: 20px;" class="center-heading text-center">
+          Transport Request</h3>
+        <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+      </div>
+      <div class="panel-body">
+        <div class="search_bar">
+          <form #RequestForm="ngForm" class="form-inline" action="">
+            <div class="row">
+              <div class="col-md-5">
+                <div class="search_one">
+                  <label for="BANumber">BA Number</label>
+                  <input type="search" name="baNumber" id="BANumber" [(ngModel)]="queryObject.BANo"
+                    placeholder="BA Number" class="form-control" />
+                  <button class="btn btn-primary" (click)="searchByBANo()"
+                    style="background:#41495d61;border-color: #5cb85c;">Search</button>
+                </div>
+
+              </div>
+              <div class="col-md-7">
+                <div class="search_two">
+                  <label for="">From</label>
+                  <input type="date" name="fromDate" [ngModel]="queryObject.FromDate | date:'yyyy-MM-dd'"
+                    (ngModelChange)="queryObject.FromDate = $event" class="form-control" />
+                  <label for="">To</label>
+                  <input type="date" name="toDate" [ngModel]="queryObject.ToDate | date:'yyyy-MM-dd'"
+                    (ngModelChange)="queryObject.ToDate = $event" class="form-control" />
+
+                  <button class="btn btn-primary" (click)="searchByDate()"
+                    style="background:#41495d61;border-color: #5cb85c;">Search</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="table-responsive">
+            <table class="table table-hover" style="text-align:center; border: 1px solid #565656;">
+              <tr>
+                <th>Request Type</th>
+                <th>Request Date</th>
+                <th>BANo</th>
+                <th>Officer Name</th>
+                <th>Traveling Date</th>
+                <th>Destination Place</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th style="text-align:right">Action</th>
+              </tr>
+              <tr *ngFor="let request of lstRequest ">
+                <td>{{request.RequestTypeName}}</td>
+                <td>{{request.RequestDate| date:'yyyy-MMM-dd'}}</td>
+                <td>{{request.BANo}}</td>
+                <td>{{request.OfficerName}}</td>
+                <td>{{request.DemandDate | date:'yyyy-MMM-dd'}}</td>
+                <td>{{request.DestinationPlace}}</td>
+                <td>{{request.OtherCancelReason}}</td>
+                <td>
+                  {{request.StatusName}}
+                </td>
+                <td style="text-align:right">
+                  <a title="Edit" [hidden]="request.Status>1 || userLevel>1" (click)="editRequest(request)"
+                    class="edit"><i class='fas fa-edit' style="font-size: 20px; margin-right:20px"></i></a>
+
+                  <a title="Approve" [hidden]="userLevel==1" (click)="ApproveRequest(request)" class="edit"><i
+                      class='fas fa-check' style="font-size: 20px; margin-right:20px"></i></a>
+
+                  <a title="Reject" [hidden]="userLevel==1" (click)="rejectModalCall(request)"><i class='fas fa-remove'
+                      style="font-size: 20px; margin-right:20px; color:red"></i></a>
+                  <a title="Print" (click)="printIndent(request)" class="print"><i class="fa fa-print"
+                      style="font-size: 20px"></i></a>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+
+
+<div id="printRequestModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">On Payment</h4>
+      </div>
+      <div class="modal-body">
+
+        <div class="onpayment">
+          <form #requestForm="ngForm">
+            <div class="container onpayment-container">
+              <section class="header">
+                <div class="row">
+                  <div class="col-md-12">
+                    <p style="text-align: right">বি এএফ জেড -২১৫০ এর পরিবতে</p>
+                    <p>
+                      অনপেমেন্ট
+                    </p>
+                    <p>
+                      যানবাহনের সংভিতিপত্র এবং আদেশনামা
+                      <br>
+                      (সরবরাহ এ যান বিধির অচ্ছেদ ১- ৯ দ্রষ্টব্য)
+                    </p>
+                  </div>
+                  <div class="col-md-6">
+                    <p class="text-left">
+                      খতিয়ানী খরচ হইতে নগদ পরিশাধে ১x জীপ
+                    </p>
+                  </div>
+                  <div class="col-md-6 text-right">
+                    <img id="logo" src="data:image/jpeg;base64,{{objRequest.RequestSign}}" alt="ImageFile" />
+                    <div style="text-align:center"> {{objRequest.OfficerName}} </div>
+                  </div>
+                </div>
+              </section>
+              <section class="manob-chahida">
+                <div class="row">
+                  <p class="text-center">
+                    প্রথম অংশ যানবাহনের চাহিদা</p>
+                  <p>
+                    সাধারণ সেনা পরিবহন কার্যের দরকার হইলে এই ফরমের দই কপি স্টেশন পরিবহন অফিসারের নিকট ৪৮ ঘণ্টা পূর্বে
+                    পৌছানাের
+                    জন্য দাখিল
+                    করিতে হইবে
+                    সামরিক প্রকৌশল সার্ভিস, প্রতিরক্ষা অর্থ বিভাগ বাংলাদেশ বিমান বাহিনী ইত্যাদির ক্ষেত্রে সরবরাহ ও যান
+                    বিধি
+                    ১২৯-১ (ক)
+                    মােতাবেক এই ফরমের ৩ কপি লাখিল করতে হবে।
+                  </p>
+                  <div class="middle-content">
+                    চাহিদা উত্থাপনকারী ইউনিট - মিলিটারী ডেন্টাল সেন্টার ঘাটাইল
+                    সংভূতক নং-৮০১২/এমটি/ ২/ <br>
+                    (ক) যে তারিখে দরকার :
+
+
+                    <input name="postingDate" [ngModel]="objRequest.DemandDate| date:'yyyy-MM-dd'"
+                      (ngModelChange)="objRequest.DemandDate = $event" type="date" class="form-control">
+                    <br>
+
+
+                    (খ) যে সময়ে দরকার প্রয়ােজনমত<br>
+                    (গ) যে স্থানে দরকার: এম টি পার্ক<br>
+                    (ঘ) ঘন্টা, দিন, ইত্যাদি নিয়ােগের সময়সীমা ৮ ঘন্টা<br>
+                    (ঙ) গন্তব্য স্থান : ইউনিট এম টি পার্ক হতে <input [(ngModel)]="objRequest.DestinationPlace"
+                      name="DestinationPlace" type="text" disabled class="form-control" required><br>
+                    (চ) কর্তব্যের ধরণ এবং প্রাধিকার (উদাহরণ স্বরুপ পেসেজ রেগুলেশন,বি,এ,ও,ডিভিশনের নির্দেশ, ইত্যাদি)
+                    এসবিএ-৫/২০০৫
+                    মোতাবেক<br>
+                    ( ঝ) সরকারী অথবা রেজিমেন্টের ভান্ডার অথবা ব্যক্তিগত মালপত্র কিনা, উহার নিদিষ্ট আকৃতি এবং
+                    প্রত্যেকটির ওজন
+                    শ্রেণী বন্যাস
+                    করতে হবে <br>
+
+                    (জ) ব্যক্তি/ব্যক্তিবর্গের বিশদ বিবরণ যাহার/যাহার জন্য যানবাহন মজুদ আছে
+
+                  </div>
+                  <div class="col-md-12">
+                    <div class="col-md-6 text-left" style="padding-bottom: 20px">
+                      <img id="logo" src="data:image/jpeg;base64,{{objRequest.HQAuhoritySign}}" alt="ImageFile" />
+                      <br>
+                      সংভূত অফিসারের স্বাক্ষর
+                    </div>
+                    <div class="col-md-6 text-right" style="padding-bottom: 20px">
+                      <img id="logo" src="data:image/jpeg;base64,{{objRequest.UnitAuhoritySign}}" alt="ImageFile" />
+                      <br>
+                      সংভূত অফিসারের স্বাক্ষর
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    নম্বর পদবী, নাম, ইউনিট অথবা যে সংস্থার ব্যক্তি ভ্রমন করিতেছে। যদি পরিবারের জন্য হয় তাহাহইলে
+                    পরিবারের
+                    কর্তার নাম, পদবী ,ইউনিট অথবা সংস্থার এবং পরিবারের বিবরণসহ সন্তানদের সঠিক বয়স দিতে হইবে। ফরমের যে
+                    অংশে
+                    অপর্যাপ্ত জায়গা থাকে
+                    <br>সেখানে আলাদাভাবে তালিকা অবশ্যই সংযুক্ত করিতে হইবে।<br>
+                  </div>
+                </div>
+              </section>
+              <section class="secound-part">
+                <div class="row">
+                  <div class="col-md-12">
+                    দ্বিতীয় অংশ- স্টেশন পরিবহন অফিসারের পরিবহন আদেশ।<br>
+                    মুলকপি পরিবহন ইউনিট অথবা পরিবহন ভাড়া করা ঠিকদারের নিকট<br>
+                    দ্বিতীয় কপি সংভূতক ইউনিটকে দিতে হইবে।<br>
+
+                    সংভুতক খাতা নং : <input [(ngModel)]="objRequest.SonbucktokNo" name="requestID" type="text"
+                      class="form-control" disabled> | বিকলনীয়।
+                    মুলকপি <div id="barcodeTarget" class="barcodeTarget"></div> <br>মিলিটারী ডেন্টাল সেন্টার ঘাটাইল,
+                    শহীদ সালাহউদ্দিন সেনানিবাস।
+                    দ্বিতীয় কপি এসটিও, শহীদ সালাহউদ্দিন সেনানিবাস।
+                    নীচের অংশে লেখানুযায়ী অনুগ্রহপূর্বক যান সরবরাহ করুন। (* ঠিকা দফা নং :
+                    পদ নং:
+                    নিলিখিত যান সরবারাহ করা হইবে/ উপরের সংভূতিপত্র অনুযায়ী আপনার ইউনিট প্রতিনিধি সংগ্রহ করিবে
+                    নিদিষ্ট (স্থান)
+                    <!-- <div class="col-md-6" style="line-height: 20px;padding-top: 15px">
+                    <p> ষ্টেশনঃ শহীদ সালাহউদ্দিন সেনানিবাস</p>
+                    <p>তারিখঃ <input name="CollectedDate" [(ngModel)]="objRequest.CollectedDate" type="date" class="form-control"
+                        required></p>
+                    <p> ভারা করা যান ব্যবহারের জন্য মাত্র । বিকল্প ব্যবস্থা প্রয়ােজন না হইলে বাদ দিতে হইবে ।</p>
+                  </div> -->
+                    <div class="col-md-6 pull-right">
+                      <img id="logo" src="data:image/jpeg;base64,{{objRequest.STOSign}}" alt="ImageFile" /><br>
+                      ষ্টেশন পল্লিবহন অফিসারের স্বাক্ষর
+                    </div>
+
+                  </div>
+                  <!-- <div class="col-md-12 text-right">
+                    <button [disabled]='!requestForm.valid' (click)="saveRequest()" class="btn btn-primary"> Submit
+                      Rquest
+                    </button>
+                  </div> -->
+                </div>
+              </section>
+
+            </div>
+          </form>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary printMe">Print</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<div id="myModalReject" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h5 class="modal-title">Reject</h5>
+      </div>
+      <div class="modal-body">
+
+        <div class="onpayment">
+
+          <form action="">
+            <div class="row">
+              <div class="col-md-12">
+                <label for="">Reject Resone</label>
+                <select [(ngModel)]="objRequest.CancelReason" class="form-control" name="reason" id="reason">
+                  <option value="undefined">Select Resone</option>
+                  <option *ngFor="let cancelReason of lstCancelReason" [value]="cancelReason.id">
+                    {{cancelReason.name}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <label for="">Other Resone</label>
+                <input [(ngModel)]="objRequest.OtherCancelReason" name="otherReason" id="otherReason"
+                  class="form-control" type="text">
+              </div>
+            </div>
+          </form>
+
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" (click)="rejectRequest()" class="btn btn-danger" data-dismiss="modal">Reject</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<div id="editRequestModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">On Payment</h4>
+      </div>
+      <div class="modal-body">
+
+        <form #requestForm="ngForm">
+          <div class="container">
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <h3 style="color: #ffffff; font-family: Arial,sans-serif; font-size: 20px;"
+                  class="center-heading text-center">Transport Request</h3>
+
+              </div>
+              <div class="panel-body">
+                <section class="header">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <p style="text-align: right">বি এএফ জেড -২১৫০ এর পরিবর্তে</p>
+                      <p>
+                        অনপেমেন্ট
+                      </p>
+                      <p>
+                        যানবাহনের সংভিতিপত্র এবং আদেশনামা
+                        <br>
+                        (সরবরাহ এ যান বিধির অনুচ্ছেদ ১ - ৯ দ্রষ্টব্য)
+                      </p>
+                    </div>
+                    <div class="col-md-12 row">
+                      <div class="col-md-4">
+                        খতিয়ানী খরচ হইতে নগদ পরিশাধে :
+                        <input [(ngModel)]="objRequest.VehicleNumber" name="numberofVehicle" type="number"
+                          class="form-control">
+                      </div>
+
+                      <div class="col-md-3">
+                        &nbsp;
+                        <select [(ngModel)]="objRequest.VehicleType" name="vehicleType" class="form-control">
+                          <option value="1">জীপ</option>
+                          <option value="2">ট্রাক</option>
+                          <option value="3">মোটরসাইকেল</option>
+                          <option value="4">বাস</option>
+                          <option value="5">অ্যাম্বুলেন্স</option>
+                          <option value="6">ট্রাক</option>
+                          <option value="7">কনটেইনার ক্যারিয়ার</option>
+                          <option value="8">পিক</option>
+                        </select>
+                      </div>
+                    </div>
+                    <!-- <div class="col-md-6 text-right">
+                        <a class="btn btn-primary" href="#">Apply for Transport</a>
+                      </div> -->
+                  </div>
+                </section>
+                <section class="manob-chahida">
+                  <div class="row">
+                    <p class="text-center">
+                      প্রথম অংশ যানবাহনের চাহিদা
+                    </p>
+                    <p style="padding: 10px;">
+                      সাধারণ সেনা পরিবহন কার্যের দরকার হইলে এই ফরমের দুই কপি স্টেশন পরিবহন অফিসারের নিকট ৪৮ ঘণ্টা পূর্বে
+                      পৌছানাের
+                      জন্য দাখিল
+                      করিতে হইবে
+                      সামরিক প্রকৌশল সার্ভিস, প্রতিরক্ষা অর্থ বিভাগ বাংলাদেশ বিমান বাহিনী ইত্যাদির ক্ষেত্রে সরবরাহ ও যান
+                      বিধি
+                      ১২৯-১ (ক)
+                      মােতাবেক এই ফরমের ৩ কপি দাখিল করতে হবে।
+                    </p>
+                    <div class="middle-content">
+                      চাহিদা উত্থাপনকারী ইউনিট - মিলিটারী ডেন্টাল সেন্টার ঘাটাইল
+                      সংভুক্ত নং-৮০১২/এমটি/ ২/ <br>
+                      (ক) যে তারিখে দরকার : <input [ngModel]="objRequest.DemandDate | date:'yyyy-MM-dd'"
+                        (ngModelChange)="objRequest.DemandDate = $event" name="demandDate" type="date"
+                        class="form-control" required><br>
+                      (খ) যে সময়ে দরকার প্রয়ােজনমত<br>
+                      (গ) যে স্থানে দরকার: এম টি পার্ক<br>
+                      (ঘ) ঘন্টা, দিন, ইত্যাদি নিয়ােগের সময়সীমা ৮ ঘন্টা<br>
+                      (ঙ) গন্তব্য স্থান : ইউনিট এম টি পার্ক হতে <input [(ngModel)]="objRequest.DestinationPlace"
+                        name="DestinationPlace" type="text" class="form-control" required><br>
+                      (চ) কর্তব্যের ধরণ এবং প্রাধিকার (উদাহরণ স্বরুপ পেসেজ রেগুলেশন,বি,এ,ও,ডিভিশনের নির্দেশ, ইত্যাদি)
+                      এসবিএ-৫/২০০৫
+                      মোতাবেক<br>
+                      ( ঝ) সরকারী অথবা রেজিমেন্টের ভান্ডার অথবা ব্যক্তিগত মালপত্র কিনা, উহার নিদিষ্ট আকৃতি এবং
+                      প্রত্যেকটির ওজন
+                      শ্রেণী বিন্যাস
+                      করতে হবে <br>
+
+                      (জ) ব্যক্তি/ব্যক্তিবর্গের বিশদ বিবরণ যাহার/যাহার জন্য যানবাহন মজুদ আছে
+
+                    </div>
+
+                    <div class="col-md-12">
+                      নম্বর পদবী, নাম, ইউনিট অথবা যে সংস্থার ব্যক্তি ভ্রমন করিতেছে। যদি পরিবারের জন্য হয় তাহাহইলে
+                      পরিবারের
+                      কর্তার নাম, পদবী ,ইউনিট অথবা সংস্থার এবং পরিবারের বিবরণসহ সন্তানদের সঠিক বয়স দিতে হইবে। ফরমের যে
+                      অংশে
+                      অপর্যাপ্ত জায়গা থাকে সেখানে আলাদাভাবে তালিকা অবশ্যই সংযুক্ত করিতে হইবে।<br>
+                    </div>
+                  </div>
+                </section>
+
+              </div>
+            </div>
+          </div>
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button [disabled]='!requestForm.valid' (click)="saveRequest()" class="btn btn-primary"> Submit
+          Rquest
+        </button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>

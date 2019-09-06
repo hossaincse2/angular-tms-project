@@ -1,0 +1,141 @@
+
+
+<section class="">
+  <div class="header_section"></div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/home" title="Back"><img
+                  style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+            <h3 class="center-heading text-center">সাপ্লাই ম্যানেজমেন্ট ড্যাশবোর্ড </h3>
+            <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+          </div>
+          <div class="panel-body">
+            <div [hidden]="userLevel==8" class="col-md-5ths text-center">
+              <div class="item">
+                <a [routerLink]="['/unitDemand']"><img style="width: 50px;" src="../../../assets/image/unitdemand.png">
+                  <h3>Unit Demand </h3>
+                </a>
+              </div>
+            </div>
+            <div [hidden]="userLevel==8" class="col-md-5ths text-center">
+              <div class="item">
+                <a [routerLink]="['/unitDemand']"><img style="width: 50px;" src="../../../assets/image/unitdemand.png">
+                  <h3>Other Garrison Demand </h3>
+                </a>
+              </div>
+            </div>
+            <div [hidden]="userLevel==8" class="col-md-5ths text-center">
+                <div class="item">
+                  <a [routerLink]="['/unitDemand']"><img style="width: 70px;" src="../../../assets/image/airForce.png">
+                    <h3>Air Force Demand </h3>
+                  </a>
+                </div>
+              </div>
+
+
+            <!-- <div [hidden]="userLevel<6 || userLevel==8" class="col-md-5ths text-center">
+              <div class="item">
+                <a [routerLink]="['/unitDemandList']"><img style="width: 60px;"
+                    src="./../../assets/image/request_list.svg">
+                  <h3>Unit Demand List </h3>
+                </a>
+              </div>
+            </div> -->
+            <div [hidden]="userLevel<6" class="col-md-5ths text-center">
+              <div class="item">
+                <a [routerLink]="['/distribution']"><img style="width: 60px;"
+                    src="../../../assets/image/distribution.png">
+                  <h3>Distribution</h3>
+                </a>
+              </div>
+            </div>
+            <div [hidden]="userLevel<6 || userLevel==8" class="col-md-5ths text-center">
+              <div class="item">
+                <a [routerLink]="['/receivedItem']"><img style="width: 60px;" src="./../../assets/image/received.png">
+                  <h3>Received Item </h3>
+                </a>
+              </div>
+            </div>
+            <div [hidden]="showPOLManagement" class="col-md-5ths text-center">
+              <div class="item">
+                <a [routerLink]="['/polManagement']"><img style="width: 60px;" src="./../../assets/image/polmanage.png">
+                  <h3>Pol Management</h3>
+                </a>
+              </div>
+            </div>
+            <div [hidden]="userLevel<6 || userLevel==8" class="col-md-5ths text-center">
+              <div class="item">
+                <a [routerLink]="['/pmDashBoard']"><img style="width: 60px;" src="./../../assets/image/pm.png">
+                  <h3>PM Group</h3>
+                </a>
+              </div>
+            </div>
+
+            <div [hidden]="userLevel<6 || userLevel==8" class="col-md-5ths text-center">
+              <div class="item">
+                <a [routerLink]="['/smuserList']"><img style="width: 70px;" src="./../../assets/image/request.svg">
+                  <h3>User List </h3>
+                </a>
+              </div>
+            </div>
+            <div [hidden]="userLevel==8" class="col-md-5ths text-center">
+              <div class="item">
+                <a [routerLink]="['/rrManagement']"><img style="width: 70px;" src="./../../assets/image/RR.png">
+                  <h3> RR Management </h3>
+                </a>
+              </div>
+            </div>
+            <div class="col-md-5ths text-center">
+              <div class="item">
+                <a [routerLink]="['/reportsManagement']"><img style="width: 70px;" src="./../../assets/image/adminReports.png">
+                  <h3>Stock Update</h3>
+                </a>
+              </div>
+            </div>
+            <!-- || userLevel==8 -->
+            <div [hidden]="userLevel<6" class="col-md-5ths text-center">
+                <div class="item">
+                  <a [routerLink]="['/adminReports']"><img style="width: 70px;" src="./../../assets/image/adminReports.png">
+                    <h3>Admin Reports</h3>
+                  </a>
+                </div>
+              </div>
+            <div [hidden]="userLevel<6 || userLevel==8" class="col-md-5ths text-center">
+                <div class="item">
+                  <a [routerLink]="['/getPass']"><img style="width: 70px;" src="./../../assets/image/Indicatives-04-512.png">
+                    <h3>Gate Pass</h3>
+                  </a>
+                </div>
+              </div>
+            <div [hidden]="userLevel<6 || userLevel==8" class="col-md-5ths text-center">
+                <div class="item">
+                  <a [routerLink]="['/RpGate']"><img style="width: 70px;" src="./../../assets/image/rpgate.png">
+                    <h3>RP Gate</h3>
+                  </a>
+                </div>
+              </div>
+            <div class="col-md-5ths text-center">
+                <div class="item">
+                  <a [routerLink]="['/']"><img style="width: 70px;" src="./../../assets/image/animaleFeed.png">
+                    <h3>Animal Feed</h3>
+                  </a>
+                </div>
+              </div>
+            <div class="col-md-5ths text-center">
+                <div class="item">
+                  <a [routerLink]="['/']"><img style="width: 70px;" src="./../../assets/image/labour.png">
+                    <h3>Hire Transport & Labour</h3>
+                  </a>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</section>

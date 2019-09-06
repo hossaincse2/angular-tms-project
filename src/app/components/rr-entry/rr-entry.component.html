@@ -1,0 +1,416 @@
+<div class="header_section"> </div>
+<div [hidden]="!showEntry" class="settings unit content100vh">
+  <div class="container">
+
+    <div class="row">
+      <div class="row top-bar">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title pull-left"> <a class="btn btn-success" (click)="close()" title="Back"><img
+                  style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+            <h3 class="center-heading text-center">RR Entry</h3>
+            <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+          </div>
+          <div class="panel-body">
+            <form #unitForm="ngForm">
+
+              <div class="col-md-12" style="padding:0px">
+                <div class="form-group col-md-3">
+                  <label for="email">ইউনিটঃ</label>
+                  <select [(ngModel)]="objRR.UnitID" (change)="getAllManpower()" required name="fromUnitID"
+                    id="fromUnitID" class="form-control">
+                    <option value='undefined'>-Select-</option>
+                    <option *ngFor="let vmUnit of lstVMUnit" [value]="vmUnit.Unit.UnitID">
+                      {{vmUnit.Unit.UnitName}}
+                    </option>
+                  </select>
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="pwd">Year</label>
+
+                  <select [(ngModel)]="objRR.Year" (change)="getAllManpower()" required name="year" id="year"
+                    class="form-control">
+                    <option value='undefined'>-Select-</option>
+                    <option *ngFor="let year of lstYear" [value]="year.id">
+                      {{year.name}}
+                    </option>
+                  </select>
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="pwd">Month</label>
+                  <select [(ngModel)]="objRR.Month" (change)="getAllManpower()" required name="month" id="month"
+                    class="form-control">
+                    <option value='undefined'>-Select-</option>
+                    <option *ngFor="let month of lstMonth" [value]="month.id">
+                      {{month.name}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div style="clear:both"></div>
+              <div class="container">
+                <div class="row">
+                  <div class="table-responsive">
+                    <table class="table tableFixHead" style="width:100%">
+                      <tr>
+                        <th>দ্রব্যের ধরণ</th>
+                        <th style="width:10%">দ্রব্যের নাম</th>
+                        <th>হিসাবের একক</th>
+                        <th style="width:5%">জনবল</th>
+                        <th style="width:5%">স্কেল</th>
+                        <th>প্রাপ্য</th>
+                        <th style="width:5%">গ্রহণ</th>
+                        <th style="width:5%">কম</th>
+                        <th style="width:5%">বেশি</th>
+                        <th>একশন</th>
+                      </tr>
+                      <tr *ngFor="let rDetail of lstRRDetail; let i = index;">
+                        <td>
+                          <select (change)="LoadItem(rDetail.ItemTypeID)" [(ngModel)]="rDetail.ItemTypeID"
+                            name="itemTypeID{{i}}" class="form-control">
+                            <option value="undefined">-Select-</option>
+                            <option *ngFor="let itemType of lstItemType" [value]="itemType.id">
+                              {{itemType.name}}
+                            </option>
+                          </select>
+                        </td>
+                        <td style="width:10%">
+                          <select [(ngModel)]="rDetail.ItemID" name="itemID{{i}}" class="form-control">
+                            <option value="undefined">-Select-</option>
+                            <option *ngFor="let item of lstItem" [value]="item.ItemID">
+                              {{item.ItemName}}
+                            </option>
+                          </select>
+                        </td>
+                        <td>
+                          <select [(ngModel)]="rDetail.UnitOfMeasure" name="itemName{{i}}" class="form-control">
+                            <option value="undefined">-Select-</option>
+                            <option *ngFor="let unitOfMeasure of lstUnitOfMeasure"
+                              [value]="unitOfMeasure.UnitOfMeasureID">
+                              {{unitOfMeasure.Name}}
+                            </option>
+                          </select>
+                        </td>
+                        <td style="width:5%"> <input name="numberOfPeople{{i}}" (change)="calculateTotal()"
+                            type="number" [(ngModel)]="rDetail.NumberOfPeople" class="form-control">
+                        </td>
+                        <td style="width:5%"><input name="scale{{i}}" (change)="calculateTotal()" type="number"
+                            [(ngModel)]="rDetail.Scale" class="form-control" placeholder=""></td>
+                        <td>
+                          <input name="description{{i}}" type="text" [(ngModel)]="rDetail.Description"
+                            class="form-control" placeholder="">
+                        </td>
+                        <td style="width:5%">
+                          <input name="receiveDescription{{i}}" type="text" [(ngModel)]="rDetail.ReceiveDescription"
+                            class="form-control" placeholder="">
+                        </td>
+                        <td style="width:5%">
+                          <input name="underDrawDescription{{i}}" type="text" [(ngModel)]="rDetail.UnderDrawDescription"
+                            class="form-control" placeholder="">
+                        </td>
+                        <td style="width:5%">
+                          <input name="overDrawDescription{{i}}" type="text" [(ngModel)]="rDetail.OverDrawDescription"
+                            class="form-control" placeholder="">
+                        </td>
+
+                        <td>
+                          <button (click)="addResource()" class="btn"> <img src="../../../assets/image/plus.svg" alt="">
+                          </button>
+                          <button (click)="removeResource()" class="btn"><img src="../../../assets/image/minus.svg"
+                              alt="">
+                          </button>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-12 text-right" style="padding-top:15px">
+                    <button [disabled]='!unitForm.valid' (click)="saveRR()" class="btn btn-primary"> Save
+                    </button>
+                    <button class="btn btn-success" (click)="close()">Close</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+</div>
+<div [hidden]="showEntry" class="container content100vh">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/rrManagement" title="Back"><img
+                style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+          <h3 class="center-heading text-center">RR Entry</h3>
+
+        </div>
+        <div class="panel-body">
+          <form #searchForm="ngForm" class="form-inline">
+            <div class="form-group">
+              <label for="email">ইউনিটঃ</label>
+              <select name="unitID" class="form-control w250">
+                <option value='undefined'>All</option>
+                <option *ngFor="let vmUnit of lstVMUnit" [value]="vmUnit.Unit.UnitID">
+                  {{vmUnit.Unit.UnitName}}
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="pwd">তারিখ হইতেঃ</label>
+              <input type="date" required [ngModel]="objQueryObject.FromDate | date:'yyyy-MM-dd'"
+                (ngModelChange)="objQueryObject.FromDate = $event" class="form-control" name="fromDate">
+            </div>
+            <div class="form-group">
+              <label for="pwd">তারিখ প্রতিঃ</label>
+              <input type="date" required [ngModel]="objQueryObject.ToDate | date:'yyyy-MM-dd'"
+                (ngModelChange)="objQueryObject.ToDate = $event" class="form-control" name="toDate">
+            </div>
+            <div class="form-group">
+              <button [disabled]='!searchForm.valid' class="btn btn-success search-btn" (click)="getFilteredRR()"
+                type="submit">Serach</button>
+
+              <button class="btn btn-success search-btn" (click)="addNew()" type="submit">Add
+                New</button>
+            </div>
+          </form>
+          <div class="table-responsive">
+            <table class="table table-hover" style="border: 1px solid #565656;">
+              <tr>
+                <th>ইউনিট এর নাম</th>
+                <th>প্রস্তুতের তারিখ</th>
+                <th>বছর</th>
+                <th>মাস</th>
+                <th>স্ট্যাটাস</th>
+                <th style="text-align:right">একশন</th>
+
+              </tr>
+              <tr *ngFor="let vmRR of lstVMRR">
+                <td>{{vmRR.RR.UnitName}}</td>
+                <td>{{vmRR.RR.PrepareDate | date:'yyyy-MM-dd'}}</td>
+                <td>{{vmRR.RR.Year}}</td>
+                <td>{{vmRR.RR.MonthName}}</td>
+                <td>{{vmRR.RR.StatusName}}</td>
+                <td style="text-align:right">
+                  <a title="Edit" (click)="editRR(vmRR)" class="edit"><i class='fa fa-check-square'
+                      style="font-size: 20px; margin-right:20px"></i></a>
+                  <a title="Print" (click)="printRR(vmRR)" class="edit"><i class='fa fa-print'
+                      style="font-size: 20px; margin-right:20px"></i></a>
+                  <a title="Detail" (click)="detailRR(vmRR)" class="detail"><i class='fa fa-list'
+                      style="font-size: 20px; margin-right:20px"></i></a>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="unitDemandModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">RR Summary</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <table class="table tableFixHead" style="width:100%">
+            <tr>
+              <th style="width:15%">দ্রব্যের নাম</th>
+              <th>হিসাবের একক</th>
+              <th>জনবল</th>
+              <th>স্কেল</th>
+              <th>প্রাপ্য</th>
+              <th style="width:5%">গ্রহণ</th>
+              <th style="width:5%">কম</th>
+              <th style="width:5%">বেশি</th>
+            </tr>
+            <tr *ngFor="let rDetail of lstRRDetail; let i = index;">
+
+              <td style="width:15%">
+                {{rDetail.ItemName}}
+              </td>
+              <td>
+                {{rDetail.UnitOfMeasureName}}
+              </td>
+              <td>
+                {{rDetail.NumberOfPeople}}
+              </td>
+              <td>
+                {{rDetail.Scale}}
+              <td>
+                {{rDetail.Description}}
+              </td>
+              <td style="width:5%">
+                {{rDetail.ReceiveDescription}}
+              </td>
+              <td style="width:5%">
+                {{rDetail.UnderDrawDescription}}
+              </td>
+              <td style="width:5%">
+                {{rDetail.OverDrawDescription}}
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="unitDemandPrintModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">RR Summary</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div id="RRDetail" class="modal-body">
+
+          <div class="text-center"> শুকনা রসদ</div>
+          <table [hidden]="lstDryRRDetail.length==0" class="table tableFixHead" style="width:100%">
+            <tr>
+              <th style="width:15%">দ্রব্যের নাম</th>
+              <th>হিসাবের একক</th>
+              <th>জনবল</th>
+              <th>স্কেল</th>
+              <th>প্রাপ্য</th>
+              <th style="width:5%">গ্রহণ</th>
+              <th style="width:5%">কম</th>
+              <th style="width:5%">বেশি</th>
+            </tr>
+            <tr *ngFor="let rDetail of lstDryRRDetail; let i = index;">
+
+              <td style="width:15%">
+                {{rDetail.ItemName}}
+              </td>
+              <td>
+                {{rDetail.UnitOfMeasureName}}
+              </td>
+              <td>
+                {{rDetail.NumberOfPeople}}
+              </td>
+              <td>
+                {{rDetail.Scale}}
+              <td>
+                {{rDetail.Description}}
+              </td>
+              <td style="width:5%">
+                {{rDetail.ReceiveDescription}}
+              </td>
+              <td style="width:5%">
+                {{rDetail.UnderDrawDescription}}
+              </td>
+              <td style="width:5%">
+                {{rDetail.OverDrawDescription}}
+              </td>
+            </tr>
+          </table>
+
+          <div class="text-center"> তাজা রসদ </div>
+
+          <table [hidden]="lstFreshRRDetail.length==0" class="table tableFixHead" style="width:100%">
+            <tr>
+              <th style="width:15%">দ্রব্যের নাম</th>
+              <th>হিসাবের একক</th>
+              <th>জনবল</th>
+              <th>স্কেল</th>
+              <th>প্রাপ্য</th>
+              <th style="width:5%">গ্রহণ</th>
+              <th style="width:5%">কম</th>
+              <th style="width:5%">বেশি</th>
+            </tr>
+            <tr *ngFor="let rDetail of lstFreshRRDetail; let i = index;">
+
+              <td style="width:15%">
+                {{rDetail.ItemName}}
+              </td>
+              <td>
+                {{rDetail.UnitOfMeasureName}}
+              </td>
+              <td>
+                {{rDetail.NumberOfPeople}}
+              </td>
+              <td>
+                {{rDetail.Scale}}
+              <td>
+                {{rDetail.Description}}
+              </td>
+              <td style="width:5%">
+                {{rDetail.ReceiveDescription}}
+              </td>
+              <td style="width:5%">
+                {{rDetail.UnderDrawDescription}}
+              </td>
+              <td style="width:5%">
+                {{rDetail.OverDrawDescription}}
+              </td>
+            </tr>
+          </table>
+
+          <div class="text-center"> মসলা</div>
+
+          <table [hidden]="lstCondimentRRDetail.length==0" class="table tableFixHead" style="width:100%">
+            <tr>
+              <th style="width:15%">দ্রব্যের নাম</th>
+              <th>হিসাবের একক</th>
+              <th>জনবল</th>
+              <th>স্কেল</th>
+              <th>প্রাপ্য</th>
+              <th style="width:5%">গ্রহণ</th>
+              <th style="width:5%">কম</th>
+              <th style="width:5%">বেশি</th>
+            </tr>
+            <tr *ngFor="let rDetail of lstCondimentRRDetail; let i = index;">
+
+              <td style="width:15%">
+                {{rDetail.ItemName}}
+              </td>
+              <td>
+                {{rDetail.UnitOfMeasureName}}
+              </td>
+              <td>
+                {{rDetail.NumberOfPeople}}
+              </td>
+              <td>
+                {{rDetail.Scale}}
+              <td>
+                {{rDetail.Description}}
+              </td>
+              <td style="width:5%">
+                {{rDetail.ReceiveDescription}}
+              </td>
+              <td style="width:5%">
+                {{rDetail.UnderDrawDescription}}
+              </td>
+              <td style="width:5%">
+                {{rDetail.OverDrawDescription}}
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary printMe">Print</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>

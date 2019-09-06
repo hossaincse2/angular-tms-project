@@ -1,0 +1,90 @@
+<div class="header_section"></div>
+<div [hidden]="!showEntry" class="settings content100vh">
+  <div class="container">
+    <div class="row">
+        <div class="col-md-12 text-left"> 
+            <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title pull-left"> <a class="btn btn-success" (click)="close()" title="Back"><img
+                      style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+                      <h3 class="center-heading text-center">ইউজার রোল</h3>
+                <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+              </div>
+             <div class="panel-body">
+                <form #itemTypeForm="ngForm">  
+                  <div class="col-md-6">
+                    <div class="row">
+                      <div class="col-md-3">
+                        <label for="">User Role</label>
+                      </div>
+                      <div class="col-md-9">
+                        <input type="text" required [(ngModel)]="objUserRole.RoleName" name="roleName" class="form-control">
+                      </div>
+                    </div>
+          
+                    <div class="row">
+                      <div class="col-md-3">
+                        <label for="">Description</label>
+                      </div>
+                      <div class="col-md-9">
+                        <!-- <input type="text" class="form-control"> -->
+                        <textarea [(ngModel)]="objUserRole.Description" name="description" class="form-control" id="" cols="30"
+                          rows="2"></textarea>
+                      </div>
+                    </div>
+                  </div>
+                    <div class="row">
+                      <div class="col-md-12 text-right">
+                        <button [disabled]='!itemTypeForm.valid' (click)="saveUserRole()" class="btn btn-primary"> Save
+                        </button>
+                        <button class="btn btn-success" (click)="close()">Close</button>
+                      </div>
+                    </div>
+                  </form>
+              </div>
+              </div>
+         </div>
+      
+
+    </div>
+  </div>
+</div>
+ 
+<div [hidden]="showEntry" class="content100vh">
+
+  <div class="container"> 
+    <div class="row">
+      <div class="col-md-12">   
+          <div class="panel panel-primary">
+              <div class="panel-heading">
+                      <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/smsDashboard" title="Back"><img style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+                      <h3 class="center-heading text-center">ইউজার রোল</h3>
+                      <span class="pull-right clickable"> <a class="btn btn-success add-new-btn"  (click)="addNew()">Add New</a></span>
+                </div> 
+              <div class="panel-body">     
+        <div class="table-responsive">
+          <table class="table table-hover" style="border: 1px solid #565656;">
+            <tr>
+              <th>Role Name</th>
+              <th>Description</th>
+              <th>Action</th>
+
+            </tr>
+            <tr *ngFor="let userRole of lstUserRole">
+              <td>{{userRole.RoleName}}</td>
+              <td>{{userRole.Description}}</td>
+              <td>
+                <a title="Edit" (click)="editUserRole(userRole)" class="edit"><i class='fa fa-check-square' style="font-size: 20px; margin-right:20px"></i></a>
+                <a title="Delete" (click)="deleteUserRole(userRole)" class="delete"><i class="fa fa-trash" style="font-size: 20px"></i></a>
+              </td>
+            </tr>
+          </table>
+        </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>

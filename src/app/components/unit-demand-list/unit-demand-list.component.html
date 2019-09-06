@@ -1,0 +1,455 @@
+<div class="header_section"> </div>
+<div class="container content100vh">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/smsDashboard" title="Back"><img
+                style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+          <h3 class="center-heading text-center">ইউনিট ডিমান্ড লিষ্ট</h3>
+          <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+        </div>
+        <div class="panel-body">
+          <form #searchForm="ngForm" class="form-inline">
+            <div class="form-group">
+              <label for="email">ইউনিটঃ</label>
+              <select [(ngModel)]="objQueryObject.UnitID" name="unitID" class="form-control w250">
+                <option value='undefined'>All</option>
+                <option *ngFor="let vmUnit of lstVMUnit" [value]="vmUnit.Unit.UnitID">
+                  {{vmUnit.Unit.UnitName}}
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="pwd">তারিখ হইতেঃ</label>
+              <input type="date" required [(ngModel)]="objQueryObject.FromDate" class="form-control" name="fromDate">
+            </div>
+            <div class="form-group">
+              <label for="pwd">তারিখ প্রতিঃ</label>
+              <input type="date" required [(ngModel)]="objQueryObject.ToDate" class="form-control" name="toDate">
+            </div>
+            <div class="form-group">
+              <button [disabled]='!searchForm.valid' class="btn btn-success search-btn"
+                (click)="getAllDryItemDemandByFilter()" type="submit">Serach</button>
+            </div>
+          </form>
+        </div>
+      </div> <br>
+      <div class="table-responsive">
+        <table class="table table-hover" style="border: 1px solid #565656;">
+          <tr>
+            <th>Unit Name</th>
+            <th>Request Date</th>
+            <th>From Date</th>
+            <th>To Date</th>
+            <th> Status</th>
+            <th>Action</th>
+
+          </tr>
+          <tr *ngFor="let vmDemand of lstVMDryItemDemand">
+            <td>{{vmDemand.DryItemDemand.UnitName}}</td>
+            <td>{{vmDemand.DryItemDemand.DemandDate | date:'yyyy-MM-dd'}}</td>
+            <td>{{vmDemand.DryItemDemand.DemandFrom | date:'yyyy-MM-dd'}}</td>
+            <td>{{vmDemand.DryItemDemand.DemandTo | date:'yyyy-MM-dd'}}</td>
+            <td>{{vmDemand.DryItemDemand.StatusName}}</td>
+            <td>
+              <a title="Edit" (click)="demandDetail(vmDemand)" class="edit"><i class='fa fa-list'
+                  style="font-size: 20px; margin-right:20px"></i></a>
+              <a title="Delete" (click)="deleteUnit(vmDemand)" class="delete"><i class="fa fa-trash"
+                  style="font-size: 20px;margin-right:20px"></i></a>
+              <a title=" Approve" (click)="approveDemand(vmDemand)" class="success"><i class="fa fa-check-square"
+                  style="font-size: 20px"></i></a>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="DryItemDemandModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <!-- <h5 class="modal-title" id="exampleModalLabel">Unit Demand Approval</h5> -->
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <form #DryItemDemandForm="ngForm">
+            <!-- <div class="header_section">  </div> -->
+            <div class="container">
+              <div class="row bg-white">
+                <section class="Contraner-up">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="panel panel-primary">
+                        <div class="panel-heading">
+                          <!-- <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/DryItemDemand" title="Back"><img style="width: 24px;" src="./../../assets/image/back.svg"></a></h3> -->
+                          <h3 class="center-heading text-center">Unit Demand Approval</h3>
+                          <!-- <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span> -->
+                        </div>
+                        <div class="panel-body">
+                          <div class="row">
+                            <div class="col-md-4 col-md-offset-4">
+                              <div class="up-midel" style="padding-top: 15px"></div>
+                              <select disabled [(ngModel)]="objDryItemDemand.DemandTypeID" required name="demandTypeID"
+                                class="form-control">
+                                <option value='undefined'>-Select-</option>
+                                <option *ngFor="let demandType of lstDemandType" [value]="demandType.id">
+                                  {{demandType.name}}
+                                </option>
+                              </select>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="empty-space"></div>
+                  <div class="row top-row" style="margin-top: 10px;">
+                    <div class="top-left">
+                      <div class="col-md-6 header_input">
+                        <div class="row">
+                          <div class="col-md-4">
+                            <label for="">হইতেঃ</label>
+                          </div>
+                          <div class="col-md-8">
+                            <select [(ngModel)]="objDryItemDemand.FromUnitID" required name="fromUnitID"
+                              class="form-control">
+                              <option value=''>-Select-</option>
+                              <option *ngFor="let vmUnit of lstVMUnit" [value]="vmUnit.Unit.UnitID">
+                                {{vmUnit.Unit.UnitName}}
+                              </option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4">
+                            <label for="">প্রতিঃ</label>
+                          </div>
+                          <div class="col-md-8">
+                            <select class="form-control" name="toSSDID" [(ngModel)]="objDryItemDemand.ToSSDID">
+                              <option *ngFor="let ssd of lstSSDList" [value]="ssd.id">
+                                {{ssd.name}}
+                              </option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4">
+                            <label for="">সংগ্রহের স্থানঃ</label>
+                          </div>
+                          <div class="col-md-8">
+                            <select class="form-control" name="supplyPalce" [(ngModel)]="objDryItemDemand.SupplyPlace">
+                              <option value=1>SSD</option>
+                              <option value=2>Other</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4">
+                            <label for="">&nbsp;</label>
+                          </div>
+                          <div class="col-md-8">
+                            <input class="form-control" name="supplyPalceName"
+                              [(ngModel)]="objDryItemDemand.OtherSupplyPlaceName" type="text" placeholder="Suppply Place">
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4">
+                            <label for="">পূর্বের চাহিদা পত্রের প্রাধিকারঃ</label>
+                          </div>
+                          <div class="col-md-8">
+                            <input type="text" [(ngModel)]="objDryItemDemand.GeneralSendReference" class="form-control"
+                              name="generalSendReference"> </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4">
+                            <label for="">শেষ চাহিদা পত্রের তারিখঃ</label>
+                          </div>
+                          <div class="col-md-8">
+                            <input [(ngModel)]="objDryItemDemand.EmergencyDate" type="date" class="form-control"
+                              name="emergencyDate">
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="">খাদ্য দ্রব্য সংগ্রহের তারিখ</label>
+                            <input [(ngModel)]="objDryItemDemand.FoodDemandDate" type="date" class="form-control"
+                              name="fodDemandDate">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="">যে সময়ের জন্য চাহিদা দাখিল করা গেল</label>
+                            <input [(ngModel)]="objDryItemDemand.FoodDemandDate" type="date" class="form-control"
+                              name="fodDemandDate">
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="">হইতেঃ</label>
+                            <input [(ngModel)]="objDryItemDemand.DemandTo" type="date" class="form-control"
+                              name="demandTo">
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </section>
+                <div class="empty-space"></div>
+                <div class="container">
+                  <section class="add_product">
+                    <div class="row">
+                      <form class="form-inline" action="/action_page.php">
+
+                      </form>
+                    </div>
+                  </section>
+                </div>
+                <div class="empty-space"></div>
+                <section class="Contraner-table">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <p><b>প্রাধিকারঃ এ আর আর ৪৯৯/৫০০ মােতাবেক চাহিদা পত্রের ভিত্তি ও বেসামরিক ব্যক্তি এবং তাদের
+                          পরিবারবর্গের
+                          জন্য
+                          বেসামরিক চিনি ব্যতীত অন্যান্য
+                          আইটেম {{totalResource}}X{{totalDay}}'='{{netResource}} জন এর মধ্যে এবং অন্যান্য</b></p>
+                      <p><ins><b>আইটেম ব্যতীত শুধুমাত্র চিনি {{bellow3ChildTotal}}*{{totalDay}}'='{{netChildTotal}}
+                            জন</b></ins>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="empty-space"></div>
+                  <div class="table-responsive">
+                    <table class="tableFixHead" cellpadding="5" width="100%">
+                      <tr>
+                        <th colspan="9" style="text-align:center;background-color: #d6f1c4">ইউনিট কর্তৃক পূরণ করিতে
+                          হইবে।</th>
+                        <!-- <th colspan="5">এস এসসিডিপাের ব্যবহারের জন্য</th> -->
+
+                      </tr>
+                      <tr>
+
+                        <th>ক্রমিক </th>
+                        <th style="width:10%;">দ্রব্যের নাম</th>
+                        <th>প্রাধিকার</th>
+                        <th>মজুদের পরিমাণ</th>
+                        <th>বর্তমান চাহিদা</th>
+                        <th>মঞ্জরিকৃত</th>
+                        <th>মোড়কের প্রকার</th>
+                        <th>মোড়কের সংখ্যা</th>
+
+                        <!--<td >table</td>
+          <td>gh</td>-->
+                      </tr>
+                      <tr *ngFor="let objDemandDetail of lstDryItemDemandDetail; let i=index">
+
+                        <td>&nbsp;<input type="checkbox" name=""> &nbsp;{{i+1}}</td>
+                        <td>
+                          {{objDemandDetail.ItemName}}
+                        </td>
+                        <td>
+                          <input disabled name="PradhikarNo{{i}}" [(ngModel)]="objDemandDetail.PradhikarNo"
+                            class="form-control" type="text">
+                        </td>
+                        <td><input disabled name="Stock{{i}}" [(ngModel)]="objDemandDetail.Stock" type="text"
+                            class="form-control">
+                        </td>
+                        <td>
+                          <input disabled name="CurrentDemand{{i}}" [(ngModel)]="objDemandDetail.CurrentDemand"
+                            class="form-control" type="text">
+                        </td>
+                        <td><input name="ApprovedQty{{i}}" [(ngModel)]="objDemandDetail.ApprovedQty" name type="text"
+                            class="form-control"></td>
+                        <td> <select [(ngModel)]="objDemandDetail.PackingMaterial" required name="fromUnitID"
+                            class="form-control">
+                            <option value='undefined'>-Select-</option>
+                            <option *ngFor="let materialsType of lstMaterialsType" [value]="materialsType.id">
+                              {{materialsType.name}}
+                            </option>
+                          </select></td>
+
+
+                        <td><input name="LotNumber{{i}}" [(ngModel)]="objDemandDetail.LotNumber" type="text"
+                            class="form-control"></td>
+
+                      </tr>
+
+                    </table>
+                  </div>
+
+
+                </section>
+                <div class="empty-space"></div>
+
+                <section class="bina-mullo">
+                  <div class="chaitha text-center">
+                    <h4><b><ins>চাহিদা ভিত্তির তথ্য</ins></b></h4>
+
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="bina-left">
+                        <table [hidden]="objDryItemDemand.DemandTypeID!=1">
+                          <tr>
+                            <th colspan="5" style="background-color: #d6f1c4">১। বিনামূল্যে প্রদান</th>
+                          </tr>
+                          <tr>
+                            <td>&nbsp;</td>
+                          </tr>
+                          <tr>
+                            <td> রেশন জনবল</td>
+                            <td><input [(ngModel)]="totalResource" type="number" disabled class="form-control"
+                                name="totalResource"></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <td>জেসিও</td>
+                            <td><input [(ngModel)]="objDryItemDemandResourceDetail.NumberOfJCO" type="number" disabled
+                                class="form-control" name="numberOfJCO"></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <td>ওআর</td>
+                            <td><input [(ngModel)]="objDryItemDemandResourceDetail.NumberOfOR" disabled type="number"
+                                class="form-control" name="numberOfOR"></td>
+                            <td></td>
+                            <td></td>
+                            <td> </td>
+                          </tr>
+                          <tr>
+                            <td> এনসি(ই)</td>
+                            <td><input [(ngModel)]="objDryItemDemandResourceDetail.NumberOfNCR" disabled type="number"
+                                class="form-control" name="numberOfNCR"></td>
+                            <td>.</td>
+                            <td>.</td>
+                            <td> </td>
+                          </tr>
+                          <tr>
+                            <td> অসামরিক</td>
+                            <td><input [disabled]="objDryItemDemand.DemandTypeID!=2"
+                                [(ngModel)]="objDryItemDemandResourceDetail.NumberOfCivil" type="number"
+                                class="form-control" disabled name="numberOfCivil"></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+
+                        </table>
+
+
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <div class="bina-right">
+
+                        <table>
+                          <tr>
+                            <th colspan="6" style="background-color: #d6f1c4">২।মুল্যে প্রদানঃ</th>
+                          </tr>
+                          <tr>
+                            <td>&nbsp;</td>
+                          </tr>
+                          <tr>
+                            <td colspan="3" class="poribarTitle">পরিবার </td>
+                            <td colspan="4" class="chelemeyTitle">ছেলেমেয়ে </td>
+                          </tr>
+
+                          <tr>
+                            <th></th>
+                            <th style="text-align:center">নিজ</th>
+                            <th style="text-align:center">স্ত্রী</th>
+                            <th style="text-align:center">১২ বৎসরের উর্ধ্বে</th>
+                            <th style="text-align:center">১২ বৎসরের নিম্নে</th>
+                            <th style="text-align:center">০৩ বৎসরের নিম্নে</th>
+                          </tr>
+                          <tr>
+                            <td style="line-height: 8px;">&nbsp;</td>
+                          </tr>
+                          <tr *ngFor="let fDetail of lstDryItemDemandFamilyDetail; let i = index;">
+                            <td>{{fDetail.PostName}}</td>
+                            <td><input type="text" name="NumberOfOwn{{i}}" type="number"
+                                [(ngModel)]="fDetail.NumberOfOwn" class="form-control"></td>
+                            <td><input type="text" name="NumberOfWife{{i}}" type="number"
+                                [(ngModel)]="fDetail.NumberOfWife" class="form-control"></td>
+                            <td><input type="text" name="NumberOfChildrendAbove12{{i}}" type="number"
+                                [(ngModel)]="fDetail.NumberOfChildrendAbove12" class="form-control"></td>
+                            <td><input type="text" name="NumberOfChildrendBellow12{{i}}" type="number"
+                                [(ngModel)]="fDetail.NumberOfChildrendBellow12" class="form-control"></td>
+                            <td><input type="text" (change)="calculateBellow2Child()"
+                                name="NumberOfChildrenBellow3{{i}}" type="number"
+                                [(ngModel)]="fDetail.NumberOfChildrenBellow3" class="form-control"></td>
+
+                          </tr>
+
+                        </table>
+
+                      </div>
+                    </div>
+                  </div>
+
+                </section>
+                <section class="Contraner-bottom">
+                  <div class="row">
+                    <div class="col-md-8">
+                      <div class="advairas">
+                        <h5>১। আমি প্রত্যায়ন করিতেছি যে, চাহিদাকৃত দ্রব্যাদি, আমার অধীনস্ত সৈনিকদের জন্য
+                          মজুদ/বিনামুল্যে/স্বল্প
+                          মূল্যে ইস্যু করা প্রয়ােজন।</h5>
+                        <h5> ২। প্রত্যায়ন হইল যে, মজুদ রেশন নিয়মিত রক্ষনাবেক্ষন ও পাল্টানাে হয়।</h5>
+                        <h5>স্টেশনঃ শহীদ সালাহউদ্দিন সেনানিবাস। </h5>
+                        তারিখঃ ২৫ / ১০/২০১৮
+                      </div>
+
+                    </div>
+                    <div class="col-md-2">
+                      <div class="relative odinayok">
+                        <p class="absolute">অধিনায়ক</p>
+                      </div>
+
+                    </div>
+                    <div class="col-md-2">
+                      <div class="relative signacar">
+                        <p class="absolute">স্বাক্ষর</p>
+                      </div>
+
+                    </div>
+
+                  </div>
+                </section>
+
+                <div>
+
+                </div>
+
+              </div>
+            </div>
+          </form>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" (click)="approveDryItemDemand()" class="btn btn-primary">Approve</button>
+        </div>
+      </div>
+    </div>
+  </div>

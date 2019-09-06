@@ -1,0 +1,45 @@
+#unitDemandModal .modal-lg {
+    width: 1200px;
+}
+@media only screen and (max-width: 768px) {
+    #unitDemandModal .modal-lg {
+        width: 100%;
+    } 
+    }
+.dryItemPrint{
+    width: 95% !important;
+}
+.modal-dialog .form-control {
+    width: 100% !important;
+ }
+ #DryItemDemandModalPrint td, th {
+    padding: 0 10px;
+}
+#DryItemDemandModalPrint label {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 3px;
+    font-weight: 700;
+    font-size: 12px;
+}
+#DryItemDemandModalPrint h4 {
+    background-color: #fff5cb;
+    padding: 5px;
+    font-weight: bold;
+    font-size: 15px;
+}
+#DryItemDemandModalPrint .panel-body {
+    padding: 10px 15px 5px;
+}
+#DryItemDemandModalPrint p {
+    margin: 0 0 2px;
+}
+
+#DryItemDemandModalPrint .h4, #DryItemDemandModalPrint .h5, #DryItemDemandModalPrint .h6, #DryItemDemandModalPrint h4, #DryItemDemandModalPrint h5, #DryItemDemandModalPrint  h6 {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+#DryItemDemandModalPrint th {
+    background: #eee;
+    font-size: 12px;
+}

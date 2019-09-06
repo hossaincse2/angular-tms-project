@@ -1,0 +1,231 @@
+<div class="header_section"> </div>
+<div [hidden]="showEntry" class="content100vh">
+  <div class="container rpGate">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="panel panel-primary" style="max-height: 180px;">
+          <div class="panel-heading">
+            <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/smsDashboard" title="Back"><img
+                  style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+            <h3 class="center-heading text-center">RP Gate</h3>
+
+          </div>
+          <div class="panel-body">
+            <form #searchForm="ngForm" class="form-inline">
+              <!-- <div class="form-group col-md-12">
+                <label class="content_radio col-md-2">Dry Rate
+                  <input [(ngModel)]="demandType" [checked]="demandType==1" type="radio" value="1" name="reports">
+                  <span class="checkmark"></span>
+                </label>
+                <label class="content_radio col-md-2">Condiment
+                  <input [(ngModel)]="demandType" type="radio" value="2" name="reports">
+                  <span class="checkmark"></span>
+                </label>
+                <label class="content_radio col-md-1">Pol
+                  <input [(ngModel)]="demandType" type="radio" value="3" name="reports">
+                  <span class="checkmark"></span>
+                </label>
+                <label class="content_radio col-md-2">Fresh Rat
+                  <input [(ngModel)]="demandType" type="radio" value="4" name="reports">
+                  <span class="checkmark"></span>
+                </label>
+                <label class="content_radio col-md-2">Butchery
+                  <input [(ngModel)]="demandType" type="radio" value="5" name="reports">
+                  <span class="checkmark"></span>
+                </label>
+                <label class="content_radio col-md-2">Hospital Items
+                  <input [(ngModel)]="demandType" type="radio" value="6" name="reports">
+                  <span class="checkmark"></span>
+                </label>
+                <label class="content_radio col-md-1">H & C
+                  <input [(ngModel)]="demandType" type="radio" value="7" name="reports">
+                  <span class="checkmark"></span>
+                </label>
+              </div> -->
+              <div class="form-group col-md-12 barCode">
+                <label for="pwd">BarCode</label>
+                <input type="number" [(ngModel)]="gatePassNumber" (keydown)="showReports($event)" required
+                  class="form-control" name="Type">
+              </div>
+            </form>
+            <div class="table-responsive">
+              <table class="table table-hover tableFixHead" style="border: 1px solid #565656;">
+                <tr>
+                  <th>Item Type</th>
+                  <th>Item Name</th>
+                  <th>Description</th>
+                  <th>Free Scale</th>
+                  <th>General Scale</th>
+                  <th>Vortuki Scale</th>
+                  <th>Action</th>
+
+                </tr>
+                <tr *ngFor="let itemType of lstItem">
+                  <td>{{itemType.TypeName}}</td>
+                  <td>{{itemType.ItemName}}</td>
+                  <td>{{itemType.Description}}</td>
+                  <td>{{itemType.FreeScale}}</td>
+                  <td>{{itemType.GeneralScale}}</td>
+                  <td>{{itemType.VortukiScale}}</td>
+                  <td>
+                    <a title="Edit" (click)="editItemType(itemType)" class="edit"><i class='fa fa-edit'
+                        style="font-size: 20px; margin-right:20px"></i></a>
+                    <a title="Delete" (click)="deleteItemType(itemType)" class="delete"><i class="fa fa-trash"
+                        style="font-size: 20px"></i></a>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+
+<div class="modal fade" id="GetPassModalPrintView" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <!-- <h5 class="modal-title" id="exampleModalLabel">Unit Demand Approval</h5> -->
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="GetPassModalPrint">
+        <div style="background-color: #fff; width:100%">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-12">
+                <div style="text-align:center">Gate Pass</div>
+                <div class="text-right" style="padding:25px">
+                  <h5>বাসেফ অর্ড -২৩৮৭( ছোট )</h5>
+                  <h5>বি. এ. এফ. ও -২৩৮৭(ছোট)</h5>
+                  <div style="margin: -3px 15px;float: right;width: 35%;">
+                    <div id="barcodeTarget" class="barcodeTarget">
+                    </div>
+                    {{objGatePass.GatePassNumber}}
+                  </div>
+                </div>
+                <div style="width:50%">
+                  <table style="width:100%">
+                    <tr>
+                      <td>হইতেঃ</td>
+                      <td> {{objGatePass.UnitName}} </td>
+                    </tr>
+                    <tr>
+                      <td>প্রতিঃ</td>
+                      <td> SSD Gahatail </td>
+                    </tr>
+                  </table>
+                </div>
+
+              </div>
+              <div class="col-md-6" style="width:50%;float: left">
+                <table>
+                  <tr>
+                    <td style="vertical-align: top;">সংস্থা</td>
+                    <td>
+                      <h5>পাস</h5>
+                      <p>অর্ডন্যান্স ডেপো </p>
+                      <p>ফ্যাক্টরি </p>
+                      <p>ওয়ার্কশপ </p>
+                      <p>ইন্সপেক্টর </p>
+                    </td>
+                  </tr>
+                </table>
+
+              </div>
+              <div class="col-md-6" style="width:50%;float: left">
+                <table style="width:100%;">
+                  <tr>
+                    <td>আই ও নংঃ</td>
+                    <td>05,09,31</td>
+                  </tr>
+                  <tr>
+                    <td>আই আর নংঃ</td>
+                    <td>99,135,50</td>
+                  </tr>
+                </table>
+
+              </div>
+              <div class="col-md-12">
+                <div class="table-responsive">
+                  <table class="tableFixHead" border="1" cellpadding="5" width="100%">
+                    <tr>
+                      <th style="text-align:left;background-color: #d6f1c4">সেকশন</th>
+                      <th colspan="8" style="text-align:right;background-color: #d6f1c4">তারিখ:
+                        {{objGatePass.CreatedDate | date:'yyyy-MM-dd'}}</th>
+                    </tr>
+                    <tr>
+
+                      <th>ক্রমিক </th>
+                      <th style="width:10%;">দ্রব্যের নাম</th>
+                      <th style="text-align:right"> মোড়কের প্রকার</th>
+                      <th style="text-align:right"> মোড়কের সংখ্যা</th>
+                      <th style="text-align:right">সর্বমোট </th>
+
+
+
+                    <tr *ngFor="let objDemandDetail of lstGatePassItemDetail; let i=index">
+
+                      <td> &nbsp;{{i+1}}</td>
+                      <td>
+                        {{objDemandDetail.ItemName}}
+                      </td>
+                      <td style="text-align:right">
+                        {{objDemandDetail.PackingMaterialName}}
+                      </td>
+                      <td style="text-align:right">
+                        {{objDemandDetail.NumberOfPackingMaterial}}
+                      </td>
+                      <td style="text-align:right">
+                        {{objDemandDetail.Quantity}}
+                      </td>
+
+                    </tr>
+                    <tr>
+                      <td colspan="5" style="text-align:center">
+                        ( মোট উপাদান {{lstGatePassItemDetail.length}})
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <p>পরীক্ষা ও বাহির করার অনুমতিকারক </p>
+                  </div>
+                  <div class="col-md-6">
+                    <p>গ্রুপ বা সেকশন অফিসার </p>
+                    <p>গ্রুপ অফিসার এ. ডব্লিউ এম.</p>
+                    <p>এ. ডব্লিউ এম.</p>
+                    <p>সুপারিনটেনন্ডেন্ট</p>
+                    <p>ইন্সপেক্টর</p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <p> <img *ngIf="objUser.Sign" id="logo" src="data:image/jpeg;base64,{{objUser.Sign}}"
+                        alt="ImageFile" /></p>
+                    <p style="float:left;width: 600px">পরীক্ষা ও বাহির করার অনুমতিকারক
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" (click)="passGate()" class="btn btn-primary">Pass</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,183 @@
+<div [hidden]="showEntry" class="onpayment content100vh">
+  <div class="header_section"> </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/smsDashboard" title="Back"><img
+                  style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+            <h3 class="center-heading text-center">ইউজার লিস্ট</h3>
+            <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+          </div>
+          <div class="panel-body">
+            <form #searchForm="ngForm" class="form-inline">
+              <div class="form-group">
+                <label for="email">Unit</label>
+                <select name="unitID" class="form-control w250">
+                  <option value='undefined'>All</option>
+                  <option *ngFor="let vmUnit of lstVMUnit" [value]="vmUnit.Unit.UnitID">
+                    {{vmUnit.Unit.UnitName}}
+                  </option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="pwd">Username</label>
+                <input type="text" required class="form-control" name="fromDate">
+              </div>
+              <div class="form-group">
+                <label for="pwd">Status</label>
+                <select name="status" class="form-control w250">
+                  <option value='0'>All</option>
+                  <option *ngFor="let status of lstUserStatus" [value]="status.id">
+                    {{status.name}}
+                  </option>
+                </select>
+              </div>
+              <div class="form-group">
+                <button [disabled]='!searchForm.valid' class="btn btn-success search-btn" (click)="getAllUserByFilter()"
+                  type="submit">Serach</button>
+              </div>
+            </form>
+            <div class="table-responsive">
+              <table class="table table-hover tableFixHead" style="border: 1px solid #565656;">
+                <tr>
+                  <th>User Name</th>
+                  <th>BANo</th>
+                  <th>Unit</th>
+                  <th>Joining Date</th>
+                  <th style="width:15%">Joining Auth</th>
+                  <th>Poisting Date</th>
+                  <th>User Level</th>
+                  <th>Status</th>
+                  <th style="width: 11%;">Action</th>
+
+                </tr>
+                <tr *ngFor="let user of lstUser">
+                  <td>{{user.UserID}}</td>
+                  <td>{{user.BANo}}</td>
+                  <td>{{user.UnitName}}</td>
+                  <td>{{user.JoiningDate | date:'yyyy-MM-dd'}}</td>
+                  <td>{{user.JoiningAuth}}</td>
+                  <td>{{user.PoistingDate | date:'yyyy-MM-dd'}}</td>
+                  <td>{{user.UserLevelName}}</td>
+                  <td>{{user.StatusName}}</td>
+                  <td>
+                    <a title="Active" (click)="activeUser(user)" class="edit"><i class='fa fa-check-square'
+                        style="font-size: 20px; margin-right:20px"></i></a>
+                    <a title="Edit" (click)="editUser(user)" class="edit"><i class="fa fa-pencil-square-o"
+                        style="font-size: 20px; margin-right:20px" aria-hidden="true"></i> </a>
+                    <a title="InActive" (click)="InActiveUser(user)" class="delete"><i class="fa fa-trash"
+                        style="font-size: 20px"></i></a>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section [hidden]="!showEntry" class="header_space">
+  <div class="container">
+    <form #loginForm="ngForm">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title pull-left"> <a class="btn btn-success" (click)="close()" title="Back"><img
+                    style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+              <h3 class="center-heading text-center">Registration</h3>
+              <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+            </div>
+            <div class="panel-body">
+
+              <div class="col-md-6">
+                <label> User Type</label>
+                <div class="">
+                  <select [(ngModel)]="objUser.UserLevel" required name="level" class="form-control">
+                    <option value='undefined'>-Select-</option>
+                    <option *ngFor="let level of userLevel" [value]="level.id">
+                      {{level.name}}
+                    </option>
+                  </select>
+                </div><br>
+
+                <label> BA No :</label>
+                <input type="text" (blur)="checkUserLevel()" [(ngModel)]="objUser.BANo" required name="baNo"
+                  class="form-control" /><br>
+
+
+                <label>Name :</label>
+                <input type="text" class="form-control" [(ngModel)]="objUser.Name" required name="name"
+                  placeholder="Type Your Full Name" /><br>
+
+
+                <label>Unit :</label>
+                <select [(ngModel)]="objUser.UnitID" required name="unitID" id="unitID" class="form-control">
+                  <option value='undefined'>-Select-</option>
+                  <option *ngFor="let vmUnit of lstVMUnit" [value]="vmUnit.Unit.UnitID">
+                    {{vmUnit.Unit.UnitName}}
+                  </option>
+                </select>
+
+                <label>Joining Date:</label>
+
+                <input name="postingDate" [ngModel]="objUser.JoiningDate| date:'yyyy-MM-dd'"
+                  (ngModelChange)="objUser.JoiningDate = $event" type="date" class="form-control">
+                <label>Joining Auth:</label>
+                <input type="text" [(ngModel)]="objUser.JoiningAuth" required name="joingAuth" class="form-control" />
+
+                <label>Signature : &nbsp;</label>
+                <!-- <input type="file" [(ngModel)]="objUser.Sign" required name="Sign" class="form-control" /> -->
+                <input type="file" multiple (change)="validateSingleInput(input)" #input />
+                <div *ngIf="objUser.Sign">
+                  <img id="logo" src="data:image/jpeg;base64,{{objUser.Sign}}" alt="ImageFile" />
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label>Posting Date :</label>
+
+                <input name="postingDate" [ngModel]="objUser.PoistingDate| date:'yyyy-MM-dd'"
+                  (ngModelChange)="objUser.PoistingDate = $event" type="date" class="form-control">
+                <label>Posting Auth:</label>
+                <input type="text" [(ngModel)]="objUser.PostingAuth" required name="postingAuth"
+                  class="form-control" /><br>
+
+                <label>Email :</label>
+                <input type="text" [(ngModel)]="objUser.Email" required name="email" class="form-control"
+                  placeholder="Enter your email address"><br>
+
+
+                <label>User Name</label>
+                <input type="text" [(ngModel)]="objUser.UserID" required name="userName" class="form-control"
+                  placeholder="Type Your Name"><br>
+
+                <label>Password</label>
+                <input type="password" [(ngModel)]="objUser.Password" 
+                  name="password" (blur)="chackPassword()" class="form-control" placeholder="Enter password"><br>
+
+                <label>Retype Password</label>
+                <input type="password" [(ngModel)]="objUser.cpassword" 
+                  name="cpassword" (blur)="chackPassword()" class="form-control" placeholder="Re-type password"><br>
+                <div class="text-danger" [hidden]="!mismatchPassword">password and retype password mismatch
+                </div>
+                <div class="pull-right">
+                  <label></label>
+                  <button [disabled]="!loginForm.valid || mismatchPassword " (click)="saveUser()"
+                    class="btn btn-success">Save</button>
+                  <button class="btn btn-success" (click)="close()">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </form>
+  </div>
+</section>

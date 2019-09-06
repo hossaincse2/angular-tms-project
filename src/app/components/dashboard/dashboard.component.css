@@ -1,0 +1,11 @@
+.item{
+    padding: 30px 0px;
+    margin-bottom: 15px;
+    min-height: 200px;
+    background-color: whitesmoke;
+    border: 1px solid gainsboro;
+}
+.item h3 {
+    line-height: 3px;
+    color: #525252;
+}

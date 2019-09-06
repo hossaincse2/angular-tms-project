@@ -1,0 +1,56 @@
+
+<section class="content100vhome">
+  <div class="header_section"></div>
+  <div class="container">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title pull-left"> <a class="btn btn-success" title="Back"><img style="width: 24px;"
+              src="./../../assets/image/back.svg"></a></h3>
+        <h3 class="center-heading text-center">Transport Management System</h3>
+        <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <div [hidden]="userLevel==4" class="col-md-3 text-center">
+            <div class="item">
+              <a [routerLink]="['/request']"><img style="width: 70px;" src="../../../assets/image/car.svg">
+                <h3>TPT Indent Request </h3>
+              </a>
+            </div>
+          </div>
+          <div [hidden]="userLevel==4" class="col-md-3 text-center">
+            <div class="item">
+              <a [routerLink]="['/busTicket']"><img style="width: 70px;" src="./../../assets/image/bus.png">
+                <h3>Bus Ticket Request </h3>
+              </a>
+            </div>
+          </div>
+
+          <div class="col-md-3 text-center">
+            <div class="item">
+              <a [routerLink]="['/requestList']"><img style="width: 50px;" src="./../../assets/image/request_list.svg">
+                <h3 style="padding-top: 15px">TPT Request History</h3>
+              </a>
+            </div>
+          </div>
+
+          <div class="col-md-3 text-center">
+            <div class="item">
+              <a [routerLink]="['/busTicketRequest']"><img style="width: 70px;"
+                  src="./../../assets/image/recent_request.svg">
+                <h3>Bus Ticket Request History</h3>
+              </a>
+            </div>
+          </div>
+          <div [hidden]="userLevel==1" class="col-md-3 text-center">
+            <div class="item">
+              <a [routerLink]="['/userList']"><img style="width: 70px;" src="./../../assets/image/request.svg">
+                <h3>User List </h3>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

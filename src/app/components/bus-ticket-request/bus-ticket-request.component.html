@@ -1,0 +1,363 @@
+<div class="content100vh">
+  <div class="header_section"></div>
+  <div class="container">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/dashboard" title="Back"><img
+              style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+        <h3 style="color: #ffffff; font-family: Arial,sans-serif; font-size: 20px;" class="center-heading text-center">
+          Bus Ticket Request</h3>
+        <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+      </div>
+      <div class="panel-body">
+        <div class="search_bar">
+          <form #searchForm="ngForm" class="form-inline" action="">
+            <div class="row">
+              <div class="col-md-12 text-center">
+
+                <div class="form-group">
+                  <label for="pwd">From</label>
+                  <select [(ngModel)]="objBusTicket.FromPlace" required name="fromPlace" id="fromPlace"
+                    class="form-control">
+                    <option value="undefined">-Select-</option>
+                    <option value=1>Dhaka</option>
+                    <option value=2>Ghatail</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="pwd">To</label>
+                  <select [(ngModel)]="objBusTicket.ToPlace" required name="toPalce" id="toPalce" class="form-control">
+                    <option value="undefined">-Select-</option>
+                    <option value=1>Dhaka</option>
+                    <option value=2>Ghatail</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="pwd">তারিখ হইতেঃ</label>
+                  <input type="date" required [ngModel]="objQueryObject.FromDate | date:'yyyy-MM-dd'"
+                    (ngModelChange)="objQueryObject.FromDate = $event" class="form-control" name="fromDate">
+                </div>
+
+                <div class="form-group">
+                  <label for="pwd">তারিখ প্রতিঃ</label>
+                  <input type="date" required [ngModel]="objQueryObject.ToDate | date:'yyyy-MM-dd'"
+                    (ngModelChange)="objQueryObject.ToDate = $event" class="form-control" name="toDate">
+                </div>
+
+                <div class="form-group">
+                  <label for="pwd">Bus Type</label>
+                  <select [(ngModel)]="objQueryObject.BusType" required name="busType" id="bustype"
+                    class="form-control">
+                    <option value="undefined">-Select-</option>
+                    <option value=1>AC Bus</option>
+                    <option value=2>Non AC Bus</option>
+                    <option value=3>Coaster</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <button [disabled]='!searchForm.valid' class="btn btn-success search-btn"
+                    (click)="getFilteredBusTicket()" type="submit">Serach</button>
+
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="table-responsive">
+            <table id="tblTickets" class="table table-hover" style="text-align:center; border: 1px solid #565656;">
+              <tr>
+                <th>RequestDate</th>
+                <th>Bus Type</th>
+                <th>Travel Date</th>
+
+                <th>Officer Name</th>
+                <th>Number Of Ticket</th>
+                <th>Seat Number</th>
+                <th>Status</th>
+                <th style="text-align:right">Action</th>
+              </tr>
+              <tr *ngFor="let vmRequest of lstVMBusTicket">
+                <td>{{vmRequest.busTicket.RequestDate| date:'yyyy-MM-dd'}}</td>
+                <td>{{vmRequest.busTicket.BusTypeName}}</td>
+                <td>{{vmRequest.busTicket.TravelDate | date:'yyyy-MM-dd'}}</td>
+                <td>{{vmRequest.busTicketDetail.Name}}</td>
+                <td>{{vmRequest.busTicket.NumberOfTicket}}</td>
+                <td>{{vmRequest.busTicket.ApprovedTicketNumber}}</td>
+                <td>{{vmRequest.busTicket.StatusName}}</td>
+                <td style="text-align:right">
+                  <a title="Edit" [hidden]="vmRequest.busTicket.Status==2 || vmRequest.busTicket.Status==3"
+                    (click)="editRequest(vmRequest)" class="edit"><i class='fas fa-edit'
+                      style="font-size: 20px; margin-right:20px"></i></a>
+                  <a title="Approve" [hidden]="userLevel==1" (click)="showForApproval(vmRequest)" class="edit"><i
+                      class='fas fa-check-square' style="font-size: 20px; margin-right:20px"></i></a>
+                  <a title="Reject" [hidden]="userLevel==1" (click)="showForReject(vmRequest)" class="edit"><i
+                      class='fas fa-remove' style="font-size: 20px; margin-right:20px"></i></a>
+                  <a title="Approve" [hidden]="vmRequest.busTicket.Status!=2" (click)="printTicket(vmRequest)"
+                    class="edit"><i class='fas fa-print' style="font-size: 20px; margin-right:20px"></i></a>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="8" style="text-align:right; font-weight: bold">
+                  Total Booked Ticket: {{totalTicket}}
+                </td>
+              </tr>
+
+            </table>
+            <div style="text-align:right;">
+              <button class="btn btn-success search-btn pSummary" (click)="printSummary()" type="submit">Print Summary</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="myModalEdit" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h5 class="modal-title">Update Request</h5>
+      </div>
+      <div class="modal-body">
+
+        <form #requestForm="ngForm" class="form-inline">
+          <div class="container">
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+
+
+              </div>
+              <div class="panel-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <table class="table borderless">
+                      <tr>
+                        <td><label for="date">Request Date</label></td>
+                        <td><input type="date" [ngModel]="objBusTicket.RequestDate | date:'yyyy-MM-dd'"
+                            (ngModelChange)="objBusTicket.RequestDate = $event" class="form-control" name="busTicket"
+                            required id="busTicket"></td>
+                      </tr>
+                      <tr>
+                        <td><label for="date">Travel Date</label></td>
+                        <td><input type="date" [ngModel]="objBusTicket.TravelDate | date:'yyyy-MM-dd'"
+                            (ngModelChange)="objBusTicket.TravelDate = $event" class="form-control" name="travelDate"
+                            required id="travelDate"></td>
+                      </tr>
+                      <tr>
+                        <td><label>Vehicle Type</label></td>
+                        <td>
+                          <select [(ngModel)]="objBusTicket.BusType" required name="busType" id="bustype"
+                            class="form-control">
+                            <option value="undefined">-Select-</option>
+                            <option value=1>AC Bus</option>
+                            <option value=2>Non AC Bust</option>
+                            <option value=3>Coaster</option>
+                          </select>
+
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <label>Number Of Ticket</label>
+                        </td>
+
+                        <td><input [(ngModel)]="objBusTicket.NumberOfTicket" type="number" class="form-control"
+                            name="numberOfTicket" id="numberOfTicket" required></td>
+                      </tr>
+                      <tr>
+                        <td><label for="name">Officer Name</label></td>
+                        <td><input type="text" [(ngModel)]="objBusTicketDetail.Name" class="form-control" name="name"
+                            id="name"></td>
+                      </tr>
+
+                    </table>
+
+                  </div>
+                  <div class="col-md-6">
+                    <table class="table borderless">
+
+
+                      <tr>
+                        <td><label for="wifeName">Wife Name</label></td>
+                        <td><input type="text" [(ngModel)]="objBusTicketDetail.WifeName" class="form-control"
+                            name="wifeName" id="wifeName"></td>
+                      </tr>
+                      <tr>
+                        <td><label for="childrenOne">Children One</label></td>
+                        <td><input type="text" [(ngModel)]="objBusTicketDetail.ChildrenOne" class="form-control"
+                            name="childrenOne" id="childrenOne"></td>
+                      </tr>
+                      <tr>
+                        <td><label for="childrenTwo">Children Two</label></td>
+                        <td><input type="text" [(ngModel)]="objBusTicketDetail.ChildrenTwo" class="form-control"
+                            name="childrenTwo" id="childrenTwo"></td>
+                      </tr>
+                      <tr>
+                        <td><label for="childrenThree">Children Three</label></td>
+                        <td><input type="text" [(ngModel)]="objBusTicketDetail.ChildrenThree" class="form-control"
+                            name="childrenThree" id="childrenThree"></td>
+                      </tr>
+                    </table>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button [disabled]='!requestForm.valid' (click)="saveBusTicket()" class="btn btn-primary"> Update Rquest
+        </button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<div id="myModalApprove" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h5 class="modal-title">Approve Bus Ticket</h5>
+      </div>
+      <div class="modal-body">
+
+        <div class="onpayment">
+
+          <form action="">
+            <div class="row">
+              <div class="col-md-12">
+                <label for="">Ticket Information</label>
+                <input class="form-control" id="approvedTicketNumber" name="approvedTicketNumber"
+                  [(ngModel)]="objBusTicket.ApprovedTicketNumber" type="text">
+              </div>
+            </div>
+          </form>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" (click)="approveRequest()" class="btn btn-default" data-dismiss="modal">Approve</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+<div id="myModalReject" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h5 class="modal-title">Reject Bus Ticket</h5>
+      </div>
+      <div class="modal-body">
+
+        <div class="onpayment">
+
+          <form action="">
+            <div class="row">
+              <div class="col-md-12">
+                <label for="">Reject Resone</label>
+                <select [(ngModel)]="objBusTicket.RejectReasonID" class="form-control" name="rejectReasonID"
+                  id="resone">
+                  <option value="undefined">Select Resone</option>
+                  <option value="1">Seat Not available</option>
+                  <option value="2">Others</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <label for="">Other Resone</label>
+                <input class="form-control" type="text" name="rejectReason" [(ngModel)]="objBusTicket.RejectReason">
+              </div>
+            </div>
+          </form>
+
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" (click)="rejectRequest()" class="btn btn-danger">Reject</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<div id="myModalPrint" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-md">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header" style="border:0">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <!-- <h5 class="modal-title">Bus Ticket</h5> -->
+      </div>
+      <div class="modal-body" id="Busticket">
+
+        <div class="onpayment" style="width:100%; font-size:11px;">
+          <h5 class="modal-title">Bus Ticket</h5>
+          <table border="1" style="width:100%; border-collapse: collapse;">
+            <tr>
+              <td style="width: 50%;padding:5px">Officer Name</td>
+              <td style="padding:5px">{{objBusTicketDetail.Name}}</td>
+            </tr>
+            <tr>
+              <td style="padding:5px">Request Date</td>
+              <td style="padding:5px">{{objBusTicket.RequestDate | date:'dd MMM yyyy'}}</td>
+            </tr>
+            <tr>
+              <td style="padding:5px">Traveling Date</td>
+              <td style="padding:5px">{{objBusTicket.TravelDate | date:'dd MMM yyyy'}}</td>
+            </tr>
+            <tr>
+              <td style="padding:5px">Vehicale Type</td>
+              <td style="padding:5px">{{objBusTicket.BusTypeName}}</td>
+            </tr>
+            <tr>
+              <td style="padding:5px">Number of Ticket</td>
+              <td style="padding:5px">{{objBusTicket.NumberOfTicket}}</td>
+            </tr>
+            <tr>
+              <td style="padding:5px">Seat Number</td>
+              <td style="padding:5px">{{objBusTicket.ApprovedTicketNumber}}</td>
+            </tr>
+          </table>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success printMe">Print</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>

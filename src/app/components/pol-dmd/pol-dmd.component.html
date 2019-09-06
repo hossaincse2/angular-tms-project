@@ -1,0 +1,850 @@
+<div class="header_section"></div>
+<div class="content100vh">
+    <section [hidden]="!showEntry">
+        <div class="container">
+            <form class="form-inline" #polDemandForm="ngForm">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title pull-left"> <a class="btn btn-success" (click)="close()"
+                                        title="Back"><img style="width: 24px;" src="./../../assets/image/back.svg"></a>
+                                </h3>
+                                <h3 class="center-heading text-center">পিওএল ডিমান্ড</h3>
+                                <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-md-4 pr0">
+                                                <label for="">ইউনিটের নাম নির্বাচন করুনঃ</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <select (change)="loadItem()" [(ngModel)]="objPOLDemand.FromUnitID"
+                                                    required name="fromUnitID" class="form-control custom_control_dmd">
+                                                    <option value='undefined'>-Select-</option>
+                                                    <option *ngFor="let vmUnit of lstVMUnit"
+                                                        [value]="vmUnit.Unit.UnitID">
+                                                        {{vmUnit.Unit.UnitName}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label for="">সংগ্রহের স্থান</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <select required [(ngModel)]="objPOLDemand.SupplyPlaceID"
+                                                    name="supplyPlaceID" class="form-control">
+                                                    <option value='undefined'>-Select-</option>
+                                                    <option *ngFor="let suplyPlace of lstSupplyPlace"
+                                                        value="{{suplyPlace.SupplyPlaceID}}">
+                                                        {{suplyPlace.SupplyPlaceName}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label for="">তারিখঃ</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="date" required [(ngModel)]="objPOLDemand.DemandDate"
+                                                    name="demandDate" class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label for="">পিওল বিতরন ধরন নির্বাচনঃ</label>
+                                            </div>
+                                            <div class="col-md-8 text-center polbitoron">
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <label class="checkbox-inline" for="isGarit">গাড়ী</label>
+                                                        <input class="form-control-checkbox" (change)="checkGari()"
+                                                            id="isGarit" [(ngModel)]="objPOLDemand.Gari" name="gari"
+                                                            type="checkbox">
+
+                                                        <input type="number" [(ngModel)]="objPOLDemand.NumberOfGari"
+                                                            id="numberOfGari" name="numberOfGari" disabled
+                                                            class="form-control w75 minusMirgin">
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label class="checkbox-inline" for="Baral">ব্যারেল</label>
+                                                        <input (change)="checkBarel()" class="form-control-checkbox"
+                                                            id="baral" [(ngModel)]="objPOLDemand.Baral" name="baral"
+                                                            type="checkbox">
+                                                        <input type="number" disabled
+                                                            [(ngModel)]="objPOLDemand.NumberOfBaral" id="numberOfBaral"
+                                                            name="numberOfBaral" class="form-control w75 minusMirgin">
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label class="checkbox-inline"
+                                                            for="VortukiPayment">জেরিক্যান</label>
+                                                        <input (change)="checkJerican()" class="form-control-checkbox"
+                                                            id="jerican" [(ngModel)]="objPOLDemand.Jerican"
+                                                            name="jerican" type="checkbox">
+                                                        <input type="number" [(ngModel)]="objPOLDemand.NumberOfJerican"
+                                                            id="numberOfJerican" name="numberOfJerican" disabled
+                                                            class="form-control w75 minusMirgin">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-md-4 text-right">
+                                                <label for="">গাড়ী নাম্বার</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <textarea disabled [(ngModel)]="objPOLDemand.GariNumber"
+                                                    name="gariNumber" id="gariNumber" cols="48" rows="5"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive table-bordered movie-table ">
+                            <table class="table movie-table tableFixHead">
+                                <thead>
+                                    <tr class="movie-table-head">
+                                        <th>ক্রমিক</th>
+                                        <th>পণ্যের নাম</th>
+                                        <th>ইউনিট</th>
+                                        <th>পরিমাণ</th>
+                                        <th>মোট</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let objFreshDetail of lstPOLDemandDetail; let i=index" class="dark-row">
+                                        <td> &nbsp;<input type="checkbox" [(ngModel)]="objFreshDetail.itemCheck"
+                                                (change)="calculateTotal(i)" name="itemCheck{{i}}"> &nbsp;{{i+1}}</td>
+                                        <td>{{objFreshDetail.ItemName}}</td>
+                                        <td>
+                                            <select [(ngModel)]="objFreshDetail.UnitOfMeasure" name="itemName{{i}}"
+                                                class="form-control">
+                                                <option value="undefined">Select Unit</option>
+                                                <option *ngFor="let unitOfMeasure of lstUnitOfMeasure"
+                                                    [value]="unitOfMeasure.UnitOfMeasureID">
+                                                    {{unitOfMeasure.Name}}
+                                                </option>
+                                            </select>
+                                        </td>
+                                        <td> <input disabled type="text" (change)="calculateTotal(i)"
+                                                name="Quantity{{i}}" id="Quantity{{i}}"
+                                                [(ngModel)]="objFreshDetail.Quantity" class="form-control"></td>
+
+
+                                        <td> <input disabled type="text" name="total{{i}}"
+                                                [(ngModel)]="objFreshDetail.Total" class="form-control"></td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="padding-top:10px; padding-bottom: 15px">
+                    <div class="col-md-12 text-right">
+                        <button [disabled]='!polDemandForm.valid' (click)="savePOLDemand()" class="btn btn-primary">
+                            Save
+                        </button>
+                        <button class="btn btn-danger" (click)="close()" type="submit">Close</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </section>
+    <div class="container">
+        <div [hidden]="showEntry" class="row">
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/unitDemand"
+                                title="Back"><img style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+                        <h3 class="center-heading text-center">পি ও এল ডিমান্ড লিস্ট</h3>
+                        <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+                    </div>
+                    <div class="panel-body">
+                        <form #searchForm="ngForm" class="form-inline">
+                            <div class="form-group">
+                                <label for="email">ইউনিটঃ</label>
+                                <select [(ngModel)]="objQueryObject.UnitID" name="unitID" class="form-control w250">
+                                    <option value='undefined'>All</option>
+                                    <option *ngFor="let vmUnit of lstVMUnit" [value]="vmUnit.Unit.UnitID">
+                                        {{vmUnit.Unit.UnitName}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="pwd">তারিখ হইতেঃ</label>
+                                <input type="date" required [ngModel]="objQueryObject.FromDate | date:'yyyy-MM-dd'"
+                                    (ngModelChange)="objQueryObject.FromDate = $event" class="form-control"
+                                    name="fromDate">
+                            </div>
+                            <div class="form-group">
+                                <label for="pwd">তারিখ প্রতিঃ</label>
+                                <input type="date" required [ngModel]="objQueryObject.ToDate | date:'yyyy-MM-dd'"
+                                    (ngModelChange)="objQueryObject.ToDate = $event" class="form-control" name="toDate">
+                            </div>
+                            <div class="form-group">
+                                <button [disabled]='!searchForm.valid' class="btn btn-success search-btn"
+                                    (click)="getFilteredPOLDemand()" type="submit">Serach</button>
+
+                                <button class="btn btn-success search-btn" (click)="addNew()" type="submit">Add
+                                    New</button>
+                                <button class="btn btn-success search-btn" (click)="viewAllotment()"
+                                    type="button">Allotment
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div> <br>
+                <div class="table-responsive">
+                    <table class="table table-hover tableFixHead" style="border: 1px solid #565656;">
+                        <tr>
+                            <th>Unit Name</th>
+                            <th>Demand Date</th>
+                            <th>গাড়ী</th>
+                            <th>গাড়ী সংখ্যা</th>
+                            <th>ব্যারেল</th>
+                            <th>ব্যারেল সংখ্যা</th>
+                            <th>জেরিক্যান</th>
+                            <th>জেরিক্যান সংখ্যা</th>
+                            <th> Status</th>
+                            <th style="width:15%; text-align:right ">Action</th>
+
+                        </tr>
+                        <tr *ngFor="let vmDemand of lstVMUnitDemand">
+                            <td>{{vmDemand.POLDemand.UnitName}}</td>
+                            <td>{{vmDemand.POLDemand.DemandDate | date:'yyyy-MM-dd'}}</td>
+                            <td>{{vmDemand.POLDemand.Gari}}</td>
+                            <td>{{vmDemand.POLDemand.NumberOfGari}}</td>
+                            <td>{{vmDemand.POLDemand.Baral}}</td>
+                            <td>{{vmDemand.POLDemand.NumberOfBaral}}</td>
+                            <td>{{vmDemand.POLDemand.Jerican}}</td>
+                            <td>{{vmDemand.POLDemand.NumberOfJerican}}</td>
+                            <td>{{vmDemand.POLDemand.StatusName}}</td>
+                            <td style="text-align:right">
+                                <a title="Detail" (click)="demandDetail(vmDemand)" class="detail"><i class='fa fa-list'
+                                        style="font-size: 20px; padding-right:15px"></i></a>
+                                <a title="Edit" [hidden]="vmDemand.POLDemand.Status>1" (click)="editDemand(vmDemand)"
+                                    class="edit"><i class="fa fa-pencil"
+                                        style="font-size: 20px;padding-right:15px"></i></a>
+
+                                <a title="Approve" [hidden]="!vmDemand.POLDemand.showApproval"
+                                    (click)="approveDemand(vmDemand)" class="success"><i class="fa fa-check-square"
+                                        style="font-size: 20px;padding-right:15px"></i></a>
+                                <!-- [hidden]="vmDemand.POLDemand.Status<3"  -->
+                                <a title="Print" (click)="printDemand(vmDemand)" class="edit"><i class="fa fa-print"
+                                        style="font-size: 20px;padding-right:15px"></i></a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="unitDemandModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Demand Detail</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table movie-table tableFixHead">
+                        <thead>
+                            <tr class="movie-table-head">
+                                <th>ক্রমিক</th>
+                                <th>পণ্যের নাম</th>
+                                <th>পরিমাণ</th>
+                                <th>প্রদেয়</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let polDetail of lstPOLDemandDetail; let i=index" class="dark-row">
+                                <td> &nbsp;{{i+1}}</td>
+                                <td>{{polDetail.ItemName}}</td>
+                                <td>{{polDetail.Quantity}}</td>
+                                <td>{{polDetail.ApprovedQty}}</td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="adminApprovalModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">POL Demand Detail</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table movie-table tableFixHead">
+                        <thead>
+                            <tr class="movie-table-head">
+                                <th>ক্রমিক</th>
+                                <th>পণ্যের নাম</th>
+                                <th style="text-align:right">বরাদ্দ</th>
+                                <th style="text-align:right">পূর্ববর্তী গ্রহণ</th>
+                                <th style="text-align:right">অবশিষ্ট</th>
+                                <th style="text-align:right">বর্তমান চাহিদা</th>
+                                <th style="text-align:right">প্রদেয়</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--row-->
+
+                            <tr *ngFor="let objCondimentDetail of lstVMPOLDistributionInfo; let i=index"
+                                class="dark-row">
+                                <td>
+                                    &nbsp;{{i+1}}</td>
+
+                                <td>{{objCondimentDetail.ItemName}}</td>
+                                <td style="text-align:right">{{objCondimentDetail.Alloted}}
+                                </td>
+                                <td style="text-align:right"> {{objCondimentDetail.Received}}
+                                </td>
+                                <td style="text-align:right"> {{objCondimentDetail.Balance}}</td>
+                                <td style="text-align:right"> {{objCondimentDetail.DemandQuantity}}</td>
+                                <td style="text-align:right"> <input type="text" style="text-align:right"
+                                        name="Quantity{{i}}" [(ngModel)]="objCondimentDetail.Quantity"
+                                        class="form-control">
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" (click)="approvePOLDemand()" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="printPolDemand" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-small" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" style="font-size: 19px;" id="exampleModalLabel">POL Demand Detail</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <button type="button" (click)="printPolDemand()"
+                        class="btn btn-primary printMe printupper">Print</button>
+                </div>
+                <div id="printPolDemandBody" class="modal-body">
+                    <div class="section" style="border-bottom: 1px dashed black;margin-bottom: 15px">
+                        <p style="text-align: right">বিএএফজেড-২২০৬ <br> প্রেরকের অংশ</p>
+                        <div style="width:100%;text-align: center">
+                            <h5>এসএসডি ঘাটাইল</h5>
+                            <h5>পিওএল সরবরাহপত্র</h5>
+                        </div>
+                        <table style="width:100%">
+                            <tr>
+                                <td style="width:15%;padding-bottom: 5px">1.&nbsp;তারিখ</td>
+                                <td style="width:85%;padding-bottom: 5px">
+                                    <span>{{objPOLDemand.ApprovedDate | date:'yyyy-MM-dd'}}</span></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 5px">2.&nbsp;বিএ নং</td>
+                                <td style="padding-bottom: 5px"><span>{{objPOLDemand.GariNumber}}</span></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 5px">3.&nbsp;ইউনিট</td>
+                                <td style="padding-bottom: 5px"><span>{{objPOLDemand.UnitName}}</span></td>
+                            </tr>
+                            <!-- <tr>
+                            <td>3.খরচকৃত পিওএল এর খাত</td>
+                            <td><input class="form-control" type="text"></td>
+                        </tr> -->
+                            <tr>
+                                <td style="padding-bottom: 5px">4.&nbsp;প্রাধিকার</td>
+                                <td style="padding-bottom: 5px"> <span>{{objPOLDemand.AutogeneratedNumber}}</span></td>
+                            </tr>
+                            <tr>
+                                <td>5.&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </table>
+
+                        <table class="table movie-table tableFixHead">
+                            <thead>
+                                <tr class="movie-table-head">
+                                    <th>ক্রমিক</th>
+                                    <th>পণ্যের নাম</th>
+                                    <th>পরিমাণ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!--row-->
+
+                                <tr *ngFor="let objFreshDetail of lstPOLDemandDetail; let i=index" class="dark-row">
+                                    <td>&nbsp;{{i+1}}</td>
+                                    <td>{{objFreshDetail.ItemName}}</td>
+                                    <td>{{objFreshDetail.ApprovedQty}}</td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                        <table style="width:100%">
+                            <tr>
+                                <td>6.&nbsp;ইউনিট সিলমোহর অ্যাডজুটেন্ট/কোয়াটার মাস্টার স্বাক্ষর</td>
+                                <td><span></span></td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td style="width:70%">গ্রহণকারী</td>
+                                <td style="width:30%">বিতরণকারী <br>(ইনচার্জ/এফডিইউ)</td>
+                            </tr>
+                        </table>
+                        <table style="width:100%">
+                            <tr>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td style="width:15%;padding-bottom: 5px">নাম্বার</td>
+                                <td style="width:50%;padding-bottom: 5px"><span></span></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 5px">পদবী এবং নাম</td>
+                                <td style="padding-bottom: 5px"><span></span></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 5px">স্বাক্ষর</td>
+                                <td style="padding-bottom: 5px"><span></span></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="section" style="border-bottom: 1px dashed black;margin-bottom: 15px">
+                        <p style="text-align: right">বিএএফজেড-২২০৬ <br> প্রাপক ইউনিটের অংশ</p>
+                        <div style="width:100%;text-align: center">
+                            <h5>এসএসডি ঘাটাইল</h5>
+                            <h5>পিওএল সরবরাহপত্র</h5>
+                        </div>
+                        <table style="width:100%">
+                            <tr>
+                                <td style="width:15%;padding-bottom: 5px">1.&nbsp;তারিখ</td>
+                                <td style="width:85%;padding-bottom: 5px">
+                                    <span>{{objPOLDemand.ApprovedDate | date:'yyyy-MM-dd'}}</span></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 5px">2.&nbsp;বিএ নং</td>
+                                <td style="padding-bottom: 5px"><span>{{objPOLDemand.GariNumber}}</span></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 5px">3.&nbsp;ইউনিট</td>
+                                <td style="padding-bottom: 5px"><span>{{objPOLDemand.UnitName}}</span></td>
+                            </tr>
+                            <!-- <tr>
+                            <td>3.খরচকৃত পিওএল এর খাত</td>
+                            <td><input class="form-control" type="text"></td>
+                        </tr> -->
+                            <tr>
+                                <td style="padding-bottom: 5px">4.&nbsp;প্রাধিকার</td>
+                                <td style="padding-bottom: 5px"> <span>{{objPOLDemand.AutogeneratedNumber}}</span></td>
+                            </tr>
+                            <tr>
+                                <td>5.&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </table>
+
+                        <table class="table movie-table tableFixHead">
+                            <thead>
+                                <tr class="movie-table-head">
+                                    <th>ক্রমিক</th>
+                                    <th>পণ্যের নাম</th>
+                                    <th>পরিমাণ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!--row-->
+
+                                <tr *ngFor="let objFreshDetail of lstPOLDemandDetail; let i=index" class="dark-row">
+                                    <td>&nbsp;{{i+1}}</td>
+                                    <td>{{objFreshDetail.ItemName}}</td>
+                                    <td>{{objFreshDetail.ApprovedQty}}</td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                        <table style="width:100%">
+                            <tr>
+                                <td>6.&nbsp;ইউনিট সিলমোহর অ্যাডজুটেন্ট/কোয়াটার মাস্টার স্বাক্ষর</td>
+                                <td><span></span></td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td style="width:70%">গ্রহণকারী</td>
+                                <td style="width:30%">বিতরণকারী <br>(ইনচার্জ/এফডিইউ)</td>
+                            </tr>
+                        </table>
+                        <table style="width:100%">
+                            <tr>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td style="width:15%;padding-bottom: 5px">নাম্বার</td>
+                                <td style="width:50%;padding-bottom: 5px"><span></span></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 5px">পদবী এবং নাম</td>
+                                <td style="padding-bottom: 5px"><span></span></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 5px">স্বাক্ষর</td>
+                                <td style="padding-bottom: 5px"><span></span></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="section section_2ndpage" style="border-bottom: 1px dashed black;margin-bottom: 15px">
+                        <p style="text-align: right">বিএএফজেড-২২০৬ <br> কেন্দ্রীয় খতিয়ানের অংশ</p>
+                        <div style="width:100%;text-align: center">
+                            <h5>এসএসডি ঘাটাইল</h5>
+                            <h5>পিওএল সরবরাহপত্র</h5>
+                        </div>
+                        <table style="width:100%">
+                            <tr>
+                                <td style="width:15%;padding-bottom: 5px">1.&nbsp;তারিখ</td>
+                                <td style="width:85%;padding-bottom: 5px">
+                                    <span>{{objPOLDemand.ApprovedDate | date:'yyyy-MM-dd'}}</span></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 5px">2.&nbsp;বিএ নং</td>
+                                <td style="padding-bottom: 5px"><span>{{objPOLDemand.GariNumber}}</span></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 5px">3.&nbsp;ইউনিট</td>
+                                <td style="padding-bottom: 5px"><span>{{objPOLDemand.UnitName}}</span></td>
+                            </tr>
+                            <!-- <tr>
+                            <td>3.খরচকৃত পিওএল এর খাত</td>
+                            <td><input class="form-control" type="text"></td>
+                        </tr> -->
+                            <tr>
+                                <td style="padding-bottom: 5px">4.&nbsp;প্রাধিকার</td>
+                                <td style="padding-bottom: 5px"> <span>{{objPOLDemand.AutogeneratedNumber}}</span></td>
+                            </tr>
+                            <tr>
+                                <td>5.&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </table>
+
+                        <table class="table movie-table tableFixHead">
+                            <thead>
+                                <tr class="movie-table-head">
+                                    <th>ক্রমিক</th>
+                                    <th>পণ্যের নাম</th>
+                                    <th>পরিমাণ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!--row-->
+
+                                <tr *ngFor="let objFreshDetail of lstPOLDemandDetail; let i=index" class="dark-row">
+                                    <td>&nbsp;{{i+1}}</td>
+                                    <td>{{objFreshDetail.ItemName}}</td>
+                                    <td>{{objFreshDetail.ApprovedQty}}</td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                        <table style="width:100%">
+                            <tr>
+                                <td>6.&nbsp;ইউনিট সিলমোহর অ্যাডজুটেন্ট/কোয়াটার মাস্টার স্বাক্ষর</td>
+                                <td><span></span></td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td style="width:70%">গ্রহণকারী</td>
+                                <td style="width:30%">বিতরণকারী <br>(ইনচার্জ/এফডিইউ)</td>
+                            </tr>
+                        </table>
+                        <table style="width:100%">
+                            <tr>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td style="width:15%;padding-bottom: 5px">নাম্বার</td>
+                                <td style="width:50%;padding-bottom: 5px"><span></span></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 5px">পদবী এবং নাম</td>
+                                <td style="padding-bottom: 5px"><span></span></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 5px">স্বাক্ষর</td>
+                                <td style="padding-bottom: 5px"><span></span></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="section">
+                        <p style="text-align: right">বিএএফজেড-২২০৬ <br> এলও অংশ</p>
+                        <div style="width:100%;text-align: center">
+                            <h5>এসএসডি ঘাটাইল</h5>
+                            <h5>পিওএল সরবরাহপত্র</h5>
+                        </div>
+                        <table style="width:100%">
+                            <tr>
+                                <td style="width:15%;padding-bottom: 5px">1.&nbsp;তারিখ</td>
+                                <td style="width:85%;padding-bottom: 5px">
+                                    <span>{{objPOLDemand.ApprovedDate | date:'yyyy-MM-dd'}}</span></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 5px">2.&nbsp;বিএ নং</td>
+                                <td style="padding-bottom: 5px"><span>{{objPOLDemand.GariNumber}}</span></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 5px">3.&nbsp;ইউনিট</td>
+                                <td style="padding-bottom: 5px"><span>{{objPOLDemand.UnitName}}</span></td>
+                            </tr>
+                            <!-- <tr>
+                            <td>3.খরচকৃত পিওএল এর খাত</td>
+                            <td><input class="form-control" type="text"></td>
+                        </tr> -->
+                            <tr>
+                                <td style="padding-bottom: 5px">4.&nbsp;প্রাধিকার</td>
+                                <td style="padding-bottom: 5px"> <span>{{objPOLDemand.AutogeneratedNumber}}</span></td>
+                            </tr>
+                            <tr>
+                                <td>5.&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </table>
+
+                        <table class="table movie-table tableFixHead">
+                            <thead>
+                                <tr class="movie-table-head">
+                                    <th>ক্রমিক</th>
+                                    <th>পণ্যের নাম</th>
+                                    <th>পরিমাণ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!--row-->
+
+                                <tr *ngFor="let objFreshDetail of lstPOLDemandDetail; let i=index" class="dark-row">
+                                    <td>&nbsp;{{i+1}}</td>
+                                    <td>{{objFreshDetail.ItemName}}</td>
+                                    <td>{{objFreshDetail.ApprovedQty}}</td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                        <table style="width:100%">
+                            <tr>
+                                <td>6.&nbsp;ইউনিট সিলমোহর অ্যাডজুটেন্ট/কোয়াটার মাস্টার স্বাক্ষর</td>
+                                <td><span></span></td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td style="width:70%">গ্রহণকারী</td>
+                                <td style="width:30%">বিতরণকারী <br>(ইনচার্জ/এফডিইউ)</td>
+                            </tr>
+                        </table>
+                        <table style="width:100%">
+                            <tr>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td style="width:15%;padding-bottom: 5px">নাম্বার</td>
+                                <td style="width:50%;padding-bottom: 5px"><span></span></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 5px">পদবী এবং নাম</td>
+                                <td style="padding-bottom: 5px"><span></span></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-bottom: 5px">স্বাক্ষর</td>
+                                <td style="padding-bottom: 5px"><span></span></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" (click)="printPolDemand()" class="btn btn-primary printMe">Print</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="modalPolAllotment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/smsDashboard"
+                                    title="Back"><img style="width: 24px;" src="./../../assets/image/back.svg"></a>
+                            </h3>
+                            <h3 class="center-heading text-center">পি ও এল অ্যালটমেন্ট</h3>
+                            <!-- <span class="pull-right clickable"> <a class="btn btn-success add-new-btn" (click)="addNew()">Add
+                                New</a></span> -->
+                        </div>
+                        <div class="panel-body">
+                            <form action="" class="form-inline">
+                                <div class="form-group">
+                                    <label for="email">ইউনিটঃ</label>
+                                    <select [(ngModel)]="objQueryObject.UnitID" required name="unitID"
+                                        class="form-control w250">
+                                        <option value=''>-Select-</option>
+                                        <option *ngFor="let vmUnit of lstVMUnit" [value]="vmUnit.Unit.UnitID">
+                                            {{vmUnit.Unit.UnitName}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pwd">তারিখ হইতেঃ</label>
+                                    <input type="date" required [ngModel]="objQueryObject.FromDate | date:'yyyy-MM-dd'"
+                                        (ngModelChange)="objQueryObject.FromDate = $event" class="form-control"
+                                        name="fromDate">
+                                </div>
+                                <div class="form-group">
+                                    <label for="pwd">তারিখ প্রতিঃ</label>
+                                    <input type="date" required [ngModel]="objQueryObject.ToDate | date:'yyyy-MM-dd'"
+                                        (ngModelChange)="objQueryObject.ToDate = $event" class="form-control"
+                                        name="toDate">
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-success search-btn" (click)="getFilteredPOLAllotment()"
+                                        type="submit">Serach</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover" style="border: 1px solid #565656;">
+                            <tr>
+                                <th>Unit Name</th>
+                                <th>Allotment Date</th>
+                                <th>Allotment Type Name</th>
+                                <th>Responsible</th>
+                                <th>Comment</th>
+                                <th>Action</th>
+
+                            </tr>
+                            <tr *ngFor="let vmPOLAllotment of lstVMPOLAllotment">
+                                <td>{{vmPOLAllotment.POLAllotment.UnitName}}</td>
+                                <td>{{vmPOLAllotment.POLAllotment.AllotmentDate| date:'yyyy-MM-dd'}}</td>
+                                <td>{{vmPOLAllotment.POLAllotment.AllotmentTypeName}}</td>
+                                <td>{{vmPOLAllotment.POLAllotment.DemandAuthority}}</td>
+                                <td>{{vmPOLAllotment.POLAllotment.Remarks}}</td>
+                                <td>
+
+                                    <a title="View Detail" (click)="viewDetailAllotment(vmPOLAllotment)"
+                                        class="detail"><i class='fa fa-list'
+                                            style="font-size: 20px; margin-right:20px"></i></a>
+
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalAllotmentDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table" style="width:100%">
+                        <tr>
+                            <th>পণ্যের নাম</th>
+                            <th>একক</th>
+                            <th>মূল্য</th>
+                            <th>পরিমাণ</th>
+                            <th>মোট পরিমাণ</th>
+                            <th>মন্তব্য</th>
+                        </tr>
+                        <tr *ngFor="let rDetail of lstPOLAllotmentDetail; let i = index;">
+                            <td>
+                                {{rDetail.ItemName}}
+                            </td>
+                            <td>
+                                <select disabled name="Unit{{i}}" [(ngModel)]="rDetail.UnitOfMeasureName" class="form-control">
+                                    <option value='undefined'>-Select-</option>
+                                    <option *ngFor="let unit of lstUnitOfMeasure" [value]="unit.UnitOfMeasureID">
+                                        {{unit.Name}}
+                                    </option>
+                                </select>
+                            </td>
+                            <td>
+                                {{rDetail.Price}}
+                            </td>
+                            <td>
+                                {{rDetail.Quantity}}
+                            </td>
+                            <td> {{rDetail.TotalQuantity}}
+                            </td>
+                            <td>
+                                {{rDetail.Remarks}}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,164 @@
+<div class="container-fluid">
+  <div class="main-navigation row navbar-shopmanager">
+    <div class="container">
+      <div class="row navbar-shopmanager">
+        <div class="site-headaer">
+          <div class="navbar-left-section">
+            <button (click)="toggleMenu()" type="button" class="btn menu-btn btn-default visible-min left-menu-toggle">
+              <span class="sr-only">Toggle Left Menu</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <nav class="site-navbar navbar-left" [class.open]="isMenuOpen">
+              <ul class="nav navbar-nav" #one>
+                <li *ngIf="errorFlag" class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">CSSD
+                    <span class="caret"></span>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <a routerLink="/user">User</a>
+                    </li>
+                
+                    <li>
+                      <a routerLink="/cssd">CSDD</a>
+                    </li>
+                    <li>
+                      <a routerLink="/ssd">SDD</a>
+                    </li>
+                    <li>
+                      <a routerLink="/demandSetting">Demand Setting</a>
+                    </li>
+                    <li>
+                      <a routerLink="/viewDemandSetting">View Demand Setting</a>
+                    </li>
+                  </ul>
+                </li>
+                <li *ngIf="errorFlag" class="dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SSD
+                    <span class="caret"></span>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <a routerLink="/ssdRequisition">Requisition</a>
+                    </li>
+                    <li>
+                      <a routerLink="/viewSSDRequisition">View Requisition</a>
+                    </li>
+                    <li>
+                      <a routerLink="/distribution">Distribution</a>
+                    </li>
+                    <li>
+                      <a routerLink="/supplier">Supplier</a>
+                    </li>
+                    <li>
+                      <a routerLink="/unit">Unit</a>
+                    </li>
+                    <li>
+                      <a routerLink="/cl">Central Ledger</a>
+                    </li>
+                    <li>
+                      <a routerLink="/product">Product</a>
+                    </li>
+
+                  </ul>
+                </li>
+                <li *ngIf="errorFlag" class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                    aria-expanded="false">
+                    Unit
+                    <span class="caret"></span>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <a routerLink="/unitRequisition">Requisition</a>
+                    </li>
+                    <li>
+                      <a routerLink="/viewUnitRequisition">View Requisition</a>
+                    </li>                   
+
+                  </ul>
+                </li>
+                <li *ngIf="errorFlag" class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                    aria-expanded="false">
+                    Central Ledger
+                    <span class="caret"></span>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <a routerLink="/requisition">SSD Requisition</a>
+                    </li>
+                    <li>
+                      <a routerLink="/requisition">Unit Requisition</a>
+                    </li>
+                    <li>
+                      <a routerLink="/viewRequisition">SSD Distribution</a>
+                    </li>
+                    <li>
+                      <a routerLink="/purchase">Accounts</a>
+                    </li>
+                  </ul>
+                </li>
+
+
+
+              </ul>
+            </nav>
+          </div>
+          <div class="small-screen-logo visible-min">LOGO</div>
+          <div class="navbar-right-section site-navbar" style="padding: 0px;">
+            <button (click)="toggleRightMenu()" type="button" class="btn menu-social-btn btn-default visible-min right-menu-toggle">
+              <span class="sr-only">Toggle Right Menu</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <nav class="site-navbar-2 navbar-right" [class.open]="isRightMenuOpen">
+              <ul class="nav navbar-nav">
+
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                    aria-expanded="false">
+                    {{userID}}
+                    <span class="caret"></span>
+                  </a>
+                  <!-- <ul class="dropdown-menu">
+                      <li>
+                          <a href="#">Action</a>
+                      </li>
+                      <li>
+                          <a href="#">Another action</a>
+                      </li>
+                  </ul> -->
+                </li>
+                <!-- <li>
+                    <a href="../navbar-static-top/">
+                        <i class="fa fa-bell"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="../navbar-static-top/">
+                        <i class="fa  fa-comment-o"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="../navbar-static-top/">
+                        <i class="fa  fa-cog"></i>
+                    </a>
+                </li> -->
+                <li>
+                  <a style="cursor: pointer;" (click)="logout()">
+                    <i class="fa fa-power-off"></i>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+        <div class="shade" [style.display]="(isMenuOpen || isRightMenuOpen ) ? 'block' : 'none'" (click)="shadeMenuToggle()"></div>
+      </div>
+    </div>
+  </div>
+</div>

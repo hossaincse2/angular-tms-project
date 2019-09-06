@@ -1,0 +1,236 @@
+<div class="header_section"> </div>
+<div [hidden]="!showEntry" class="settings unit">
+  <div class="container content100vh">
+    <div class="row">
+      <form #unitForm="ngForm">
+        <div class="row top-bar">
+          <div class="col-md-12">
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/polManagement"
+                    title="Back"><img style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+                <h3 class="center-heading text-center">পি ও এল রিসিভ</h3>
+                <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+              </div>
+              <div class="panel-body">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="row">
+                        <div class="col-md-2">
+                          <label for="">তারিখ</label>
+                        </div>
+                        <div class="col-md-10 pl0">
+                          <input [ngModel]="objPOLReceive.ReceiveDate| date:'yyyy-MM-dd'"
+                          (ngModelChange)="objPOLReceive.ReceiveDate = $event" name="receiveDate" type="date" required
+                            class="form-control" />
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-2">
+                          <label for="">কম্পানি</label>
+                        </div>
+                        <div class="col-md-10 pl0">
+                          <input class="form-control" [(ngModel)]="objPOLReceive.CompanyName" name="companyName"
+                            type="text">
+                        </div>
+                      </div>
+
+                    </div>
+                    <div class="col-md-6">
+                      <div class="row">
+                        <div class="col-md-3">
+                          <label for="">রেফারেন্স নাম্বার</label>
+                        </div>
+                        <div class="col-md-9 pl0">
+                          <input class="form-control" [(ngModel)]="objPOLReceive.ReferenceNumber" name="referenceNumber"
+                            type="text">
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-3">
+                          <label for="">মন্তব্য</label>
+                        </div>
+                        <div class="col-md-9 pl0">
+                          <textarea [(ngModel)]="objPOLReceive.Remarks" name="remarks" class="form-control" id=""
+                            cols="30" rows="2"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="container">
+              <div class="row">
+                <table class="table" style="width:100%">
+                  <tr>
+                    <th>Item</th>
+                    <th>Unit</th>
+                    <th>Quantity</th>
+                    <th>Remarks</th>
+                    <th colspan="2">Action</th>
+                  </tr>
+                  <tr *ngFor="let rDetail of lstPOLReceiveDetail; let i = index;">
+                    <td>
+                      <select [(ngModel)]="rDetail.ItemID" name="itemName{{i}}" class="form-control">
+                        <option value="undefined">-Select-</option>
+                        <option *ngFor="let item of lstPOLItem" [value]="item.ItemID">
+                          {{item.ItemName}}
+                        </option>
+                      </select>
+                    </td>
+                    <td>
+                      <select [(ngModel)]="rDetail.UnitOfMeasure" name="unitOfMeasure{{i}}" class="form-control">
+                        <option value="undefined">-Select-</option>
+                        <option *ngFor="let unitOfMeasure of lstUnitOfMeasure" [value]="unitOfMeasure.UnitOfMeasureID">
+                          {{unitOfMeasure.Name}}
+                        </option>
+                      </select>
+                    </td>
+                    <td> <input name="quantity{{i}}" type="number" [(ngModel)]="rDetail.Quantity" class="form-control">
+                    </td>
+                    <td> <input name="remarks{{i}}" type="text" [(ngModel)]="rDetail.Remarks" class="form-control">
+
+
+                    <td style="width: 3%;">
+                      <button (click)="addResource()" class="btn"> <img src="../../../assets/image/plus.svg" alt="">
+                      </button>
+                    </td>
+                    <td>
+                      <button (click)="removeResource()" class="btn"><img src="../../../assets/image/minus.svg" alt="">
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="container">
+              <div class="row">
+                <div class="text-right" style="padding-top:15px">
+                  <button [disabled]='!unitForm.valid' (click)="savePOLReceive()" class="btn btn-primary"> Save
+                  </button>
+                  <button class="btn btn-success" (click)="close()">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div [hidden]="showEntry" class="container">
+  <div class="row content100vh">
+    <div class="col-md-12">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/polManagement" title="Back"><img
+                style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+          <h3 class="center-heading text-center">পি ও এল রিসিভ লিস্ট</h3>
+          <!-- <span class="pull-right clickable"> <a class="btn btn-success add-new-btn" (click)="addNew()">Add
+              New</a></span> -->
+        </div>
+        <div class="panel-body">
+          <form action="" class="form-inline">
+            <!-- <div class="form-group">
+              <label for="email">ইউনিটঃ</label>
+              <select [(ngModel)]="objQueryObject.UnitID" required name="fromUnitID" class="form-control w250">
+                <option value=''>-Select-</option>
+                <option *ngFor="let vmUnit of lstVMUnit" [value]="vmUnit.Unit.UnitID">
+                  {{vmUnit.Unit.UnitName}}
+                </option>
+              </select>
+            </div> -->
+            <div class="form-group">
+              <label for="pwd">তারিখ হইতেঃ</label>
+              <!-- <input type="date" [(ngModel)]="objQueryObject.FromDate" name="fromDate" class="form-control" id="usr"> -->
+              <input type="date" required [ngModel]="objQueryObject.FromDate | date:'yyyy-MM-dd'"
+                (ngModelChange)="objQueryObject.FromDate = $event" class="form-control" name="fromDate">
+            </div>
+            <div class="form-group">
+              <label for="pwd">তারিখ প্রতিঃ</label>
+              <!-- <input type="date" [(ngModel)]="objQueryObject.ToDate" name="toDate" class="form-control" id="usr"> -->
+              <input type="date" required [ngModel]="objQueryObject.ToDate | date:'yyyy-MM-dd'"
+                (ngModelChange)="objQueryObject.ToDate = $event" class="form-control" name="toDate">
+            </div>
+            <div class="form-group">
+              <button class="btn btn-success search-btn" (click)="getFilteredPOLReceive()" type="submit">Serach</button>
+              <button class="btn btn-success search-btn" (click)="addNewPOL()" type="submit">Add
+                New</button>
+            </div>
+
+
+          </form>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover" style="border: 1px solid #565656;">
+          <tr>
+            <th>Receive Date</th>
+            <th>Company Name</th>
+            <th>Reference Number</th>
+            <th>Remarks</th>
+            <th>Action</th>
+
+          </tr>
+          <tr *ngFor="let vmPOLReceive of lstVMPOLReceive">
+            <td>{{vmPOLReceive.POLReceive.ReceiveDate| date:'yyyy-MM-dd'}}</td>
+            <td>{{vmPOLReceive.POLReceive.CompanyName}}</td>
+            <td>{{vmPOLReceive.POLReceive.ReferenceNumber}}</td>
+            <td>{{vmPOLReceive.POLReceive.Remarks}}</td>
+            <td>
+              <a title="Approve" [hidden]="vmPOLReceive.POLReceive.Status==2" (click)="apovePOLReceive(vmPOLReceive)"
+                class="approve"><i class='fa fa-check-square' style="font-size: 20px; margin-right:20px"></i></a>
+              <a title="Edit" [hidden]="vmPOLReceive.POLReceive.Status==2" (click)="editPOLReceive(vmPOLReceive)"
+                class="edit"><i class='fa fa-edit' style="font-size: 20px; margin-right:20px"></i></a>
+              <a title="Detail" (click)="polReceiveDetail(vmPOLReceive)" class="detail"><i class='fa fa-list'
+                  style="font-size: 20px; margin-right:20px"></i></a>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="modal fade" id="adminApprovalModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Unit Demand Detail</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="table-responsive">
+            <table class="table" style="width:100%">
+              <tr>
+                <th>Item</th>
+                <th>Unit</th>
+                <th>Quantity</th>
+                <th>Remarks</th>       
+              </tr>
+              <tr *ngFor="let rDetail of lstPOLReceiveDetail; let i = index;">
+                <td>
+                  {{rDetail.ItemName}}
+                </td>
+                <td>
+                  {{rDetail.UnitOfMeasureName}}
+                </td>
+                <td>
+                  {{rDetail.Quantity}}
+                </td>
+                <td> {{rDetail.Remarks}} </td>
+
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

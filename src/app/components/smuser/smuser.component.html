@@ -1,0 +1,97 @@
+<section class="header_space">
+  <div class="container">
+    <form #loginForm="ngForm">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/smsDashboard" title="Back"><img
+                    style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+              <h3 class="center-heading text-center">Registration</h3>
+              <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+            </div>
+            <div class="panel-body">
+
+              <div class="col-md-6">
+                <label> User Type</label>
+                <div class="">
+                  <select [(ngModel)]="objUser.UserLevel" required name="level" class="form-control">
+                    <option value='undefined'>-Select-</option>
+                    <option *ngFor="let level of userLevel" [value]="level.id">
+                      {{level.name}}
+                    </option>
+                  </select>
+                </div><br>
+
+                <label> Army No :</label>
+                <input type="text" (blur)="checkUserLevel()" [(ngModel)]="objUser.BANo" required name="baNo"
+                  class="form-control" /><br>
+
+
+                <label>Name :</label>
+                <input type="text" class="form-control" [(ngModel)]="objUser.Name" required name="name"
+                  placeholder="Type Your Full Name" /><br>
+
+
+                <label>Unit :</label>
+                <select [(ngModel)]="objUser.UnitID" required name="unitID" id="unitID" class="form-control">
+                  <option value='undefined'>-Select-</option>
+                  <option *ngFor="let vmUnit of lstVMUnit" [value]="vmUnit.Unit.UnitID">
+                    {{vmUnit.Unit.UnitName}}
+                  </option>
+                </select>
+                <label>Joining Date:</label>
+
+                <input name="postingDate" [ngModel]="objUser.JoiningDate| date:'yyyy-MM-dd'"
+                  (ngModelChange)="objUser.JoiningDate = $event" type="date" class="form-control">
+                <label>Joining Auth:</label>
+                <input type="text" [(ngModel)]="objUser.JoiningAuth" required name="joingAuth" class="form-control" />
+
+                <label>Signature : &nbsp;</label>
+                <!-- <input type="file" [(ngModel)]="objUser.Sign" required name="Sign" class="form-control" /> -->
+                <input type="file" multiple (change)="validateSingleInput(input)" #input />
+                <div *ngIf="objUser.Sign">
+                  <img id="logo" width="100px"  src="data:image/jpeg;base64,{{objUser.Sign}}" alt="ImageFile" />
+                </div>
+              </div>
+
+              <div class="col-md-6">
+               
+                <label>Rank</label>
+                <input type="text" [(ngModel)]="objUser.PostingAuth" required name="postingAuth"
+                  class="form-control" /><br>
+
+                <label>Email :</label>
+                <input type="text" [(ngModel)]="objUser.Email" required name="email" class="form-control"
+                  placeholder="Enter your email address"><br>
+
+
+                <label>User Name</label>
+                <input type="text" [(ngModel)]="objUser.UserID" required name="userName" class="form-control"
+                  placeholder="Type Your Name"><br>
+
+                <label>Password</label>
+                <input type="password" [(ngModel)]="objUser.Password" [required]="!editStateFlag ? 'required' : null"
+                  name="password" (blur)="chackPassword()" class="form-control" placeholder="Enter password"><br>
+
+                <label>Retype Password</label>
+                <input type="password" [(ngModel)]="objUser.cpassword" [required]="!editStateFlag ? 'required' : null"
+                  name="cpassword" (blur)="chackPassword()" class="form-control" placeholder="Re-type password"><br>
+                <div class="text-danger" [hidden]="!mismatchPassword">password and retype password mismatch
+                </div>
+                <div class="pull-right">
+                  <label></label>
+                  <button [disabled]="!loginForm.valid || mismatchPassword " (click)="saveUser()"
+                    class="btn btn-success">Save</button>
+                  <button class="btn btn-success" routerLink="/smsLogin">Back to login</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </form>
+  </div>
+</section>

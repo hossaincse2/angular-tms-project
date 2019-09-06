@@ -1,0 +1,25 @@
+.header_title{
+    padding: 5px;
+    border: 1px solid;
+    background-color: #ccc;
+    width: 58%;
+    margin: 0 auto;
+}
+.body_content {
+    border: 1px solid gainsboro;
+    min-height: 510px;
+    width: 58%;
+    margin: 0 auto;
+    padding: 10px;
+}
+@media only screen and (max-width: 768px) {
+        .header_title{
+            width: 100%;
+        }
+        .body_content { 
+            width: 100%; 
+            height: 564px;
+            border: 0px;
+        }
+    }
+   

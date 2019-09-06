@@ -1,0 +1,6 @@
+.borderless td, .borderless th {
+    border: none;
+}
+.bus-ticket .form-control {
+    width: 260px;
+}

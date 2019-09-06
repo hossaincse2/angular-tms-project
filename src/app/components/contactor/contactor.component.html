@@ -1,0 +1,317 @@
+<div class="header_section"></div>
+<div [hidden]="showEntry" class="container content100vh">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/smsDashboard"
+                            title="Back"><img style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+                    <h3 class="center-heading text-center">কন্ট্রাকটর</h3>
+                    <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+                </div>
+                <div class="panel-body">
+                    <form #searchForm="ngForm" class="form-inline">
+                        <div class="form-group">
+                            <label for="pwd">Contractor Name</label>
+                            <input class="form-control" type="text">
+                        </div>
+
+                        <div class="form-group">
+                            <button [disabled]='!searchForm.valid' (click)="searchContractor()"
+                                class="btn btn-success search-btn" type="submit">Serach</button>
+                        </div>
+                        <button class="btn btn-success" (click)="addNew()">Add New</button>
+                    </form>
+                    <div class="table-responsive">
+                        <table class="table table-hover tableFixHead" style="border: 1px solid #565656;">
+                            <tr>
+                                <th>Contractor Name</th>
+                                <th>Bank Name</th>
+                                <th>Account Number</th>
+                                <th>Contract Date</th>
+                                <th>Valid Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+
+                            </tr>
+                            <tr *ngFor="let vmContactor of lstVMContractor">
+                                <td>{{vmContactor.Contactor.ContractorName}}</td>
+                                <td>{{vmContactor.Contactor.BankName}}</td>
+                                <td>{{vmContactor.Contactor.AccountNumber}}</td>
+                                <td>{{vmContactor.Contactor.ContactDate | date:'yyyy-MM-dd'}}</td>
+                                <td>{{vmContactor.Contactor.ValidDate | date:'yyyy-MM-dd'}}</td>
+                                <td>{{vmContactor.Contactor.StatusName}}</td>
+                                <td>
+                                    <a title="Edit" (click)="editContactor(vmContactor)" class="edit">
+                                        <i class='fa fa-pencil' style="font-size: 20px; margin-right:20px"></i>
+                                    </a>
+                                    <a title="Detail" (click)="contactorDetail(vmContactor)" class="detail">
+                                        <i class='fa fa-list' style="font-size: 20px; margin-right:20px"></i>
+                                    </a>
+                                    <a title="Delete" (click)="deleteUnit(vmContactor)" class="delete">
+                                        <i class="fa fa-trash" style="font-size: 20px"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div [hidden]="!showEntry" class="settings content100vh">
+    <div class="settings">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title pull-left"> <a class="btn btn-success" (click)="close()"
+                                    title="Back"><img style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+                            <h3 class="center-heading text-center">কন্ট্রাকটর</h3>
+                            <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+                        </div>
+                        <div class="panel-body">
+                            <form #contactorForm="ngForm">
+
+                                <div class="row">
+                                    <div class="col-md-2 text-right">
+                                        <label for="">Year</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input [(ngModel)]="objContactor.Year" name="Year" type="number"
+                                            class="form-control">
+                                    </div>
+                                    <div class="col-md-2 text-right">
+                                        <label for="">Distribution Place</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select required [(ngModel)]="objContactor.DistributionPlace" name="supplyPlaceID"
+                                            class="form-control">
+                                            <option value='undefined'>-Select-</option>
+                                            <option *ngFor="let suplyPlace of lstSupplyPlace"
+                                                value="{{suplyPlace.SupplyPlaceID}}">
+                                                {{suplyPlace.SupplyPlaceName}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-md-2 text-right">
+                                        <label for="">Contract Date</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input [ngModel]="objContactor.ContactDate | date:'yyyy-MM-dd'"
+                                            (ngModelChange)="objContactor.ContactDate = $event" name="contactDate"
+                                            type="date" class="form-control">
+                                    </div>
+                                    <div class="col-md-2 text-right">
+                                        <label for="">Valid Date</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input [ngModel]="objContactor.ValidDate | date:'yyyy-MM-dd'"
+                                            (ngModelChange)="objContactor.ValidDate = $event" name="validDate"
+                                            type="date" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-2 text-right">
+                                        <label for="">Contractor Name</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input [(ngModel)]="objContactor.ContractorName" name="ContractorName"
+                                            type="text" class="form-control">
+                                    </div>
+                                    <div class="col-md-2 text-right">
+                                        <label for="">Reference Number</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input [(ngModel)]="objContactor.ReferenceNumber" name="referenceNumber"
+                                            type="text" class="form-control">
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-md-2 text-right">
+                                        <label for="">Bank Name</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input [(ngModel)]="objContactor.BankName" name="BankName" type="text"
+                                            class="form-control">
+                                    </div>
+                                    <div class="col-md-2 text-right">
+                                        <label for="">Account Number</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input [(ngModel)]="objContactor.AccountNumber" name="AccountNumber" type="text"
+                                            class="form-control">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2 text-right">
+                                        <label for="">Item Type</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select [(ngModel)]="objContactor.ItemTypeID" name="itemType"
+                                            (change)="LoadItemName()" class="form-control">
+                                            <option *ngFor="let contractType of lstContractType"
+                                                [value]="contractType.id">
+                                                {{contractType.name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table class="table tableFixHead" style="width:100%">
+                                                <tr>
+                                                    <th style="width:15%">Item Name</th>
+                                                    <th>Contract Quantity</th>
+                                                    <th>Rate</th>
+                                                    <th>Issue Quantity</th>
+                                                    <th>Percentage</th>
+                                                    <th>ADC</th>
+                                                    <th>Remarks</th>
+                                                    <th colspan="2">Action</th>
+                                                </tr>
+                                                <tr
+                                                    *ngFor="let  contractorItemDetail of lstContractorItemDetail; let i = index;">
+
+                                                    <td>
+                                                        <select [(ngModel)]="contractorItemDetail.ItemID"
+                                                            name="itemName{{i}}" class="form-control">
+                                                            <option value="">Select List</option>
+                                                            <option *ngFor="let item of lstItem" [value]="item.ItemID">
+                                                                {{item.ItemName}}
+                                                            </option>
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <input [(ngModel)]="contractorItemDetail.ContactQuantity"
+                                                            name="ContactQuantity{{i}}" type="number"
+                                                            class="form-control">
+                                                    </td>
+                                                    <td>
+                                                        <input [(ngModel)]="contractorItemDetail.Rate" name="Rate{{i}}"
+                                                            type="number" class="form-control">
+                                                    </td>
+                                                    <td>
+                                                        <input disabled [(ngModel)]="contractorItemDetail.IssueQuantity"
+                                                            name="IssueQuantity{{i}}" type="number"
+                                                            class="form-control">
+                                                    </td>
+                                                    <td>
+                                                        <input [(ngModel)]="contractorItemDetail.Percentage"
+                                                            name="Percentage{{i}}" type="number" class="form-control">
+                                                    </td>
+                                                    <td>
+                                                        <input disabled [(ngModel)]="contractorItemDetail.ADC"
+                                                            name="ADC{{i}}" type="text" class="form-control">
+                                                    </td>
+                                                    <td>
+                                                        <input [(ngModel)]="contractorItemDetail.Remarks"
+                                                            name="Remarks{{i}}" type="text" class="form-control">
+                                                    </td>
+
+                                                    <td>
+                                                        <button (click)="addResource()" class="btn">
+                                                            <img src="../../../assets/image/plus.svg" alt="">
+                                                        </button>
+                                                    </td>
+                                                    <td>
+                                                        <button (click)="removeResource()" class="btn">
+                                                            <img src="../../../assets/image/minus.svg" alt="">
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12 text-right">
+                                        <button [disabled]='!contactorForm.valid' (click)="saveContactor()"
+                                            class="btn btn-primary">
+                                            Save
+                                        </button>
+                                        <button class="btn btn-success" (click)="close()">Close</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="modal fade" id="adminApprovalModalPrint" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" id="printConductor">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Contract Bill</h5>
+                <button type="button" class="close noprint" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table tableFixHead" style="width:100%">
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Contract Quantity</th>
+                        <th>Rate</th>
+                        <th>Issue Quantity</th>
+                        <th>Percentage</th>
+                        <th>ADC</th>
+                        <th>Remarks</th>
+                    </tr>
+                    <tr *ngFor="let  contractorItemDetail of lstContractorItemDetail; let i = index;">
+
+                        <td>
+                            {{contractorItemDetail.ItemName}}
+                        </td>
+                        <td>
+                            {{contractorItemDetail.ContactQuantity}}
+                        </td>
+                        <td>
+                            {{contractorItemDetail.Rate}}
+                        </td>
+                        <td>
+                            {{contractorItemDetail.IssueQuantity}}
+                        </td>
+                        <td>
+                            {{contractorItemDetail.Percentage}}
+                        </td>
+                        <td>
+                            {{contractorItemDetail.ADC}}
+                        </td>
+                        <td>
+                            {{contractorItemDetail.Remarks}}
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="modal-footer noprint">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary printMe">Print</button>
+            </div>
+        </div>
+    </div>
+</div>

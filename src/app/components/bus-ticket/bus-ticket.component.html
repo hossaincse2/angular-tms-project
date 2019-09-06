@@ -1,0 +1,120 @@
+<div class="onpayment bus-ticket content100vh">
+  <form #requestForm="ngForm" class="form-inline">
+    <div class="container">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/dashboard" title="Back"><img
+                style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+          <h3 style="color: #ffffff; font-family: Arial,sans-serif; font-size: 20px;"
+            class="center-heading text-center">Transport Request</h3>
+          <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-6">
+              <table class="table borderless">
+                <tr>
+                  <td><label for="date">Request Date</label></td>
+                  <td>  
+                      <input type="date" disabled  [ngModel]="objBusTicket.RequestDate | date:'yyyy-MM-dd'"
+                      (ngModelChange)="objBusTicket.RequestDate = $event" class="form-control" name="toDate">
+                    
+                    </td>
+                </tr>
+                <tr>
+                  <td><label for="date">Travel Date</label></td>
+                  <td><input type="date" [(ngModel)]="objBusTicket.TravelDate" class="form-control" name="travelDate"
+                      required id="travelDate"></td>
+                </tr>
+                <tr>
+                    <td><label for="childrenThree">From</label></td>
+                    <td>
+                      <select [(ngModel)]="objBusTicket.FromPlace" required name="fromPlace" id="fromPlace"
+                        class="form-control">
+                        <option value="undefined">-Select-</option>
+                        <option value=1>Dhaka</option>
+                        <option value=1>Ghatail</option>
+                      </select>
+                    </td>
+                  </tr>
+                <tr>
+                    <td><label for="childrenThree">To</label></td>
+                    <td>
+                      <select [(ngModel)]="objBusTicket.ToPlace" required name="toPlace" id="toPlace"
+                        class="form-control">
+                        <option value="undefined">-Select-</option>
+                        <option value=1>Dhaka</option>
+                        <option value=1>Ghatail</option>
+                      </select>
+                    </td>
+                  </tr>
+
+                <tr>
+                  <td><label>Vehicle Type</label></td>
+                  <td>
+                    <select [(ngModel)]="objBusTicket.BusType" required name="busType" id="bustype"
+                      class="form-control">
+                      <option value="undefined">-Select-</option>
+                      <option value=1>AC Bus</option>
+                      <option value=2>Non AC Bus</option>
+                      <option value=3>Coaster</option>
+                    </select>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <label>Number Of Ticket</label>
+                  </td>
+                  <td><input [(ngModel)]="objBusTicket.NumberOfTicket" type="number" class="form-control"
+                      name="numberOfTicket" id="numberOfTicket" required></td>
+                </tr>
+                <tr>
+                  <td><label for="name">Officer Name</label></td>
+                  <td><input type="text" [(ngModel)]="objBusTicketDetail.Name" class="form-control" name="name"
+                      id="name"></td>
+                </tr>
+          
+
+              </table>
+
+            </div>
+            <div class="col-md-6">
+              <table class="table borderless">
+                <tr>
+                  <td><label for="wifeName">Wife Name</label></td>
+                  <td><input type="text" [(ngModel)]="objBusTicketDetail.WifeName" class="form-control" name="wifeName"
+                      id="wifeName"></td>
+                </tr>
+                <tr>
+                  <td><label for="childrenOne">Children One</label></td>
+                  <td><input type="text" [(ngModel)]="objBusTicketDetail.ChildrenOne" class="form-control"
+                      name="childrenOne" id="childrenOne"></td>
+                </tr>
+                <tr>
+                  <td><label for="childrenTwo">Children Two</label></td>
+                  <td><input type="text" [(ngModel)]="objBusTicketDetail.ChildrenTwo" class="form-control"
+                      name="childrenTwo" id="childrenTwo"></td>
+                </tr>
+                <tr>
+                  <td><label for="childrenThree">Children Three</label></td>
+                  <td><input type="text" [(ngModel)]="objBusTicketDetail.ChildrenThree" class="form-control"
+                      name="childrenThree" id="childrenThree"></td>
+                </tr>
+           
+
+              </table>
+
+            </div>
+            <div class="col-md-12">
+              <div class="pull-right">
+                <button [disabled]='!requestForm.valid' (click)="saveBusTicket()" class="btn btn-primary"> Submit Rquest
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

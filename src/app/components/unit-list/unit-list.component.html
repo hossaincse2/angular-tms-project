@@ -1,0 +1,31 @@
+<div class="container header_space">
+  <div class="pull-left">
+    <a class="btn btn-success" style="margin-bottom: 15px" routerLink="/smsDashboard">Go Dashboard</a>
+  </div>
+  <div class="pull-right">
+    <a class="btn btn-success" style="margin-bottom: 15px" (click)="addNew()">Add New</a>
+  </div> 
+  <div class="row">
+    <div class="col-md-12">
+      <div class="table-responsive">
+        <table class="table table-hover" style="border: 1px solid #565656;">
+          <tr>
+            <th>Unit Name</th>
+            <th>Address</th>
+            <th>Responsible</th>
+            <th>Action</th>
+
+          </tr>
+          <tr *ngFor="let vmUnit of lstVMUnit">
+            <td>{{vmUnit.Unit.UnitName}}</td>
+            <td>{{vmUnit.Unit.Address}}</td>
+            <td>{{vmUnit.Unit.Responsible}}</td>
+            <td>
+              <a title="Edit" (click)="editUnit(vmUnit)" class="edit"><i class='fa fa-check-square' style="font-size: 20px; margin-right:20px"></i></a>
+              <a title="Delete" (click)="deleteUnit(vmUnit)" class="delete"><i class="fa fa-trash" style="font-size: 20px"></i></a>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>

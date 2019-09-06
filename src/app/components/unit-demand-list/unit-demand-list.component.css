@@ -1,0 +1,8 @@
+#unitDemandModal .modal-lg {
+    width: 1200px;
+}
+@media only screen and (max-width: 768px) {
+    #unitDemandModal .modal-lg {
+        width: 100%;
+    }
+    }

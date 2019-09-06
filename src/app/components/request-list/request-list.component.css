@@ -1,0 +1,73 @@
+table tr th{background:#5cb85c; color: #fff;}
+		a.edit {color: green;}
+		a.delete{color:#7b7676;}
+		.add_button {
+			margin-top: 22px;
+		}
+		.search_bar{
+			margin: 0 0 30px 0px;
+			background:#565656; 
+			padding: 30px 40px;
+		}
+		.search_bar label { 
+			color: #fff; 
+		}
+
+		/* .onpayment input.form-control {
+			width: 22%;
+			display: inline-block;
+		  } */
+
+		  .onpayment-container{
+			  width: 100%;
+		  }
+		  .main-content .onpayment-container{
+			margin: 0px !important;
+			}
+			 
+ 		#config{
+				overflow: auto;
+				margin-bottom: 10px;
+		}
+		.config{
+				float: left;
+				width: 200px;
+				height: 250px;
+				border: 1px solid #000;
+				margin-left: 10px;
+		}
+		.config .title{
+				font-weight: bold;
+				text-align: center;
+		}
+		.config .barcode2D,
+		#miscCanvas{
+			display: none;
+		}
+		#submit{
+				clear: both;
+		}
+		#barcodeTarget,
+		#canvasTarget{
+			margin-top: 20px;
+			float: right;
+			position: absolute;
+			top: 119px;
+			right: 0;
+		}        
+
+		.barcodeTarget div:last-child {
+			display: none !important;
+		}
+		.search_bar .form-control{
+			height: 32px;
+			padding: 2px 17px;
+		}
+		.search_bar .glyphicon {
+			font-size: 20px !important;
+			color: #fff !important;
+			-moz-osx-font-smoothing: grayscale;
+		}
+		input[type="date"].disabled::-webkit-calendar-picker-indicator {
+			display: none;
+		  }

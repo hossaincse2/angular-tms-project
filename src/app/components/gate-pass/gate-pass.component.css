@@ -1,0 +1,26 @@
+.nav-tabs>li>a {
+    margin-right: 2px;
+    line-height: 1.42857143;
+    border: 1px solid #ffffff4f;
+    border-radius: 4px 4px 0 0;
+    /* background: red; */
+    color: #fff;
+}
+.nav-tabs {
+    border-bottom: 0px solid #ddd;
+    text-align: center;
+    margin: 0 auto;
+    width: 30%;
+}
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    color: #fff !important;
+    cursor: default;
+    background-color: #222;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+}
+
+.nav>li>a:focus, .nav>li>a:hover {
+    text-decoration: none;
+    background-color: #101010;
+}

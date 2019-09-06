@@ -1,0 +1,263 @@
+<div class="header_section"></div>
+<div class="content100vh">
+<div [hidden]="!showEntry">
+    <div class="header_section"></div>
+    <div class="container">
+        <form #contactorForm="ngForm">
+            <div class="row">
+                <div class="col-md-12 text-left">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title pull-left"> <a class="btn btn-success" (click)="close()"
+                                    title="Back"><img style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+                            <h3 class="center-heading text-center">পণ্য গ্রহণ </h3>
+                            <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="">Receive Date</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input [(ngModel)]="objReceiveItem.ReceiveDate" name="receiveDate" type="date"
+                                        class="form-control">
+                                </div>
+                                <div class="col-md-2 text-right">
+                                    <label for="">Company Name</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input [(ngModel)]="objReceiveItem.CompanyName" name="companyName" type="text"
+                                        class="form-control">
+
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="">Responsible Name</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input [(ngModel)]="objReceiveItem.Responsible" name="responsible" type="text"
+                                        class="form-control">
+                                </div>
+                                <div class="col-md-2 text-right">
+                                    <label for="">Note</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <textarea [(ngModel)]="objReceiveItem.ShortNote" name="shortNote" cols="30" rows="2"
+                                        class="form-control"></textarea>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div> <br>
+
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive tableScrollY">
+                                <table class="table tableFixHead" style="width:100%">
+                                    <tr>
+                                        <th style="width: 15%;">Item Type</th>
+                                        <th style="width: 15%;">Item Name</th>
+                                        <th style="width: 15%;">Unit of Measure</th>
+                                        <th>Quantity</th>
+                                        <th>Ref. Number</th>
+                                        <th style="width: 10%;">Expire Date</th>
+                                        <th style="width: 11%;">Quality Type</th>
+                                        <th colspan="2" style="width: 9%;">Action</th>
+                                    </tr>
+                                    <tr *ngFor="let  receiveItemDetail of lstReceiveItemDetail; let i = index;">
+                                        <td>
+                                            <select (change)="LoadItemName(i)"
+                                                [(ngModel)]="receiveItemDetail.ItemTypeID" name="ItemName{{i}}"
+                                                class="form-control">
+                                                <option value="undefined">Select Type</option>
+                                                <option *ngFor="let itemType of lstItemType"
+                                                    [value]="itemType.ItemTypeID">
+                                                    {{itemType.TypeName}}
+                                                </option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select [(ngModel)]="receiveItemDetail.ItemID" name="itemName{{i}}"
+                                                class="form-control">
+                                                <option value="undefined">Select Item</option>
+                                                <option *ngFor="let item of lstFilterItem" [value]="item.ItemID">
+                                                    {{item.ItemName}}
+                                                </option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select [(ngModel)]="receiveItemDetail.UnitOfMeasure" name="itemName{{i}}"
+                                                class="form-control">
+                                                <option value="undefined">Select Unit</option>
+                                                <option *ngFor="let unitOfMeasure of lstUnitOfMeasure"
+                                                    [value]="unitOfMeasure.UnitOfMeasureID">
+                                                    {{unitOfMeasure.Name}}
+                                                </option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input [(ngModel)]="receiveItemDetail.Quantity" name="Quantity{{i}}"
+                                                type="number" class="form-control">
+                                        </td>
+                                        <td>
+                                            <input [(ngModel)]="receiveItemDetail.ReferenceNo" name="ReferenceNo{{i}}"
+                                                type="text" class="form-control">
+                                        </td>
+                                        <td>
+                                            <input [(ngModel)]="receiveItemDetail.ExpaireDate" name="ExpaireDate{{i}}"
+                                                type="date" class="form-control">
+                                        </td>
+                                        <td>
+                                            <input [(ngModel)]="receiveItemDetail.QualityType" name="QualityType{{i}}"
+                                                type="text" class="form-control">
+                                        </td>
+                                        <td>
+                                            <button (click)="addItem()" class="btn">
+                                                <img src="../../../assets/image/plus.svg" alt="">
+                                            </button>
+                                            <button (click)="removeItem()" class="btn">
+                                                <img src="../../../assets/image/minus.svg" alt="">
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row margin_top15">
+                        <div class="col-md-12 text-right">
+                            <button [disabled]='!contactorForm.valid' (click)="saveReceiveItem()"
+                                class="btn btn-primary">
+                                Save
+                            </button>
+                            <button class="btn btn-success" (click)="close()">Close</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<div class="container ">
+    <div [hidden]="showEntry" class="row">
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/smsDashboard"
+                            title="Back"><img style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+                    <h3 class="center-heading text-center">পণ্য গ্রহণ লিস্ট</h3>
+                    <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+                </div>
+                <div class="panel-body">
+                    <form #searchForm="ngForm" class="form-inline">
+
+                        <div class="form-group">
+                            <label for="pwd">তারিখ হইতেঃ</label>
+                            <input type="date" required [ngModel]="objQueryObject.FromDate | date:'yyyy-MM-dd'"
+                                (ngModelChange)="objQueryObject.FromDate = $event" class="form-control" name="fromDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="pwd">তারিখ প্রতিঃ</label>
+                            <input type="date" required [ngModel]="objQueryObject.ToDate | date:'yyyy-MM-dd'"
+                                (ngModelChange)="objQueryObject.ToDate = $event" class="form-control" name="toDate">
+                        </div>
+                        <div class="form-group">
+                            <button [disabled]='!searchForm.valid' class="btn btn-success search-btn"
+                                (click)="getFilteredReceiveItem()" type="submit">Serach</button>
+
+                            <button class="btn btn-success search-btn" (click)="addNew()" type="submit">Add
+                                New</button>
+                        </div>
+                    </form>
+                </div>
+            </div> <br>
+            <div class="table-responsive">
+                <table class="table table-hover tableFixHead" style="border: 1px solid #565656;">
+                    <tr>
+
+                        <th>Receive Date</th>
+                        <th>Company Name</th>
+                        <th>Responsible Name</th>
+                        <th>Short Note</th>
+
+                        <th style="width:15%; text-align:right ">Action</th>
+
+                    </tr>
+                    <tr *ngFor="let vmDemand of lstVMReceiveItem">
+                        <td>{{vmDemand.ReceiveItem.ReceiveDate | date:'yyyy-MM-dd'}}</td>
+                        <td>{{vmDemand.ReceiveItem.CompanyName}}</td>
+                        <td>{{vmDemand.ReceiveItem.Responsible}}</td>
+                        <td>{{vmDemand.ReceiveItem.ShortNote}}</td>
+
+                        <td style="text-align:right">
+                            <a title="Detail" (click)="receiveDetail(vmDemand)" class="detail"><i class='fa fa-list'
+                                    style="font-size: 20px; margin-right:20px"></i></a>
+                            <a title="Edit" (click)="editReceive(vmDemand)" class="edit"><i class="fa fa-pencil"
+                                    style="font-size: 20px;margin-right:20px"></i></a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<div class="modal fade" id="unitDemandModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Receive Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <table class="table tableFixHead" style="width:100%">
+                    <tr>
+                        <th style="width: 20%;">Item Name</th>
+                        <th style="width: 15%;">Unit of Measure</th>
+                        <th style="width: 15%; text-align:center">Quantity</th>
+                        <th style="width: 20%;">Ref. Number</th>
+                        <th style="width: 15%;">Expire Date</th>
+                        <th style="width: 15%;">Quality Type</th>
+                    </tr>
+                    <tr *ngFor="let  receiveItemDetail of lstReceiveItemDetail; let i = index;">
+                        <td>
+                            {{receiveItemDetail.ItemName}}
+                        </td>
+                        <td>
+                            {{receiveItemDetail.UnitOfMeasureName}}
+                        </td>
+                        <td style="text-align: center">
+                            {{receiveItemDetail.Quantity}}
+                        </td>
+                        <td>
+                            {{receiveItemDetail.ReferenceNo}}
+                        </td>
+                        <td>
+                            {{receiveItemDetail.ExpaireDate | date:'yyyy-MM-dd'}}
+                        </td>
+                        <td style="text-align: center">
+                            {{receiveItemDetail.QualityType}}
+                        </td>
+
+                    </tr>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

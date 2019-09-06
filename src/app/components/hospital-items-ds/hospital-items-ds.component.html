@@ -1,0 +1,88 @@
+<div class="header_section"> </div>
+<div class="container content100vh">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/distribution" title="Back"><img
+                style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+          <h3 class="center-heading text-center">হসপিটাল আইটেম ডিমান্ড লিস্ট</h3>
+          <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+        </div>
+        <div class="panel-body">
+          <form #searchForm="ngForm" class="form-inline">
+            <div class="form-group">
+              <label for="email">ইউনিটঃ</label>
+              <select [(ngModel)]="objQueryObject.UnitID" name="unitID" class="form-control w250">
+                <option value='undefined'>All</option>
+                <option *ngFor="let vmUnit of lstVMUnit" [value]="vmUnit.Unit.UnitID">
+                  {{vmUnit.Unit.UnitName}}
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="pwd">তারিখ হইতেঃ</label>
+              <input type="date" required [(ngModel)]="objQueryObject.FromDate" class="form-control" name="fromDate">
+            </div>
+            <div class="form-group">
+              <label for="pwd">তারিখ প্রতিঃ</label>
+              <input type="date" required [(ngModel)]="objQueryObject.ToDate" class="form-control" name="toDate">
+            </div>
+            <div class="form-group">
+              <button [disabled]='!searchForm.valid' class="btn btn-success search-btn"
+                (click)="getAllUnitDemandByFilter()" type="submit">Serach</button>
+            </div>
+          </form>
+        </div>
+      </div> <br>
+      <div class="table-responsive">
+        <table class="table table-hover tableFixHead" style="border: 1px solid #565656;">
+          <tr>
+            <th>Unit Name</th>
+            <th>Request Date</th>
+            <th>From Date</th>
+            <th>To Date</th>
+            <th> Status</th>
+            <th style="width: 10%;">Action</th>
+
+          </tr>
+          <tr *ngFor="let vmDemand of lstVMUnitDemand">
+            <td>{{vmDemand.UnitDemand.UnitName}}</td>
+            <td>{{vmDemand.UnitDemand.DemandDate | date:'yyyy-MM-dd'}}</td>
+            <td>{{vmDemand.UnitDemand.DemandFrom | date:'yyyy-MM-dd'}}</td>
+            <td>{{vmDemand.UnitDemand.DemandTo | date:'yyyy-MM-dd'}}</td>
+            <td>{{vmDemand.UnitDemand.StatusName}}</td>
+            <td>
+              <a title="Edit" (click)="demandDetail(vmDemand)" class="edit"><i class='fa fa-list'
+                  style="font-size: 20px; margin-right:20px"></i></a>
+              <a title="Delete" (click)="deleteUnit(vmDemand)" class="delete"><i class="fa fa-trash"
+                  style="font-size: 20px;margin-right:20px"></i></a>
+              <a title=" Approve" (click)="approveDemand(vmDemand)" class="success"><i class="fa fa-check-square"
+                  style="font-size: 20px"></i></a>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="unitDemandModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <!-- <h5 class="modal-title" id="exampleModalLabel">Unit Demand Approval</h5> -->
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" (click)="approveUnitDemand()" class="btn btn-primary">Approve</button>
+        </div>
+      </div>
+    </div>
+  </div>

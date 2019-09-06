@@ -1,0 +1,281 @@
+<div class="header_section"> </div>
+<div class="content100vh">
+    <section [hidden]="!showEntry">
+        <div class="container">
+            <form class="form-inline" #hcDemandForm="ngForm">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title pull-left"> <a class="btn btn-success" (click)="close()"
+                                        title="Back"><img style="width: 24px;" src="./../../assets/image/back.svg"></a>
+                                </h3>
+                                <h3 class="center-heading text-center">হাইজিন এন্ড ক্যামিকেল ডিমান্ড</h3>
+                                <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label for="email">ইউনিটঃ</label>
+                                    <select (change)="loadItem()" [(ngModel)]="objHygineAndChemicalDemand.FromUnitID"
+                                        required name="fromUnitID" class="form-control">
+                                        <option value=''>-Select-</option>
+                                        <option *ngFor="let vmUnit of lstVMUnit" [value]="vmUnit.Unit.UnitID">
+                                            {{vmUnit.Unit.UnitName}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pwd">তারিখঃ</label>
+                                    <input type="date" required
+                                        [ngModel]="objHygineAndChemicalDemand.DemandDate | date:'yyyy-MM-dd'"
+                                        (ngModelChange)="objHygineAndChemicalDemand.DemandDate = $event"
+                                        class="form-control" name="demandDate">
+                                </div>
+                                <div class="form-group">
+                                    <label for="pwd">জনবলঃ</label>
+                                    <input type="numbner" required (change)="calculateTotal()"
+                                        [(ngModel)]="objHygineAndChemicalDemand.NumberOfPeople" class="form-control"
+                                        name="numberOfPeople">
+                                </div>
+                                <div class="form-group">
+                                        <label for="pwd">সংগ্রহের স্থান</label>
+                                         <select [(ngModel)]="objHygineAndChemicalDemand.SupplyPlaceID" name="supplyPlaceID" class="form-control">
+                                             <option value='undefined'>-Select-</option>
+                                             <option *ngFor="let suplyPlace of lstSupplyPlace" value="{{suplyPlace.SupplyPlaceID}}">
+                                                {{suplyPlace.SupplyPlaceName}}
+                                             </option>
+                                         </select>
+                                 </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div><br>
+                <div style="font-weight:bold" class="pull-right">Total:{{totalDemand | number:'2.2'}}</div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive table-bordered movie-table">
+                            <table class="table movie-table">
+                                <thead>
+                                    <tr class="movie-table-head">
+                                        <th>ক্রমিক</th>
+                                        <th>পণ্যের নাম</th>
+                                        <th style="text-align:right">স্কেল</th>
+                                        <th style="text-align:right">মোট</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr *ngFor="let objFreshDetail of lstHygineAndChemicalDemandDetail; let i=index"
+                                        class="dark-row">
+                                        <td> &nbsp;
+                                            <input [(ngModel)]="objFreshDetail.itemCheck" (change)="calculateTotal()"
+                                                name="itemCheck{{i}}" type="checkbox">
+                                            &nbsp;{{i+1}}</td>
+
+                                        <td>{{objFreshDetail.ItemName}}</td>
+
+                                        <td style="text-align:right">
+                                            <input style="text-align:right" type="text" disabled name="Quantity{{i}}"
+                                                [(ngModel)]="objFreshDetail.Quantity" class="form-control">
+                                        </td>
+                                        <td style="text-align:right">
+                                            <input style="text-align:right" type="text" name="Total{{i}}"
+                                                [(ngModel)]="objFreshDetail.Total" class="form-control">
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="padding-top:10px">
+                    <div class="col-md-12 text-right">
+                        <button [disabled]='!hcDemandForm.valid' (click)="saveHygineAndChemicalDemand()"
+                            class="btn btn-primary">
+                            Save
+                        </button>
+                        <button class="btn btn-danger" (click)="close()" type="submit">Close</button>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <div class="container">
+        <div [hidden]="showEntry" class="row">
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/unitDemand"
+                                title="Back"><img style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+                        <h3 class="center-heading text-center">হাইজিন এন্ড কেমিক্যাল আইটেম ডিমান্ড লিস্ট</h3>
+                        <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+                    </div>
+                    <div class="panel-body">
+                        <form #searchForm="ngForm" class="form-inline">
+                            <div class="form-group">
+                                <label for="email">ইউনিটঃ</label>
+                                <select [(ngModel)]="objQueryObject.UnitID" name="unitID" class="form-control w250">
+                                    <option value='undefined'>All</option>
+                                    <option *ngFor="let vmUnit of lstVMUnit" [value]="vmUnit.Unit.UnitID">
+                                        {{vmUnit.Unit.UnitName}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="pwd">তারিখ হইতেঃ</label>
+                                <input type="date" required [ngModel]="objQueryObject.FromDate | date:'yyyy-MM-dd'"
+                                    (ngModelChange)="objQueryObject.FromDate = $event" class="form-control"
+                                    name="fromDate">
+                            </div>
+                            <div class="form-group">
+                                <label for="pwd">তারিখ প্রতিঃ</label>
+                                <input type="date" required [ngModel]="objQueryObject.ToDate | date:'yyyy-MM-dd'"
+                                    (ngModelChange)="objQueryObject.ToDate = $event" class="form-control" name="toDate">
+                            </div>
+                            <div class="form-group">
+                                <button [disabled]='!searchForm.valid' class="btn btn-success search-btn"
+                                    (click)="getFilteredCondementDemand()" type="submit">Search</button>
+
+                                <button class="btn btn-success search-btn" (click)="addNew()" type="submit">Add
+                                    New</button>
+                            </div>
+                        </form>
+                    </div>
+                </div> <br>
+                <div class="table-responsive">
+                    <table class="table table-hover tableFixHead" style="border: 1px solid #565656;">
+                        <tr>
+                            <th>Unit Name</th>
+                            <th>Demand Date</th>
+                            <th>Number Of People</th>
+                            <th> Status</th>
+                            <th style="width:15%; text-align:right ">Action</th>
+
+                        </tr>
+                        <tr *ngFor="let vmDemand of lstVMUnitDemand">
+                            <td>{{vmDemand.HygineAndChemicalDemand.UnitName}}</td>
+                            <td>{{vmDemand.HygineAndChemicalDemand.DemandDate | date:'yyyy-MM-dd'}}</td>
+                            <td>{{vmDemand.HygineAndChemicalDemand.NumberOfPeople}}</td>
+                            <td>{{vmDemand.HygineAndChemicalDemand.StatusName}}</td>
+                            <td style="text-align:right">
+                                <a title="Detail" (click)="demandDetail(vmDemand)" class="detail"><i class='fa fa-list'
+                                        style="font-size: 20px; margin-right:20px"></i></a>
+                                <a title="Edit" [hidden]="vmDemand.HygineAndChemicalDemand.Status>1" (click)="editDemand(vmDemand)" class="edit"><i class="fa fa-pencil"
+                                        style="font-size: 20px;margin-right:20px"></i></a>
+                                <a title="Approve" [hidden]="!vmDemand.HygineAndChemicalDemand.showApproval"
+                                    (click)="approveDemand(vmDemand)" class="success"><i class="fa fa-check-square"
+                                        style="font-size: 20px;margin-right:20px"></i></a>
+                                <!-- <a title="Delete" (click)="deleteDemand(vmDemand)" class="delete"><i class="fa fa-trash"
+                                    style="font-size: 20px;margin-right:20px"></i></a> -->
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="unitDemandModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Demand Detail</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <table class="table movie-table tableFixHead">
+                        <thead>
+                            <tr class="movie-table-head">
+                                <th>ক্রমিক</th>
+                                <th>পণ্যের নাম</th>
+                                <th style="text-align:right">স্কেল</th>
+                                <th style="text-align:right">মোট</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--row-->
+                            <tr *ngFor="let objCondimentDetail of lstHygineAndChemicalDemandDetail; let i=index"
+                                class="dark-row">
+                                <td>
+                                    &nbsp;{{i+1}}</td>
+
+                                <td>{{objCondimentDetail.ItemName}}</td>
+                                <td style="text-align:right">{{objCondimentDetail.Quantity}}
+                                </td>
+                                <td style="text-align:right"> {{objCondimentDetail.Total}}
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="adminApprovalModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Unit Demand Detail</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <table class="table movie-table tableFixHead">
+                        <thead>
+                            <tr class="movie-table-head">
+                                <th>ক্রমিক</th>
+                                <th>পণ্যের নাম</th>
+                                <th style="text-align:right">স্কেল</th>
+                                <th style="text-align:right">মোট</th>
+                                <th style="text-align:right">প্রদেয় পরিমাণ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--row-->
+                            <tr *ngFor="let objCondimentDetail of lstHygineAndChemicalDemandDetail; let i=index"
+                                class="dark-row">
+                                <td>
+                                    &nbsp;{{i+1}}</td>
+
+                                <td>{{objCondimentDetail.ItemName}}</td>
+                                <td style="text-align:right">{{objCondimentDetail.Quantity}}
+                                </td>
+                                <td style="text-align:right"> {{objCondimentDetail.Total}}
+                                </td>
+                                <td style="text-align:right"> <input type="text" style="text-align:right"
+                                        name="ApprovedQty{{i}}" [(ngModel)]="objCondimentDetail.ApprovedQty"
+                                        class="form-control">
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" (click)="approveCondimentDemand()" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>

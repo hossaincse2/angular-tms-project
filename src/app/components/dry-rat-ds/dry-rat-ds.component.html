@@ -1,0 +1,455 @@
+<div class="header_section"> </div>
+<div class="container content100vh">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/distribution" title="Back"><img
+                style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+          <h3 class="center-heading text-center">ড্রাই আইটেম ডিমান্ড লিস্ট</h3>
+          <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+        </div>
+        <div class="panel-body">
+          <form #searchForm="ngForm" class="form-inline">
+            <div class="form-group">
+              <label for="email">ইউনিটঃ</label>
+              <select [(ngModel)]="objQueryObject.UnitID" name="unitID" class="form-control w250">
+                <option value='0'>All</option>
+                <option *ngFor="let vmUnit of lstVMUnit" [value]="vmUnit.Unit.UnitID">
+                  {{vmUnit.Unit.UnitName}}
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="pwd">তারিখ হইতেঃ</label>
+              <input type="date" required [ngModel]="objQueryObject.FromDate | date:'yyyy-MM-dd'"
+                (ngModelChange)="objQueryObject.FromDate = $event" class="form-control" name="fromDate">
+            </div>
+            <div class="form-group">
+              <label for="pwd">তারিখ প্রতিঃ</label>
+              <input type="date" required [ngModel]="objQueryObject.ToDate | date:'yyyy-MM-dd'"
+                (ngModelChange)="objQueryObject.ToDate = $event" class="form-control" name="toDate">
+            </div>
+            <div class="form-group">
+              <button [disabled]='!searchForm.valid' class="btn btn-success search-btn"
+                (click)="getAllDryItemDemandByFilter()" type="submit">Serach</button>               
+            </div>
+          </form>
+        </div>
+      </div> <br>
+      <div class="table-responsive">
+        <table class="table table-hover tableFixHead" style="border: 1px solid #565656;">
+          <tr>
+            <th>Unit Name</th>
+            <th>Request Date</th>
+            <th>From Date</th>
+            <th>To Date</th>
+            <th>Status</th>
+            <th style="width: 10%;">Action</th>
+
+          </tr>
+          <tr *ngFor="let vmDemand of lstVMDryItemDemand">
+            <td>{{vmDemand.DryItemDemand.UnitName}}</td>
+            <td>{{vmDemand.DryItemDemand.DemandDate | date:'yyyy-MM-dd'}}</td>
+            <td>{{vmDemand.DryItemDemand.DemandFrom | date:'yyyy-MM-dd'}}</td>
+            <td>{{vmDemand.DryItemDemand.DemandTo | date:'yyyy-MM-dd'}}</td>
+            <td>{{vmDemand.DryItemDemand.StatusName}}</td>
+            <td>
+              <a title="Distribute" (click)="distributeDryItemDemand(vmDemand)" class="success"><i
+                  class="fa fa-check-square" style="font-size: 20px"></i></a>
+              <a *ngIf="vmDemand.DryItemDemand.StatusName == 'OC SSD Approved'" title="Distribute"
+                (click)="distributeDryItemDemandPrint(vmDemand)" class="success"><i class="fa fa-print"
+                  style="font-size: 20px"></i></a>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="modal fade" id="DryItemDemandModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <!-- <h5 class="modal-title" id="exampleModalLabel">Unit Demand Approval</h5> -->
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <table cellpadding="5" width="100%">
+            <tr>
+
+              <th>ক্রমিক </th>
+              <th style="width:10%;">দ্রব্যের নাম</th>
+              <th style="text-align:right">প্রাধিকার</th>
+              <th style="text-align:right">মজুদের পরিমাণ</th>
+              <th style="text-align:right">বর্তমান চাহিদা</th>
+              <th style="text-align:right">মঞ্জরিকৃত</th>
+              <th style="text-align:right">মোড়কের সংখ্যা</th>
+              <th style="text-align:right">মোড়কের প্রকার</th>
+
+            </tr>
+            <tr *ngFor="let objDemandDetail of lstDryItemDemandDetail; let i=index">
+
+              <td> &nbsp;{{i+1}}</td>
+              <td>
+                {{objDemandDetail.ItemName}}
+              </td>
+
+              <td style="text-align:right">
+                {{objDemandDetail.PradhikarNo}}
+              </td>
+
+              <td style="text-align:right">
+                {{objDemandDetail.Stock }}
+              </td>
+
+              <td style="text-align:right">
+                {{objDemandDetail.CurrentDemand}}
+              </td>
+
+              <td style="text-align:right">
+                {{objDemandDetail.ApprovedQty}}
+              </td>
+
+
+              <td style="text-align:right">
+                {{objDemandDetail.NumberOfPackingMaterial}}
+              </td>
+
+              <td style="text-align:right">
+                {{objDemandDetail.PackingMaterialName}}
+              </td>
+
+            </tr>
+
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" (click)="saveDistributeDryItemDemand()" class="btn btn-primary">Distribute</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" style="border: none !important;" id="DryItemDemandModalPrint" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg dryItemPrint" role="document">
+      <div class="modal-content" style="border: none !important;padding: 0px; margin: 0px;">
+        <div style="border-bottom: 0px solid #e5e5e5" class="modal-header noprint">
+          <!-- <h5 class="modal-title" id="exampleModalLabel">Unit Demand Approval</h5> -->
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="dryItemPrintpdf" style="margin-top: -30px;">
+          <form #DryItemDemandForm="ngForm">
+            <div class="header_section"> </div>
+            <div class="container">
+              <div class="row bg-white" style="margin: 0 -30px;">
+                <section class="Contraner-up">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="print-header">
+                        <div style="width:100%; margin: -3px 15px;float: right; text-align: right">
+                          <h5 style="font-size: 11px">বা সে ফ সা - ২০৯৮ এর পরিবর্তে</h5>
+                        </div>
+                        <div style="width:100%; float: left;text-align: center;margin-top: 20px;">
+                          <h4 style="font-size: 11px">{{objDryItemDemand.DemandTypeName}}</h4>
+                        </div>
+                        <div style="width:100%; margin: -3px 15px;float: right; text-align: right">
+                          <div style="text-align: right;float: right;" id="barcodeTarget" class="barcodeTarget"></div>
+                        </div>
+                      </div>
+                      <div style="width:50%; float: left">
+                        <table style="width:100%">
+                          <tr>
+                            <td style="width:50%"><label style="font-size: 11px" for="">হইতেঃ</label></td>
+                            <td style="width:40%;font-size: 11px">{{objDryItemDemand.UnitName}} </td>
+                          </tr>
+                          <tr>
+                            <td><label style="font-size: 11px" for="">প্রতিঃ</label></td>
+                            <td style="font-size: 11px"> SSD Gahatail </td>
+                          </tr>
+                          <tr>
+                            <td><label style="font-size: 11px" for="">সংগ্রহের স্থানঃ</label></td>
+                            <td style="font-size: 11px"> Sup P-BBS </td>
+                          </tr>
+                          <tr>
+                            <td><label style="font-size: 11px" for="">পূর্বের চাহিদা পত্রের প্রাধিকারঃ</label></td>
+                            <td style="font-size: 11px"> Q/RR/10 </td>
+                          </tr>
+                          <tr>
+                            <td><label style="font-size: 11px" for="">শেষ চাহিদা পত্রের তারিখঃ</label></td>
+                            <td style="font-size: 11px"> 12/13/2019 </td>
+                          </tr>
+
+                        </table>
+                      </div>
+                      <div style="width:50%; float: left">
+                        <table style="width:100%;font-size: 11px">
+                          <tr>
+                            <td style="width:25%;font-size: 11px"><label style="font-size: 11px" for="">খাদ্য দ্রব্য
+                                সংগ্রহের তারিখ</label></td>
+                            <td style="width:75%;font-size: 11px"><span>12/03/2019</span></td>
+                          </tr>
+                          <tr>
+                            <td style="width:75%;font-size: 11px"><label style="font-size: 11px" for="">যে সময়ের জন্য
+                                চাহিদা দাখিল করা গেল</label></td>
+                            <td style="width:9%;font-size: 11px">03/03/2019</td>
+                            <td style="width:7%;font-size: 11px">হইতে</td>
+                            <td style="width:9%;font-size: 11px">12/03/2019</td>
+                          </tr>
+                        </table>
+                      </div>
+
+                    </div>
+                  </div>
+                </section>
+
+                <section class="Contraner-table">
+                  <div class="row">
+                    <div class="col-md-12 col-xs-12" style="width:100%; float:left">
+                      <p style="font-size: 11px !important;"><b>প্রাধিকারঃ এ আর আর ৪৯৯/৫০০ মােতাবেক চাহিদা পত্রের ভিত্তি
+                          ও বেসামরিক ব্যক্তি এবং তাদের
+                          পরিবারবর্গের
+                          জন্য
+                          বেসামরিক চিনি ব্যতীত অন্যান্য
+                          আইটেম {{totalResource}}X{{totalDay}}'='{{netResource}} জন এর মধ্যে এবং অন্যান্য</b></p>
+                      <p style="font-size: 11px !important;" id="lblChildrenCount"><ins><b>
+
+                            আইটেম ব্যতীত শুধুমাত্র চিনি {{bellow3ChildTotal}}*{{totalDay}}'='{{netChildTotal}}
+                            জন</b></ins>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="empty-space"></div>
+                  <div class="table-responsive table-boder">
+                    <table class="tableFixHead" style="border:1px solid black;border-collapse: collapse;"
+                      cellpadding="5" width="100%">
+                      <tr>
+                        <th colspan="9"
+                          style="text-align:center;background-color: #d6f1c4;font-size: 11px; padding: 5px">ইউনিট কর্তৃক
+                          পূরণ করিতে
+                          হইবে।</th>
+                        <!-- <th colspan="5">এস এসসিডিপাের ব্যবহারের জন্য</th> -->
+                      </tr>
+                      <tr>
+                        <th style="width:6%;font-size: 10px;border:1px solid black;">ক্রমিক </th>
+                        <th style="width:10%;font-size: 10px;border:1px solid black;">দ্রব্যের নাম</th>
+                        <th style="width:7%;text-align:right;font-size: 10px;border:1px solid black;">প্রাধিকার</th>
+                        <th style="width:12%;text-align:right;font-size: 10px;border:1px solid black;">মজুদের পরিমাণ
+                        </th>
+                        <th style="width:12%;text-align:right;font-size: 10px;border:1px solid black;">বর্তমান চাহিদা
+                        </th>
+                        <th style="width:7%;text-align:right;font-size: 10px;border:1px solid black;">মঞ্জরিকৃত</th>
+                        <th style="width:12%;text-align:right;font-size: 10px;border:1px solid black;">মোড়কের সংখ্যা
+                        </th>
+                        <th style="width:12%;text-align:right;font-size: 10px;border:1px solid black;">মোড়কের প্রকার
+                        </th>
+
+
+                      <tr *ngFor="let objDemandDetail of lstDryItemDemandDetail; let i=index">
+
+                        <td style="font-size: 10px;border:1px solid black;"> &nbsp;{{i+1}}</td>
+                        <td style="font-size: 10px;border:1px solid black;">
+                          {{objDemandDetail.ItemName}}
+                        </td>
+
+                        <td style="text-align:right;;font-size: 10px;border:1px solid black;">
+                          {{objDemandDetail.PradhikarNo}}
+                        </td>
+
+                        <td style="text-align:right;font-size: 10px;border:1px solid black;">
+                          {{objDemandDetail.Stock }}
+                        </td>
+
+                        <td style="text-align:right;font-size: 10px;border:1px solid black;">
+                          {{objDemandDetail.CurrentDemand}}
+                        </td>
+
+                        <td style="text-align:right;font-size: 10px;border:1px solid black;">
+                          {{objDemandDetail.ApprovedQty}}
+                        </td>
+
+
+                        <td style="text-align:right;font-size: 10px;border:1px solid black;">
+                          {{objDemandDetail.NumberOfPackingMaterial}}
+                        </td>
+
+                        <td style="text-align:right;font-size: 10px;border:1px solid black;">
+                          {{objDemandDetail.PackingMaterialName}}
+                        </td>
+
+                      </tr>
+                    </table>
+                  </div>
+
+
+                </section>
+                <div class="empty-space"></div>
+
+                <section class="bina-mullo">
+                  <div class="chaitha text-center" style="width:100%">
+                    <h4 style="font-size: 11px;text-align:center">চাহিদা ভিত্তির তথ্য</h4>
+
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6 col-xs-6" style="width:28%;float:left;margin-right: 2%">
+                      <div class="bina-left;">
+                        <table class="table-boder" style="width:100%;border:1px solid black;border-collapse: collapse;"
+                          [hidden]="objDryItemDemand.DemandTypeID!=1">
+                          <tr>
+                            <th colspan="5" style="background-color: #d6f1c4; margin-bottom: 5px;font-size: 11px;">১।
+                              বিনামূল্যে প্রদান</th>
+                          </tr>
+                          <tr>
+                            <td style="width: 30%;font-size: 11px;border:1px solid black;"> রেশন জনবল</td>
+                            <td style="font-size: 11px;border:1px solid black;">0</td>
+                          </tr>
+                          <tr>
+                            <td style="font-size: 11px;border:1px solid black;">জেসিও</td>
+                            <td style="font-size: 11px;border:1px solid black;">0</td>
+                          </tr>
+                          <tr>
+                            <td style="font-size: 11px;border:1px solid black;">ওআর</td>
+                            <td style="font-size: 11px;border:1px solid black;">0</td>
+                          </tr>
+                          <tr>
+                            <td style="font-size: 11px;border:1px solid black;"> এনসি(ই)</td>
+                            <td style="font-size: 11px;border:1px solid black;">0</td>
+                          </tr>
+                          <tr>
+                            <td style="font-size: 11px;border:1px solid black;"> অসামরিক</td>
+                            <td style="font-size: 11px;border:1px solid black;">0</td>
+                          </tr>
+
+                        </table>
+
+
+                      </div>
+                    </div>
+
+                    <div class="col-md-6 col-xs-6" style="width:69%;float:left">
+                      <div class="bina-right">
+                        <div class="table-responsive">
+                          <table class="table-boder"
+                            style="width:100%; border-collapse: collapse;border:1px solid black;">
+                            <tr>
+                              <th colspan="6" style="background-color: #d6f1c4;font-size: 11px;">২।মুল্যে প্রদানঃ</th>
+                            </tr>
+                            <!-- <tr>
+                              <td style="line-height: 10px;">&nbsp;</td>
+                            </tr> -->
+                            <tr>
+                              <th style="font-size: 11px;border:1px solid black;text-align:center" colspan="3"
+                                class="poribarTitle">পরিবার </th>
+                              <th style="font-size: 11px;border:1px solid black;text-align:center" colspan="4"
+                                class="chelemeyTitle">ছেলেমেয়ে </th>
+                            </tr>
+
+                            <tr>
+                              <!-- <th></th> -->
+                              <th style="text-align:center;font-size: 11px;border:1px solid black;">নিজ</th>
+                              <th style="text-align:center;font-size: 11px;border:1px solid black;">স্ত্রী</th>
+                              <th style="text-align:center;font-size: 11px;border:1px solid black;">১২ বৎসরের উর্ধ্বে
+                              </th>
+                              <th style="text-align:center;font-size: 11px;border:1px solid black;">১২ বৎসরের নিম্নে
+                              </th>
+                              <th style="text-align:center;font-size: 11px;border:1px solid black;">০৩ বৎসরের নিম্নে
+                              </th>
+                            </tr>
+                            <!-- <tr>
+                              <td style="line-height: 8px;">&nbsp;</td>
+                            </tr> -->
+                            <tr *ngFor="let fDetail of lstDryItemDemandFamilyDetail; let i = index;">
+                              <td style="width:15%;font-size: 11px;border:1px solid black;">{{fDetail.PostName}}</td>
+                              <td>
+
+                                <input type="text" [disabled]="fDetail.isEnable" (change)="onFamilyResourceChange()"
+                                  name="NumberOfOwn{{i}}" type="number" [(ngModel)]="fDetail.NumberOfOwn"
+                                  class="form-control">
+                              </td>
+                              <td style="font-size: 11px;border:1px solid black;"><input type="text"
+                                  [disabled]="fDetail.isEnable" (change)="onFamilyResourceChange()"
+                                  name="NumberOfWife{{i}}" type="number" [(ngModel)]="fDetail.NumberOfWife"
+                                  class="form-control">
+                              </td>
+                              <td style="font-size: 11px;border:1px solid black;"><input type="text"
+                                  [disabled]="fDetail.isEnable" (change)="onFamilyResourceChange()"
+                                  name="NumberOfChildrendAbove12{{i}}" type="number"
+                                  [(ngModel)]="fDetail.NumberOfChildrendAbove12" class="form-control"></td>
+                              <td style="font-size: 11px;border:1px solid black;"><input type="text"
+                                  [disabled]="fDetail.isEnable" (change)="calculateBellow12Child()"
+                                  name="NumberOfChildrendBellow12{{i}}" type="number"
+                                  [(ngModel)]="fDetail.NumberOfChildrendBellow12" class="form-control"></td>
+                              <td style="font-size: 11px;border:1px solid black;"><input type="text"
+                                  [disabled]="fDetail.isEnable" (change)="calculateBellow2Child()"
+                                  name="NumberOfChildrenBellow3{{i}}" type="number"
+                                  [(ngModel)]="fDetail.NumberOfChildrenBellow3" class="form-control"></td>
+
+                            </tr>
+
+                          </table>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </section>
+                <section class="Contraner-bottom">
+                  <div class="row">
+                    <div class="col-md-8 col-xs-8" style="width:70%;float: left">
+                      <div class="advairas">
+                        <h5 style="font-size: 11px;">১। আমি প্রত্যায়ন করিতেছি যে, চাহিদাকৃত দ্রব্যাদি, আমার অধীনস্ত
+                          সৈনিকদের জন্য
+                          মজুদ/বিনামুল্যে/স্বল্প
+                          মূল্যে ইস্যু করা প্রয়ােজন।</h5>
+                        <h5 style="font-size: 11px;"> ২। প্রত্যায়ন হইল যে, মজুদ রেশন নিয়মিত রক্ষনাবেক্ষন ও পাল্টানাে
+                          হয়।</h5>
+                        <h5 style="font-size: 11px;">স্টেশনঃ শহীদ সালাহউদ্দিন সেনানিবাস। </h5>
+                        <!-- তারিখঃ ২৫ / ১০/২০১৮ -->
+                      </div>
+
+                    </div>
+                    <div class="col-md-2 col-xs-2" style="width:15%;float: left">
+                      <div class="relative odinayok">
+                        <p style="font-size:10px" class="absolute">অধিনায়ক</p>
+                      </div>
+
+                    </div>
+                    <div class="col-md-2 col-xs-2" style="width:15%;float: left">
+                      <div class="relative signacar">
+                        <img *ngIf="objUser.Sign" style="width:100px" id="logo" src="data:image/jpeg;base64,{{objUser.Sign}}"
+                          alt="ImageFile" />
+                        <p style="font-size:10px" class="absolute">স্বাক্ষর</p>
+                      </div>
+
+                    </div>
+
+                  </div>
+                </section>
+
+                <div>
+
+                </div>
+
+              </div>
+            </div>
+          </form>
+
+        </div>
+        <div class="modal-footer noprint">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary printMe">Print</button>
+        </div>
+      </div>
+    </div>
+  </div>

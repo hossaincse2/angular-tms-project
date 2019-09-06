@@ -1,0 +1,168 @@
+ 
+<section [hidden]="showRequestForm" class="content100vhome">  
+    <div class="header_section"></div>
+  <div class="container">
+      <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/dashboard" title="Back"><img
+                  style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+            <h3 class="center-heading text-center">Request Dashboard</h3>
+            <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+          </div>
+
+          <div  class="panel-body">
+              <div class="row" style="padding-top: 20px">
+                  <div class="col-md-2 text-center custom_pading">
+                    <div class="item">
+                      <button style="border: 0; background: transparent;" [disabled]="otherDisable" (click)="showRequest(1)"><img
+                          style="width: 70px;" src="../../../assets/image/admin.svg">
+                        <h3>Admin/OPS </h3>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-md-2 text-center custom_pading">
+                    <div class="item">
+                      <button style="border: 0; background: transparent;" (click)="showRequest(2)"><img style="width: 50px;" src="./../../assets/image/onpayment.svg">
+                        <h3 style="padding-top: 15px">On Payment </h3>
+                      </button>
+                    </div>
+                  </div>
+            
+                  <div class="col-md-2 text-center custom_pading">
+                    <div class="item">
+                      <button style="border: 0; background: transparent;"  (click)="showRequest(3)"><img
+                          style="width: 70px;" src="./../../assets/image/rpayment.svg">
+                        <h3>Normal Payment </h3>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-md-2 text-center custom_pading">
+                    <div class="item">
+                      <button style="border: 0; background: transparent;" [disabled]="otherDisable" (click)="showRequest(4)"><img
+                          style="width: 70px;" src="./../../assets/image/group.svg">
+                        <h3>Group Aminity </h3>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-md-2 text-center custom_pading">
+                    <div class="item">
+                      <button style="border: 0; background: transparent;" [disabled]="otherDisable" (click)="showRequest(5)"><img
+                          style="width: 70px;" src="./../../assets/image/free.svg">
+                        <h3>Free Aminity </h3>
+                      </button>
+                    </div>
+                  </div>              
+                </div>
+          </div>
+          </div>
+  
+   
+  </div>
+</section>
+
+
+<div [hidden]="!showRequestForm" class="onpayment">
+    <div class="header_section"></div>
+  <form #requestForm="ngForm">
+    <div class="container">
+       <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title pull-left"> <a class="btn btn-success" (click)="banckRequest()" title="Back"><img
+                  style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+            <h3 style="color: #ffffff; font-family: Arial,sans-serif; font-size: 20px;" class="center-heading text-center">Transport Request</h3>
+            <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+          </div>
+          <div class="panel-body">
+      <section class="header">
+        <div class="row">
+          <div class="col-md-12">
+            <p style="text-align: right">বি এএফ জেড -২১৫০ এর পরিবর্তে</p>
+            <p>
+              অনপেমেন্ট
+            </p>
+            <p>
+              যানবাহনের সংভিতিপত্র এবং আদেশনামা
+              <br>
+              (সরবরাহ এ যান বিধির অনুচ্ছেদ ১ - ৯ দ্রষ্টব্য)
+            </p>
+          </div>
+          <div class="col-md-12">
+
+            <div class="col-md-4">
+              খতিয়ানী খরচ হইতে নগদ পরিশাধে :
+              <input [(ngModel)]="objRequest.VehicleNumber" name="numberofVehicle" type="number" class="form-control">
+            </div>
+
+            <div class="col-md-3">
+              <select [(ngModel)]="objRequest.VehicleType" name="vehicleType" class="form-control">
+                <option value=1>জীপ</option>
+                <option value=2>ট্রাক</option>
+                <option value=3>মোটরসাইকেল</option>
+                <option value=4>বাস</option>
+                <option value=5>অ্যাম্বুলেন্স</option>
+                <option value=6>ট্রাক</option>
+                <option value=7>কনটেইনার ক্যারিয়ার</option>
+                <option value=8>পিক</option>
+              </select>
+            </div>
+          </div>
+          <!-- <div class="col-md-6 text-right">
+            <a class="btn btn-primary" href="#">Apply for Transport</a>
+          </div> -->
+        </div>
+      </section>
+      <section class="manob-chahida">
+        <div class="row">
+          <p class="text-center">
+            প্রথম অংশ যানবাহনের চাহিদা
+          </p>
+          <p style="padding: 10px;">
+            সাধারণ সেনা পরিবহন কার্যের দরকার হইলে এই ফরমের দুই কপি স্টেশন পরিবহন অফিসারের নিকট ৪৮ ঘণ্টা পূর্বে পৌছানাের
+            জন্য দাখিল
+            করিতে হইবে
+            সামরিক প্রকৌশল সার্ভিস, প্রতিরক্ষা অর্থ বিভাগ বাংলাদেশ বিমান বাহিনী ইত্যাদির ক্ষেত্রে সরবরাহ ও যান বিধি
+            ১২৯-১ (ক)
+            মােতাবেক এই ফরমের ৩ কপি দাখিল করতে হবে।
+          </p>
+          <div class="middle-content">
+            চাহিদা উত্থাপনকারী ইউনিট - মিলিটারী ডেন্টাল সেন্টার ঘাটাইল
+            সংভুক্ত নং-৮০১২/এমটি/ ২/ <br>
+            (ক) যে তারিখে দরকার : <input [(ngModel)]="objRequest.DemandDate" name="demandDate" type="date" class="form-control"
+              required><br>
+            (খ) যে সময়ে দরকার প্রয়ােজনমত<br>
+            (গ) যে স্থানে দরকার: এম টি পার্ক<br>
+            (ঘ) ঘন্টা, দিন, ইত্যাদি নিয়ােগের সময়সীমা ৮ ঘন্টা<br>
+            (ঙ) গন্তব্য স্থান : ইউনিট এম টি পার্ক হতে <input [(ngModel)]="objRequest.DestinationPlace" name="DestinationPlace"
+              type="text" class="form-control" required><br>
+            (চ) কর্তব্যের ধরণ এবং প্রাধিকার (উদাহরণ স্বরুপ পেসেজ রেগুলেশন,বি,এ,ও,ডিভিশনের নির্দেশ, ইত্যাদি)
+            এসবিএ-৫/২০০৫
+            মোতাবেক<br>
+            ( ঝ) সরকারী অথবা রেজিমেন্টের ভান্ডার অথবা ব্যক্তিগত মালপত্র কিনা, উহার নিদিষ্ট আকৃতি এবং প্রত্যেকটির ওজন
+            শ্রেণী বিন্যাস
+            করতে হবে <br>
+
+            (জ) ব্যক্তি/ব্যক্তিবর্গের বিশদ বিবরণ যাহার/যাহার জন্য যানবাহন মজুদ আছে
+
+          </div>
+
+          <div class="col-md-12">
+            নম্বর পদবী, নাম, ইউনিট অথবা যে সংস্থার ব্যক্তি ভ্রমন করিতেছে। যদি পরিবারের জন্য হয় তাহাহইলে পরিবারের
+            কর্তার নাম, পদবী ,ইউনিট অথবা সংস্থার এবং পরিবারের বিবরণসহ সন্তানদের সঠিক বয়স দিতে হইবে। ফরমের যে অংশে
+            অপর্যাপ্ত জায়গা থাকে সেখানে আলাদাভাবে তালিকা অবশ্যই সংযুক্ত করিতে হইবে।<br>
+          </div>
+        </div>
+      </section>
+      <section class="secound-part">
+        <div class="row">
+          <div class="col-md-12 text-right">
+            <button [disabled]='!requestForm.valid' (click)="saveRequest()" class="btn btn-primary"> Send Rquest
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+    </div>
+    </div>
+  </form>
+</div>

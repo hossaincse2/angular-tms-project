@@ -1,0 +1,123 @@
+<div class="header_section"> </div>
+<div [hidden]="!showEntry" class="settings unit content100vh">
+  <div class="container">
+
+    <div class="row">
+      <div class="row top-bar">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title pull-left"> <a class="btn btn-success" (click)="close()" title="Back"><img
+                  style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+            <h3 class="center-heading text-center">Packing Material</h3>
+            <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+          </div>
+          <div class="panel-body">
+            <form #unitForm="ngForm">
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="row">
+                      <div class="col-md-5">
+                        <label for="">Packing Material</label>
+                      </div>
+                      <div class="col-md-7 pl0">
+                        <input name="UnitName" required [(ngModel)]="objPackingMaterial.MaterialName" type="text" class="form-control" />
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-5">
+                        <label for="">Unit Of Measure Name</label>
+                      </div>
+                      <div class="col-md-7 pl0">
+
+                        <select [(ngModel)]="objPackingMaterial.UnitOfMeasure" required name="unitOfMeasure" class="form-control">
+                          <option value="undefined">Select Unit</option>
+                          <option *ngFor="let unitOfMeasure of lstUnitOfMeasure" [value]="unitOfMeasure.UnitOfMeasureID">
+                            {{unitOfMeasure.Name}}
+                          </option>
+                        </select>
+
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-5">
+                        <label for="">Quantity</label>
+                      </div>
+                      <div class="col-md-7 pl0">
+                        <input name="quantity" required [(ngModel)]="objPackingMaterial.Quantity" type="number" class="form-control" />
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-5">
+                        <label for="">Opening Balance</label>
+                      </div>
+                      <div class="col-md-7 pl0">
+                        <input name="openingBalance" required [(ngModel)]="objPackingMaterial.OpeningBalance" type="number" class="form-control" />
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <br>
+
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-12 text-right" style="padding-top:15px">
+                    <button [disabled]='!unitForm.valid' (click)="savePackingMaterial()" class="btn btn-primary"> Save
+                    </button>
+                    <button class="btn btn-success" (click)="close()">Close</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+</div>
+<div [hidden]="showEntry" class="container content100vh">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/smsDashboard" title="Back"><img
+                style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+          <h3 class="center-heading text-center">Packing Material</h3>
+          <span class="pull-right clickable"> <a class="btn btn-success add-new-btn" (click)="addNew()">Add
+              New</a></span>
+        </div>
+        <div class="panel-body">
+          <div class="table-responsive">
+            <table class="table table-hover" style="border: 1px solid #565656;">
+              <tr>
+                <th>Packing Material</th>
+                <th>Unit Of Measure Name</th>
+                <th>Quantity</th>
+                <th>Opening Balance</th>
+                <th>Action</th>
+
+              </tr>
+              <tr *ngFor="let pMaterial of lstPackingMeterial">
+                <td>{{pMaterial.MaterialName}}</td>
+                <td>{{pMaterial.UnitOfMeasureName}}</td>
+                <td>{{pMaterial.Quantity}}</td>
+                <td>{{pMaterial.OpeningBalance}}</td>
+                <td>
+                  <a title="Edit" (click)="editUnit(pMaterial)" class="edit"><i class='fa fa-pencil'
+                      style="font-size: 20px; margin-right:20px"></i></a>
+                  <a title="Delete" (click)="deleteUnit(pMaterial)" class="delete"><i class="fa fa-trash"
+                      style="font-size: 20px"></i></a>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

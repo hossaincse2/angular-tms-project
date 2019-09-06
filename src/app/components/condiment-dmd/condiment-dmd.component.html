@@ -1,0 +1,595 @@
+<div class="header_section"></div>
+<div class="content100vh">
+    <section [hidden]="!showEntry">
+        <div class="container">
+            <form #condimentDemandForm="ngForm" class="form-inline">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title pull-left"> <a class="btn btn-success" (click)="close()"
+                                        title="Back"><img style="width: 24px;" src="./../../assets/image/back.svg"></a>
+                                </h3>
+                                <h3 class="center-heading text-center">কনডিমেন্ড ডিমান্ড</h3>
+                                <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label for="email">ইউনিটঃ</label>
+                                    <select (change)="loadItem()" [(ngModel)]="objCondimentDemand.FromUnitID" required
+                                        name="fromUnitID" id="fromUnitID" class="form-control">
+                                        <option value=''>-Select-</option>
+                                        <option *ngFor="let vmUnit of lstVMUnit" [value]="vmUnit.Unit.UnitID">
+                                            {{vmUnit.Unit.UnitName}}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="pwd">Demand Date</label>
+                                    <input type="date" required
+                                        [ngModel]="objCondimentDemand.DemandDate | date:'yyyy-MM-dd'"
+                                        (ngModelChange)="objCondimentDemand.DemandDate = $event" class="form-control"
+                                        name="demandDate">
+                                </div>
+                                <div class="form-group">
+                                    <label for="pwd">খাদ্য দ্রব্য সংগ্রহের তারিখ</label>
+                                    <input type="date" required
+                                        [ngModel]="objCondimentDemand.ReceivingDate | date:'yyyy-MM-dd'"
+                                        (ngModelChange)="objCondimentDemand.ReceivingDate = $event" class="form-control"
+                                        name="receivingDate">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="pwd">শেষ চাহিদা পত্রের তারিখঃ</label>
+                                    <input type="date" required
+                                        [ngModel]="objCondimentDemand.LastDemandDate | date:'yyyy-MM-dd'"
+                                        (ngModelChange)="objCondimentDemand.LastDemandDate = $event"
+                                        class="form-control" name="lastDemandDate">
+                                </div>
+                                <div class="form-group">
+                                    <label for="pwd">পূর্বের চাহিদা পত্রের প্রাধিকারঃ</label>
+                                    <input type="numbner" required [(ngModel)]="objCondimentDemand.LastDemandNumber"
+                                        class="form-control" name="lastDemandNumber">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="pwd">হইতেঃ</label>
+                                    <input type="date" required (change)="onDateChange()"
+                                        [ngModel]="objCondimentDemand.FromDate | date:'yyyy-MM-dd'"
+                                        (ngModelChange)="objCondimentDemand.FromDate = $event" class="form-control"
+                                        name="fromDate">
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="pwd">প্রতিঃ</label>
+                                    <input type="date" required (change)="onDateChange()"
+                                        [ngModel]="objCondimentDemand.ToDate | date:'yyyy-MM-dd'"
+                                        (ngModelChange)="objCondimentDemand.ToDate = $event" class="form-control"
+                                        name="toDate">
+                                </div>
+                                <div class="form-group">
+                                    <label for="pwd">Total Day</label>
+                                    <input type="number" disabled [(ngModel)]="objCondimentDemand.TotalDays"
+                                        class="form-control" name="totalDays">
+                                </div>
+                                <div class="form-group">
+                                    <label for="pwd">জনবলঃ</label>
+                                    <input type="numbner" (change)="calculateTotal()" required
+                                        [(ngModel)]="objCondimentDemand.NumberOfPeople" class="form-control"
+                                        name="numberOfPeople">
+                                </div>
+                                <div class="form-group">
+                                    <label for="pwd">সংগ্রহের স্থান</label>
+                                    <select [(ngModel)]="objCondimentDemand.SupplyPlaceID" name="supplyPlaceID"
+                                        class="form-control">
+                                        <option value='undefined'>-Select-</option>
+                                        <option *ngFor="let suplyPlace of lstSupplyPlace"
+                                            value="{{suplyPlace.SupplyPlaceID}}">
+                                            {{suplyPlace.SupplyPlaceName}}
+                                        </option>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div><br>
+                <div style="font-weight:bold" class="pull-right">Total:{{totalDemand | number:'2.2'}}</div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive table-bordered movie-table">
+                            <table class="table movie-table tableFixHead">
+                                <thead>
+                                    <tr class="movie-table-head">
+                                        <th>ক্রমিক</th>
+                                        <th>পণ্যের নাম</th>
+                                        <th style="text-align:right">স্কেল</th>
+                                        <th style="text-align:right">প্রাধিকার</th>
+                                        <th style="text-align:right">মজুদের পরিমাণ</th>
+                                        <th style="text-align:right">বর্তমান চাহিদা</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!--row-->
+                                    <tr *ngFor="let objCondimentDetail of lstCondimentDemandDetail; let i=index"
+                                        class="dark-row">
+                                        <td> &nbsp;
+                                            <input [(ngModel)]="objCondimentDetail.itemCheck"
+                                                (change)="calculateTotal()" name="itemCheck{{i}}" type="checkbox">
+
+                                            &nbsp;{{i+1}}</td>
+
+                                        <td>{{objCondimentDetail.ItemName}}</td>
+                                        <td style="text-align:right"> <input type="text" disabled
+                                                style="text-align:right" name="Quantity{{i}}"
+                                                [(ngModel)]="objCondimentDetail.Quantity" class="form-control">
+                                        </td>
+                                        <td style="text-align:right"> 
+                                            {{objCondimentDetail.Pradhikar}}
+                                        </td>
+                                        <td style="text-align:right">
+                                            <input type="text" (keyup)="CalculateTotalDemand()" style="text-align:right"
+                                                name="Stock{{i}}" [(ngModel)]="objCondimentDetail.Stock"
+                                                class="form-control">
+                                        </td>
+                                        <td style="text-align:right">
+                                            {{objCondimentDetail.Total}}
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="padding-top:10px">
+                    <div class="col-md-12 text-right">
+                        <button [disabled]='!condimentDemandForm.valid' (click)="saveUnitcondimentDemand()"
+                            class="btn btn-primary">
+                            Save
+                        </button>
+                        <button class="btn btn-danger" (click)="close()" type="submit">Close</button>
+
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+    </section>
+
+
+    <div class="container">
+        <div [hidden]="showEntry" class="row">
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/unitDemand"
+                                title="Back"><img style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+                        <h3 class="center-heading text-center">কনডিমান্ড আইটেম ডিমান্ড লিস্ট</h3>
+                        <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+                    </div>
+                    <div class="panel-body">
+                        <form #searchForm="ngForm" class="form-inline">
+
+
+                            <div class="form-group">
+                                <label for="email">ইউনিটঃ</label>
+                                <select [(ngModel)]="objQueryObject.UnitID" name="unitID" class="form-control">
+                                    <option value='undefined'>All</option>
+                                    <option *ngFor="let vmUnit of lstVMUnit" [value]="vmUnit.Unit.UnitID">
+                                        {{vmUnit.Unit.UnitName}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="pwd">সংগ্রহের স্থানঃ</label>
+                                <select class="form-control" name="supplyPalce"
+                                    [(ngModel)]="objQueryObject.SupplyPlaceID">
+                                    <option value='undefined'>-Select-</option>
+                                    <option *ngFor="let suplyPlace of lstSupplyPlace"
+                                        value="{{suplyPlace.SupplyPlaceID}}">
+                                        {{suplyPlace.SupplyPlaceName}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="pwd">হইতেঃ</label>
+                                <input type="date" required [ngModel]="objQueryObject.FromDate | date:'yyyy-MM-dd'"
+                                    (ngModelChange)="objQueryObject.FromDate = $event" class="form-control"
+                                    name="fromDate">
+                            </div>
+                            <div class="form-group">
+                                <label for="pwd">প্রতিঃ</label>
+                                <input type="date" required [ngModel]="objQueryObject.ToDate | date:'yyyy-MM-dd'"
+                                    (ngModelChange)="objQueryObject.ToDate = $event" class="form-control" name="toDate">
+                            </div>
+
+
+
+                            <div class="form-group">
+                                <button [disabled]='!searchForm.valid' class="btn btn-success search-btn"
+                                    (click)="getFilteredCondementDemand()" type="submit">Serach</button>
+
+                                <button class="btn btn-success search-btn" (click)="addNew()" type="submit">Add
+                                    New</button>
+                            </div>
+                        </form>
+                    </div>
+                </div> <br>
+                <div class="table-responsive">
+                    <table class="table table-hover tableFixHead" style="border: 1px solid #565656;">
+                        <tr>
+                            <th>Unit Name</th>
+                            <th>Supply Place</th>
+                            <th>Demand Date</th>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                            <th>Total Days</th>
+                            <th>Number Of People</th>
+                            <th> Status</th>
+                            <th style="width:15%; text-align:right ">Action</th>
+
+                        </tr>
+                        <tr *ngFor="let vmDemand of lstVMUnitDemand">
+                            <td>{{vmDemand.CondimentDemand.UnitName}}</td>
+                            <td>{{vmDemand.CondimentDemand.SupplyPlaceName}}</td>
+                            <td>{{vmDemand.CondimentDemand.DemandDate | date:'dd-MMM-yyyy'}}</td>
+                            <td>{{vmDemand.CondimentDemand.FromDate | date:'dd-MMM-yyyy'}}</td>
+                            <td>{{vmDemand.CondimentDemand.ToDate | date:'dd-MMM-yyyy'}}</td>
+                            <td>{{vmDemand.CondimentDemand.TotalDays}}</td>
+                            <td>{{vmDemand.CondimentDemand.NumberOfPeople}}</td>
+                            <td>{{vmDemand.CondimentDemand.StatusName}}</td>
+                            <td style="text-align:right">
+
+                                <a title="Detail" (click)="demandDetail(vmDemand)" class="detail"><i class='fa fa-list'
+                                        style="font-size: 20px; margin-right:20px"></i></a>
+                                <a title="Edit" [hidden]="vmDemand.CondimentDemand.Status>1"
+                                    (click)="editDemand(vmDemand)" class="edit"><i class="fa fa-pencil"
+                                        style="font-size: 20px;margin-right:20px"></i></a>
+                                <a title="Approve" [hidden]="!vmDemand.CondimentDemand.showApproval"
+                                    (click)="approveDemand(vmDemand)" class="success"><i class="fa fa-check-square"
+                                        style="font-size: 20px;margin-right:20px"></i></a>
+                                <a title="Print" (click)="demandDetailPrint(vmDemand)" class="edit"><i class="fa fa-print"
+                                        style="font-size: 20px;margin-right:20px"></i></a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="unitDemandModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Demand Detail</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <table class="table movie-table tableFixHead">
+                        <thead>
+                            <tr class="movie-table-head">
+                                <th>ক্রমিক</th>
+                                <th>পণ্যের নাম</th>
+                                <th style="text-align:right">স্কেল</th>
+                                <th style="text-align:right">প্রাধিকার</th>
+                                <th style="text-align:right">মজুদের পরিমাণ</th>
+                                <th style="text-align:right">বর্তমান চাহিদা</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--row-->
+                            <tr *ngFor="let objCondimentDetail of lstCondimentDemandDetail; let i=index"
+                                class="dark-row">
+                                <td>
+                                    &nbsp;{{i+1}}</td>
+
+                                <td>{{objCondimentDetail.ItemName}}</td>
+                                <td style="text-align:right">{{objCondimentDetail.Quantity}}
+                                </td>
+                                <td style="text-align:right"> {{objCondimentDetail.Pradhikar}}
+                                </td>
+                                 <td style="text-align:right"> {{objCondimentDetail.Stock}}
+                                </td>
+                                   <td style="text-align:right"> {{objCondimentDetail.Total}}
+                                </td>                              
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="modal fade" id="adminApprovalModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Unit Demand Detail</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <table class="table movie-table tableFixHead">
+                        <thead>
+                            <tr class="movie-table-head">
+                                <th>ক্রমিক</th>
+                                <th>পণ্যের নাম</th>
+                                <th style="text-align:right">স্কেল</th>
+                                <th style="text-align:right">মোট</th>
+                                <th style="text-align:right">প্রদেয় পরিমাণ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--row-->
+                            <tr *ngFor="let objCondimentDetail of lstCondimentDemandDetail; let i=index"
+                                class="dark-row">
+                                <td> &nbsp;{{i+1}}</td>
+
+                                <td>{{objCondimentDetail.ItemName}}</td>
+                                <td style="text-align:right">
+                                    {{ objCondimentDetail.Quantity}}
+                                </td>
+                                <td style="text-align:right">
+                                    {{ objCondimentDetail.Total}}
+                                </td>
+                                <td style="text-align:right"> <input type="text" style="text-align:right"
+                                        name="ApprovedQuantity{{i}}" [(ngModel)]="objCondimentDetail.ApprovedQuantity"
+                                        class="form-control">
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" (click)="approveCondimentDemand()" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="adminApprovalModalPrint" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+
+                <div class="modal-body">
+                    <div class="header_section"> </div>
+                    <div class="container">
+                        <div class="row bg-white" style="margin: 0 -30px;">
+                            <section class="Contraner-up">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="print-header">
+                                            <div style="width:100%; margin: -3px 15px;float: right; text-align: right">
+                                                <h5 style="font-size: 11px">বা সে ফ সা - ২০৯৮ এর পরিবর্তে</h5>
+                                            </div>
+                                            <div style="width:100%; float: left;text-align: center;margin-top: 20px;">
+                                                <h4 style="font-size: 11px">বিনামূল্যে বিতরণের চাহিদা পএ </h4>
+                                            </div>
+                                            <div style="width:100%; margin: -3px 15px;float: right; text-align: right">
+                                                <div style="text-align: right;float: right;" id="barcodeTarget"
+                                                    class="barcodeTarget"></div>
+                                            </div>
+                                        </div>
+                                        <div style="width:50%; float: left">
+                                            <table style="width:100%">
+                                                <tr>
+                                                    <td style="width:50%"><label style="font-size: 11px"
+                                                            for="">হইতেঃ</label></td>
+                                                    <td style="width:40%;font-size: 11px">
+                                                        {{objVMUnitDemand.CondimentDemand.UnitName}} </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><label style="font-size: 11px" for="">প্রতিঃ</label></td>
+                                                    <td style="font-size: 11px"> SSD Gahatail </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><label style="font-size: 11px" for="">সংগ্রহের
+                                                            স্থানঃ</label></td>
+                                                    <td style="font-size: 11px">
+                                                        {{objVMUnitDemand.CondimentDemand.SupplyPlaceName}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><label style="font-size: 11px" for="">পূর্বের চাহিদা পত্রের
+                                                            প্রাধিকারঃ</label></td>
+                                                    <td style="font-size: 11px">
+                                                        {{objVMUnitDemand.CondimentDemand.LastDemandNumber}} </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><label style="font-size: 11px" for="">শেষ চাহিদা পত্রের
+                                                            তারিখঃ</label></td>
+                                                    <td style="font-size: 11px">
+                                                        {{objVMUnitDemand.CondimentDemand.LastDemandDate | date:'dd-MMM-yyyy'}}
+                                                    </td>
+                                                </tr>
+
+                                            </table>
+                                        </div>
+                                        <div style="width:50%; float: left">
+                                            <table style="width:100%;font-size: 11px">
+                                                <tr>
+                                                    <td style="font-size: 11px"><label style="font-size: 11px"
+                                                            for="">খাদ্য দ্রব্য
+                                                            সংগ্রহের তারিখ</label></td>
+                                                    <td style="font-size: 11px">
+                                                        <span>{{objVMUnitDemand.CondimentDemand.ReceivingDate | date:'dd-MMM-yyyy'}}</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="font-size: 11px"><label style="font-size: 11px" for="">যে
+                                                            সময়ের জন্য
+                                                            চাহিদা দাখিল করা গেল</label></td>
+                                                    <td style="font-size: 11px">
+                                                        {{objVMUnitDemand.CondimentDemand.FromDate | date:'dd-MMM-yyyy'}}
+                                                    </td>
+                                                    <td style="font-size: 11px">হইতে</td>
+                                                    <td style="font-size: 11px">
+                                                        {{objVMUnitDemand.CondimentDemand.ToDate | date:'dd-MMM-yyyy'}}
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section class="Contraner-table">
+                                <div class="row">
+                                    <div class="col-md-12 col-xs-12" style="width:100%; float:left">
+                                        <p style="font-size: 11px !important;"><b>প্রাধিকারঃ এ আর আর ৪৯৯/৫০০
+                                                মােতাবেক চাহিদা পত্রের ভিত্তি
+                                                ও বেসামরিক ব্যক্তি এবং তাদের
+                                                পরিবারবর্গের
+                                                জন্য
+                                                বেসামরিক চিনি ব্যতীত অন্যান্য
+                                                আইটেম {{objVMUnitDemand.CondimentDemand.NumberOfPeople}} জন এর মধ্যে
+                                                এবং অন্যান্য</b></p>
+
+                                    </div>
+                                </div>
+                                <div class="empty-space"></div>
+                                <div class="table-responsive table-boder">
+                                    <table class="tableFixHead"
+                                        style="border:1px solid black;border-collapse: collapse;" cellpadding="5"
+                                        width="100%">
+                                        <tr>
+                                            <th colspan="9"
+                                                style="text-align:center;background-color: #d6f1c4;font-size: 11px; padding: 5px">
+                                                ইউনিট কর্তৃক
+                                                পূরণ করিতে
+                                                হইবে।</th>
+                                            <!-- <th colspan="5">এস এসসিডিপাের ব্যবহারের জন্য</th> -->
+                                        </tr>
+                                        <tr>
+                                            <th style="width:6%;font-size: 10px;border:1px solid black;">ক্রমিক
+                                            </th>
+                                            <th style="width:10%;font-size: 10px;border:1px solid black;">দ্রব্যের
+                                                নাম</th>
+                                            <th
+                                                style="width:7%;text-align:right;font-size: 10px;border:1px solid black;">
+                                                প্রাধিকার</th>
+                                            <th
+                                                style="width:12%;text-align:right;font-size: 10px;border:1px solid black;">
+                                                মজুদের পরিমাণ
+                                            </th>
+                                            <th
+                                                style="width:12%;text-align:right;font-size: 10px;border:1px solid black;">
+                                                বর্তমান চাহিদা
+                                            </th>
+                                            <th
+                                                style="width:7%;text-align:right;font-size: 10px;border:1px solid black;">
+                                                মঞ্জরিকৃত</th>
+
+
+
+                                        <tr *ngFor="let objDemandDetail of lstCondimentDemandDetail; let i=index">
+
+                                            <td style="font-size: 10px;border:1px solid black;"> &nbsp;{{i+1}}</td>
+                                            <td style="font-size: 10px;border:1px solid black;">
+                                                {{objDemandDetail.ItemName}}
+                                            </td>
+
+                                            <td style="text-align:right;;font-size: 10px;border:1px solid black;">
+                                                {{objDemandDetail.Pradhikar}}
+                                            </td>
+
+                                            <td style="text-align:right;font-size: 10px;border:1px solid black;">
+                                                {{objDemandDetail.Stock }}
+                                            </td>
+
+                                            <td style="text-align:right;font-size: 10px;border:1px solid black;">
+                                                {{objDemandDetail.Total}}
+                                            </td>
+
+                                            <td style="text-align:right;font-size: 10px;border:1px solid black;">
+                                                {{objDemandDetail.ApprovedQuantity}}
+                                            </td>
+
+                                        </tr>
+                                    </table>
+                                </div>
+
+
+                            </section>
+                            <div class="empty-space"></div>
+
+
+                            <section class="Contraner-bottom">
+                                <div class="row">
+                                    <div class="col-md-8 col-xs-8" style="width:70%;float: left">
+                                        <div class="advairas">
+                                            <h5 style="font-size: 11px;">১। আমি প্রত্যায়ন করিতেছি যে, চাহিদাকৃত
+                                                দ্রব্যাদি, আমার অধীনস্ত
+                                                সৈনিকদের জন্য
+                                                মজুদ/বিনামুল্যে/স্বল্প
+                                                মূল্যে ইস্যু করা প্রয়ােজন।</h5>
+                                            <h5 style="font-size: 11px;"> ২। প্রত্যায়ন হইল যে, মজুদ রেশন নিয়মিত
+                                                রক্ষনাবেক্ষন ও পাল্টানাে
+                                                হয়।</h5>
+                                            <h5 style="font-size: 11px;">স্টেশনঃ শহীদ সালাহউদ্দিন সেনানিবাস। </h5>
+                                            <!-- তারিখঃ ২৫ / ১০/২০১৮ -->
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-2 col-xs-2" style="width:15%;float: left">
+                                        <div class="relative odinayok">
+                                            <p style="font-size:10px" class="absolute">অধিনায়ক</p>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-2 col-xs-2" style="width:15%;float: left">
+                                        <div class="relative signacar">
+                                            <img *ngIf="objUser.Sign" style="width:100px" id="logo"
+                                                src="data:image/jpeg;base64,{{objUser.Sign}}" alt="ImageFile" />
+                                            <p style="font-size:10px" class="absolute">স্বাক্ষর</p>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </section>
+
+                            <div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer noprint">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" (click)="generatePrint()" class="btn btn-primary printMe">Print</button>
+                </div>
+            </div>
+        </div>
+    </div>

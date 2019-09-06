@@ -1,0 +1,373 @@
+<div class="header_section"> </div>
+<div class="content100vh">
+    <section [hidden]="!showEntry">
+        <div class="container">
+            <form class="form-inline" #hospitalItemForm="ngForm">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title pull-left"> <a class="btn btn-success" (click)="close()"
+                                        title="Back"><img style="width: 24px;" src="./../../assets/image/back.svg"></a>
+                                </h3>
+                                <h3 class="center-heading text-center">হসপিটাল আইটেম ডিমান্ড</h3>
+                                <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label for="email">ইউনিটঃ</label>
+                                    <select (change)="loadItem()" [(ngModel)]="objHospitalItemDemand.FromUnitID"
+                                        required name="fromUnitID" class="form-control">
+                                        <option value=''>-Select-</option>
+                                        <option *ngFor="let vmUnit of lstVMUnit" [value]="vmUnit.Unit.UnitID">
+                                            {{vmUnit.Unit.UnitName}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pwd">তারিখঃ</label>
+                                    <input type="date" [ngModel]="objHospitalItemDemand.DemandDate | date:'yyyy-MM-dd'"
+                                        (ngModelChange)="objHospitalItemDemand.DemandDate = $event" class="form-control"
+                                        required name="demandDate">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="pwd">তারিখ হইতেঃ</label>
+                                    <input type="date" [ngModel]="objHospitalItemDemand.FromDate | date:'yyyy-MM-dd'"
+                                        (ngModelChange)="objHospitalItemDemand.FromDate = $event"
+                                        (change)="onResourceChange(); calculateTotal()" class="form-control" required name="fromDate">
+                                </div>
+                                <div class="form-group">
+                                    <label for="pwd">তারিখ প্রতিঃ</label>
+                                    <input type="date" [ngModel]="objHospitalItemDemand.ToDate | date:'yyyy-MM-dd'"
+                                        (ngModelChange)="objHospitalItemDemand.ToDate = $event"
+                                        (change)="onResourceChange(); calculateTotal()" class="form-control" required name="toDate">
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="pwd">জনবলঃ</label>
+                                    {{totalDays}}/{{totalResource}}
+
+                                    <input type="numbner" disabled (change)="calculateTotal()"
+                                        [(ngModel)]="objHospitalItemDemand.NumberOfPeople" class="form-control" name="numberOfPeople">
+                                </div>
+                                <div class="form-group">
+                                    <label for="pwd">সংগ্রহের স্থান</label>
+                                    <select [(ngModel)]="objHospitalItemDemand.SupplyPlaceID" name="SupplyPlaceID"
+                                        class="form-control">
+                                        <option value='undefined'>-Select-</option>
+                                        <option *ngFor="let suplyPlace of lstSupplyPlace"
+                                            value="{{suplyPlace.SupplyPlaceID}}">
+                                            {{suplyPlace.SupplyPlaceName}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive table-bordered movie-table">
+                            <table class="table movie-table">
+                                <thead>
+                                    <tr class="movie-table-head">
+                                        <th>ক্রমিক</th>
+                                        <th>পণ্যের নাম</th>
+                                        <th style="text-align:right">প্রাধিকার</th>
+                                        <th style="text-align:right">মজুদের পরিমাণ</th>
+                                        <th style="text-align:right">বর্তমান চাহিদা</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr *ngFor="let objFreshDetail of lstHospitalItemDemandDetail; let i=index"
+                                        class="dark-row">
+                                        <td> &nbsp;
+                                            <input [(ngModel)]="objFreshDetail.itemCheck" (change)="calculateTotal()"
+                                                name="itemCheck{{i}}" type="checkbox">
+                                            &nbsp;{{i+1}}</td>
+                                        <td>{{objFreshDetail.ItemName}}</td>
+                                        <td style="text-align:right">
+                                            <input type="text" disabled name="PradikarNo{{i}}" style="text-align:right"
+                                                [(ngModel)]="objFreshDetail.PradikarNo" class="form-control">
+                                        </td>
+                                        <td style="text-align:right">
+                                            <input type="text" (change)="calculateTotal()" name="Stock{{i}}"
+                                                style="text-align:right" [(ngModel)]="objFreshDetail.Stock"
+                                                class="form-control">
+                                        </td>
+                                        <td style="text-align:right">
+                                            <input type="text" style="text-align:right" name="Quantity{{i}}"
+                                                [(ngModel)]="objFreshDetail.Quantity" class="form-control">
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="col-md-6" style=" padding-top: 11px;">
+                <div class="bina-left;">
+                    <table>
+                        <tr>
+                            <th colspan="5" style="background-color: #d6f1c4">Diet Type</th>
+                        </tr>
+
+                        <tr>
+                            <td style="width: 30%;"> High Calories</td>
+                            <td><input (change)="onResourceChange()"
+                                    [(ngModel)]="objHospitalItemDemandDiteDetail.HighCalorie" type="number"
+                                    class="form-control" name="HighCalorie"></td>
+                        </tr>
+                        <tr>
+                            <td>Standard</td>
+                            <td><input (change)="onResourceChange()"
+                                    [(ngModel)]="objHospitalItemDemandDiteDetail.Standard" type="number"
+                                    class="form-control" name="Standard"></td>
+                        </tr>
+                        <tr>
+                            <td>Children</td>
+                            <td><input (change)="onResourceChange()"
+                                    [(ngModel)]="objHospitalItemDemandDiteDetail.Children" type="number"
+                                    class="form-control" name="Children"></td>
+                        </tr>
+                        <tr>
+                            <td>Carbohydrate Restricted</td>
+                            <td><input (change)="onResourceChange()"
+                                    [(ngModel)]="objHospitalItemDemandDiteDetail.Carbohydrate" type="number"
+                                    class="form-control" name="Carbohydrate"></td>
+                        </tr>
+                        <tr>
+                            <td> Infant</td>
+                            <td><input (change)="onResourceChange()"
+                                    [(ngModel)]="objHospitalItemDemandDiteDetail.Infant" type="number"
+                                    class="form-control" name="Infant"></td>
+                        </tr>
+                        <tr>
+                            <td> Soft</td>
+                            <td><input (change)="onResourceChange()" [(ngModel)]="objHospitalItemDemandDiteDetail.Soft"
+                                    type="number" class="form-control" name="Soft"></td>
+                        </tr>
+                        <tr>
+                            <td> Fat Restricted</td>
+                            <td><input (change)="onResourceChange()"
+                                    [(ngModel)]="objHospitalItemDemandDiteDetail.FatRestricted" type="number"
+                                    class="form-control" name="FatRestricted"></td>
+                        </tr>
+                        <tr>
+                            <td> Protein Restricted</td>
+                            <td><input (change)="onResourceChange()"
+                                    [(ngModel)]="objHospitalItemDemandDiteDetail.ProteinRestricted" type="number"
+                                    class="form-control" name="ProteinRestricted"></td>
+                        </tr>
+                        <tr>
+                            <td>Liquid</td>
+                            <td><input (change)="onResourceChange()"
+                                    [(ngModel)]="objHospitalItemDemandDiteDetail.Liquid" type="number"
+                                    class="form-control" name="Liquid"></td>
+                        </tr>
+                    </table>
+
+
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-12 text-right" style="padding-top: 6px">
+                    <button [disabled]='!hospitalItemForm.valid' (click)="saveUnithospitalDemand()"
+                        class="btn btn-primary">
+                        Save
+                    </button>
+                    <button class="btn btn-danger" (click)="close()" type="submit">Close</button>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+
+    <div class="container">
+        <div [hidden]="showEntry" class="row">
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/unitDemand"
+                                title="Back"><img style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+                        <h3 class="center-heading text-center">হসপিটাল আইটেম ডিমান্ড</h3>
+                        <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+                    </div>
+                    <div class="panel-body">
+                        <form #searchForm="ngForm" class="form-inline">
+                            <div class="form-group">
+                                <label for="email">ইউনিটঃ</label>
+                                <select [(ngModel)]="objQueryObject.UnitID" name="unitID" class="form-control w250">
+                                    <option value='undefined'>All</option>
+                                    <option *ngFor="let vmUnit of lstVMUnit" [value]="vmUnit.Unit.UnitID">
+                                        {{vmUnit.Unit.UnitName}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="pwd">তারিখ হইতেঃ</label>
+                                <input type="date" required [ngModel]="objQueryObject.FromDate | date:'yyyy-MM-dd'"
+                                    (ngModelChange)="objQueryObject.FromDate = $event" class="form-control"
+                                    name="fromDate">
+                            </div>
+                            <div class="form-group">
+                                <label for="pwd">তারিখ প্রতিঃ</label>
+                                <input type="date" required [ngModel]="objQueryObject.ToDate | date:'yyyy-MM-dd'"
+                                    (ngModelChange)="objQueryObject.ToDate = $event" class="form-control" name="toDate">
+                            </div>
+                            <div class="form-group">
+                                <button [disabled]='!searchForm.valid' class="btn btn-success search-btn"
+                                    (click)="getFilteredHospitalDemand()" type="submit">Serach</button>
+
+                                <button class="btn btn-success search-btn" (click)="addNew()" type="submit">Add
+                                    New</button>
+                            </div>
+                        </form>
+                    </div>
+                </div> <br>
+                <div class="table-responsive">
+                    <table class="table table-hover tableFixHead" style="border: 1px solid #565656;">
+                        <tr>
+                            <th>Unit Name</th>
+                            <th>Demand Date</th>
+                            <th>Number Of People</th>
+                            <th> Status</th>
+                            <th style="width:15%; text-align:right ">Action</th>
+
+                        </tr>
+                        <tr *ngFor="let vmDemand of lstVMUnitDemand">
+                            <td>{{vmDemand.HospitalItemDemand.UnitName}}</td>
+                            <td>{{vmDemand.HospitalItemDemand.DemandDate | date:'yyyy-MM-dd'}}</td>
+                            <td>{{vmDemand.HospitalItemDemand.NumberOfPeople}}</td>
+                            <td>{{vmDemand.HospitalItemDemand.StatusName}}</td>
+                            <td style="text-align:right">
+                                <a title="Detail" (click)="demandDetail(vmDemand)" class="detail"><i class='fa fa-list'
+                                        style="font-size: 20px; margin-right:20px"></i></a>
+                                <a title="Edit" [hidden]="vmDemand.HospitalItemDemand.Status>1"
+                                    (click)="editDemand(vmDemand)" class="edit"><i class="fa fa-pencil"
+                                        style="font-size: 20px;margin-right:20px"></i></a>
+                                <a title="Approve" [hidden]="!vmDemand.HospitalItemDemand.showApproval"
+                                    (click)="approveDemand(vmDemand)" class="success"><i class="fa fa-check-square"
+                                        style="font-size: 20px;margin-right:20px"></i></a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="unitDemandModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Demand Detail</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <table class="table movie-table tableFixHead">
+                        <thead>
+                            <tr class="movie-table-head">
+                                <th>ক্রমিক</th>
+                                <th>পণ্যের নাম</th>
+                                <th>স্কেল</th>
+                                <th>মোট</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr *ngFor="let objFreshDetail of lstHospitalItemDemandDetail; let i=index"
+                                class="dark-row">
+                                <td>
+
+                                    &nbsp;{{i+1}}</td>
+
+                                <td>{{objFreshDetail.ItemName}}</td>
+
+                                <td>
+                                    {{objFreshDetail.Quantity}}
+                                </td>
+                                <td>
+                                    {{objFreshDetail.Total}}
+
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="adminApprovalModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Unit Demand Detail</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <table class="table movie-table tableFixHead">
+                        <thead>
+                            <tr class="movie-table-head">
+                                <th>ক্রমিক</th>
+                                <th>পণ্যের নাম</th>
+                                <th style="text-align:right">স্কেল</th>
+                                <th style="text-align:right">মোট</th>
+                                <th style="text-align:right">প্রদেয় পরিমাণ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--row-->
+                            <tr *ngFor="let objCondimentDetail of lstHospitalItemDemandDetail; let i=index"
+                                class="dark-row">
+                                <td> &nbsp;{{i+1}}</td>
+
+                                <td>{{objCondimentDetail.ItemName}}</td>
+                                <td style="text-align:right">
+                                    {{ objCondimentDetail.Quantity}}
+                                </td>
+                                <td style="text-align:right">
+                                    {{ objCondimentDetail.Total}}
+                                </td>
+                                <td style="text-align:right">
+                                    <input type="text" style="text-align:right" name="ApprovedQuantity{{i}}"
+                                        [(ngModel)]="objCondimentDetail.ApprovedQuantity" class="form-control">
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" (click)="approveCondimentDemand()" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>

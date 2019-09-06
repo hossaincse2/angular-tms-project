@@ -1,0 +1,204 @@
+<div class="header_section"></div>
+<div class="content100vh pmAuction">
+    <section [hidden]="!showEntry">
+        <div class="container">
+            <form #pmAuctionForm="ngForm" class="form-inline">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/pmDashBoard"
+                                        title="Back"><img style="width: 24px;" src="./../../assets/image/back.svg"></a>
+                                </h3>
+                                <h3 class="center-heading text-center">PM Distribution</h3>
+                                <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+                            </div>
+                            <div class="panel-body">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="pwd">Distribution Date</label>
+                                        <input [ngModel]="objPMAuction.AuctionDate | date:'yyyy-MM-dd'"
+                                            (ngModelChange)="objPMAuction.AuctionDate = $event" type="date" required
+                                            class="form-control" name="auctionDate">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="pwd">Party Name</label>
+                                        <input [(ngModel)]="objPMAuction.CompanyName" type="text" required
+                                            class="form-control" name="companyName">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="pwd">Pradikar Number</label>
+                                        <input [(ngModel)]="objPMAuction.PradikharNumber" type="text" required
+                                            class="form-control" name="prdikarNumber">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="pwd">Lot Number</label>
+                                        <input [(ngModel)]="objPMAuction.LotNumber" type="text" class="form-control"
+                                            name="lotNumber">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="pwd">Short Note</label>
+                                        <textarea [(ngModel)]="objPMAuction.ShortNote" name="shortNote" id="shortNote"
+                                            class="form-control" cols="30" rows="2"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table table-hover" style="text-align:center; border: 1px solid #565656;">
+                                <tr>
+                                    <th>ক্রমিক</th>
+                                    <th>মোরকের নাম</th>
+                                    <th>Quantity</th>
+                                    <th>Short Note</th>
+                                </tr>
+                                <tr *ngFor="let pmDetail of lstPMAuctionDetail; let i=index" class="dark-row">
+                                    <td> &nbsp;
+                                        <input [(ngModel)]="pmDetail.itemCheck" name="itemCheck{{i}}" type="checkbox">
+                                        &nbsp;{{i+1}}</td>
+                                    <td>{{pmDetail.MaterialName}}</td>
+                                    <td>
+                                        <input type="number" [disabled]="!pmDetail.itemCheck" style="text-align:right"
+                                            name="Quantity{{i}}" [(ngModel)]="pmDetail.Quantity" class="form-control">
+
+                                    </td>
+                                    <td>
+                                        <input type="text" [disabled]="!pmDetail.itemCheck" style="text-align:right"
+                                            name="ShortNote{{i}}" [(ngModel)]="pmDetail.ShortNote" class="form-control">
+
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="text-right">
+                                <button (click)="savePmAuction()" [disabled]="!pmAuctionForm.valid"
+                                    class="btn btn-primary"> Save </button>
+                                <button (click)="close()" class="btn btn-success"> Close </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+    </section>
+    <section [hidden]="showEntry">
+        <div class="container">
+            <form #pmAuctionForm="ngForm" class="form-inline">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/pmDashBoard"
+                                        title="Back"><img style="width: 24px;" src="./../../assets/image/back.svg"></a>
+                                </h3>
+                                <h3 class="center-heading text-center">PM Distribution</h3>
+                                <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label for="pwd">তারিখ হইতেঃ</label>
+                                    <input type="date" required [ngModel]="objQueryObject.FromDate | date:'yyyy-MM-dd'"
+                                        (ngModelChange)="objQueryObject.FromDate = $event" class="form-control"
+                                        name="fromDate">
+                                </div>
+                                <div class="form-group">
+                                    <label for="pwd">তারিখ প্রতিঃ</label>
+                                    <input type="date" required [ngModel]="objQueryObject.ToDate | date:'yyyy-MM-dd'"
+                                        (ngModelChange)="objQueryObject.ToDate = $event" class="form-control"
+                                        name="toDate">
+                                </div>
+                                <div class="form-group">
+                                    <button [disabled]='!pmAuctionForm.valid' (click)="searchByDate()"
+                                        class="btn btn-primary"> Search
+                                    </button>
+                                    <button (click)="addNew()" class="btn btn-primary"> Add New </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table table-hover" style="text-align:center; border: 1px solid #565656;">
+                                <tr>
+                                    <th>Auction Date</th>
+                                    <th>Pradhikar No</th>
+                                    <th>Lot Number</th>
+                                    <th>Company Name</th>
+                                    <th>Short Note</th>
+                                    <th>Action</th>
+                                </tr>
+                                <tr *ngFor="let vmPMAcution of lstVMPMAuction; let i=index">
+                                    <td>{{vmPMAcution.PMAuction.AuctionDate | date:'yyyy-MM-dd'}}</td>
+                                    <td>{{vmPMAcution.PMAuction.PradikharNumber}}</td>
+                                    <td>{{vmPMAcution.PMAuction.LotNumber}}</td>
+                                    <td>{{vmPMAcution.PMAuction.CompanyName}}</td>
+                                    <td>{{vmPMAcution.PMAuction.ShortNote}}</td>
+                                    <td>
+                                        <a title="Edit" (click)="editPmAuction(vmPMAcution)" class="edit"><i
+                                                class='fas fa-edit' style="font-size: 20px; margin-right:20px"></i></a>
+                                        <a title="Edit" (click)="detailPmAuction(vmPMAcution)" class="detail"><i
+                                                class='fas fa-list' style="font-size: 20px; margin-right:20px"></i></a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+    </section>
+</div>
+
+
+<div class="modal fade" id="pmAuctionDetailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-small" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">PM Recive Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+
+                        <table class="table table-hover" style="text-align:center; border: 1px solid #565656;">
+                            <tr>
+                                <th>ক্রমিক</th>
+                                <th>মোরকের নাম</th>
+                                <th>Quantity</th>
+                                <th>Short Note</th>
+                            </tr>
+                            <tr *ngFor="let pmDetail of lstPMAuctionDetail; let i=index" class="dark-row">
+                                <td>
+                                    &nbsp;{{i+1}}</td>
+                                <td>{{pmDetail.MaterialName}}</td>
+                                <td>
+                                    {{pmDetail.Quantity}}
+                                </td>
+                                <td>
+                                    {{pmDetail.ShortNote}}
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,223 @@
+<div class="header_section"></div>
+<div class="content100vh">
+    <section [hidden]="!showEntry" class="content100vh">
+        <div class="container">
+            <form #condimentDemandForm="ngForm" class="form-inline">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title pull-left"> <a class="btn btn-success" (click)="close()"
+                                        title="Back"><img style="width: 24px;" src="./../../assets/image/back.svg"></a>
+                                </h3>
+                                <h3 class="center-heading text-center">PM Recive</h3>
+                                <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label for="email">ইউনিটঃ</label>
+                                    <select (change)="getAllPMReceivable()" [(ngModel)]="objPMReceive.UnitID" required
+                                        name="fromUnitID" class="form-control">
+                                        <option value='undefined'>-Select-</option>
+                                        <option *ngFor="let vmUnit of lstVMUnit" [value]="vmUnit.Unit.UnitID">
+                                            {{vmUnit.Unit.UnitName}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pwd">Receive Date</label>
+                                    <input type="date"  [ngModel]="objPMReceive.PMReceiveDate | date:'yyyy-MM-dd'"
+                                    (ngModelChange)="objPMReceive.PMReceiveDate = $event" required
+                                        class="form-control" name="demandDate">
+                                </div>
+                                <div class="form-group">
+                                    <label for="pwd">Short Note</label>
+                                    <textarea [(ngModel)]="objPMReceive.ShortNote" name="shortNote" id="shortNote"
+                                        class="form-control" cols="30" rows="2"></textarea>
+                                </div>
+                                <button style="float:right;margin-top: 24px;" type="button" (click)="printPmRecive()" id="printMePMRecive" class="btn btn-primary">Print</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12"> 
+                        <div class="table-responsive">
+                            <table class="table table-hover" style="text-align:center; border: 1px solid #565656;">
+                                <tr>
+                                    <th>ক্রমিক</th>
+                                    <th>মোরকের নাম</th>
+                                    <th>বিতরণ </th>
+                                    <th>গ্রহণ</th>
+                                    <th>ইউনিট এর কাছে প্রাপ্য</th>
+                                    <th>গ্রহণ</th>
+                                </tr>
+                                <tr *ngFor="let pmDetail of lstVMPMReceivable; let i=index" class="dark-row">
+                                    <td> &nbsp;
+                                        <input [(ngModel)]="pmDetail.itemCheck"
+                                            name="itemCheck{{i}}" type="checkbox">
+                                        &nbsp;{{i+1}}</td>
+                                    <td>{{pmDetail.MaterialName}}</td>
+                                    <td>{{pmDetail.Distribution}}</td>
+                                    <td>{{pmDetail.Receieved}}</td>
+                                    <td>{{ pmDetail.Balance}}</td>
+                                    <td>
+                                        <input type="number" [disabled]="!pmDetail.itemCheck"  style="text-align:right" name="Quantity{{i}}"
+                                            [(ngModel)]="pmDetail.Quantity" class="form-control">
+
+                                    </td>
+                                </tr>
+                            </table> 
+                        </div>
+                        <div class="text-right">
+                                <div class="form-group">
+                                    <button [disabled]='!condimentDemandForm.valid' (click)="savePmRecive()"
+                                        class="btn btn-primary"> Save
+                                    </button>
+                                    <button (click)="close()" class="btn btn-success"> Close
+                                    </button>
+                                </div>
+                            </div>
+
+
+                            <div id="printPdDetails" style="display: none;">
+                                <h4 style="text-align:center">Unit PM Reports</h4>
+                                    <table class="table table-hover" style="text-align:center; border: 1px solid #565656;">
+                                            <tr>
+                                                <th>ক্রমিক</th>
+                                                <th>মোরকের নাম</th>
+                                                <th>বিতরণ </th>
+                                                <th>গ্রহণ</th>
+                                                <th>ইউনিট এর কাছে প্রাপ্য</th>
+                                             </tr>
+                                            <tr *ngFor="let pmDetail of lstVMPMReceivable; let i=index" class="dark-row">
+                                                <td>&nbsp;{{i+1}}</td>
+                                                <td>{{pmDetail.MaterialName}}</td>
+                                                <td>{{pmDetail.Distribution}}</td>
+                                                <td>{{pmDetail.Receieved}}</td>
+                                                <td>{{ pmDetail.Balance}}</td> 
+                                            </tr>
+                                        </table> 
+                            </div>
+
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+    </section>
+
+    <section [hidden]="showEntry">
+        <div class="container">
+            <form #searchForm="ngForm" class="form-inline">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/pmDashBoard"
+                                        title="Back"><img style="width: 24px;" src="./../../assets/image/back.svg"></a>
+                                </h3>
+                                <h3 class="center-heading text-center">PM Recive</h3>
+                                <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label for="email">ইউনিটঃ</label>
+                                    <select (change)="loadItem()" [(ngModel)]="objQueryObject.UnitID" required
+                                        name="fromUnitID" class="form-control">
+                                        <option value='undefined'>-Select-</option>
+                                        <option *ngFor="let vmUnit of lstVMUnit" [value]="vmUnit.Unit.UnitID">
+                                            {{vmUnit.Unit.UnitName}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pwd">তারিখ হইতেঃ</label>
+                                    <input type="date" required [ngModel]="objQueryObject.FromDate | date:'yyyy-MM-dd'"
+                                        (ngModelChange)="objQueryObject.FromDate = $event" class="form-control"
+                                        name="fromDate">
+                                </div>
+                                <div class="form-group">
+                                    <label for="pwd">তারিখ প্রতিঃ</label>
+                                    <input type="date" required [ngModel]="objQueryObject.ToDate | date:'yyyy-MM-dd'"
+                                        (ngModelChange)="objQueryObject.ToDate = $event" class="form-control"
+                                        name="toDate">
+                                </div>
+
+                                <div class="form-group">
+                                    <button [disabled]='!searchForm.valid' (click)="searchPMReceive()"
+                                        class="btn btn-primary"> Search
+                                    </button>
+                                    <button class="btn btn-primary" (click)="addNew()"> Add New
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table table-hover" style="text-align:center; border: 1px solid #565656;">
+                                <tr>
+                                    <th>Unit Name</th>
+                                    <th>Receive Date</th>
+                                    <th>Short Note</th>
+                                    <th>Action</th>
+                                </tr>
+                                <tr *ngFor = "let pmVmRecive of lstVMPMReceive; let i=index">
+                                    <td>{{pmVmRecive.PMReceive.unitName}}</td>
+                                    <td>{{pmVmRecive.PMReceive.PMReceiveDate | date:'yyyy-MM-dd' }}</td>
+                                    <td>{{pmVmRecive.PMReceive.ShortNote}}</td>
+                                    <td>
+                                        <a title="Edit" (click)="editPmRecive(pmVmRecive)" class="edit"><i class='fas fa-edit'
+                                                style="font-size: 20px; margin-right:20px"></i></a>
+                                        <a title="View" (click)="pmViewModal(pmVmRecive.PMReceive.PMReceiveID)" class="edit"><i class='fas fa-list'
+                                                style="font-size: 20px; margin-right:20px"></i></a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+    </section>
+</div>
+
+<div class="modal fade" id="pmReciveModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog modal-small" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel">PM Recive Details</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-hover" style="text-align:center; border: 1px solid #565656;">
+                    <tr>
+                        <th>ক্রমিক</th>
+                        <th>মোরকের নাম</th>
+                        <th>গ্রহণ</th>
+                     </tr>
+                    <tr *ngFor="let pmDetails of lstPMReceiveDetail; let i=index">
+                        <td>{{i+1}}</td>
+                        <td>{{pmDetails.PackingMaterialName}}</td>
+                        <td>{{pmDetails.NumberOfMaterial}}</td>
+                     </tr>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      <!-- <button type="button" (click)="approveUnitDemand()" class="btn btn-primary">Print</button> -->
+    </div>
+  </div>
+</div>
+</div>

@@ -1,0 +1,164 @@
+<div class="header_section">  </div>
+<div [hidden]="!showEntry" class="settings unit content100vh">
+    <div class="container">
+      
+      <div class="row">  
+          <div class="row top-bar"> 
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                  <h3 class="panel-title pull-left"> <a class="btn btn-success" (click)="close()" title="Back"><img
+                        style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+                        <h3 class="center-heading text-center">ইউনিট</h3>
+                  <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+                </div>
+                <div class="panel-body">
+                    <form #unitForm="ngForm">
+                        <div class="container">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                      <label for="">Unit Name</label>
+                                    </div> 
+                                    <div class="col-md-9 pl0">
+                                        <input [(ngModel)]="objUnit.UnitName" required name="UnitName" type="text" class="form-control" />
+                                    </div>
+                                  </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                      <label for="">Address</label>
+                                    </div> 
+                                    <div class="col-md-9 pl0">
+                                        <textarea [(ngModel)]="objUnit.Address" required name="address" class="form-control" id="" cols="30" rows="2"></textarea>
+                                    </div>
+                                  </div> 
+                                </div>
+                                <div class="col-md-6"> 
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                          <label for="">Comdt/CO/OC</label>
+                                        </div> 
+                                        <div class="col-md-9 pl0">
+                                            <input [(ngModel)]="objUnit.Responsible" name="Responsible" type="text" class="form-control" />
+                                        </div>
+                                      </div>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                          <label for="">Unit QM</label>
+                                        </div> 
+                                        <div class="col-md-9 pl0">
+                                            <input [(ngModel)]="objUnit.UnitQM" name="unitQM" type="text" class="form-control" />
+                                        </div>
+                                      </div>
+                                    </div>
+                              </div> 
+                        </div>
+                        <br>
+                        <div class="container">
+                          <div class="row"> 
+                          <div class="table-responsive"> 
+                            <table class="table tableFixHead" style="width:100%">
+                              <tr>
+                                <th>Post</th>
+                                <th>Number</th>
+                                <th>Wife</th>
+                                <th>Children (Above 12)</th>
+                                <th>Children (Below 10)</th>
+                                <th>Children (Below 3)</th>
+                                <!-- <th></th> -->
+                                <th colspan="2">Action</th>
+                              </tr>
+                              <tr *ngFor="let rDetail of lstUnitResourceDetail; let i = index;">
+                                <td>
+                                  <select name="resourceType{{i}}" [(ngModel)]="rDetail.ResourceTypeID" name="List" class="form-control">
+                
+                                    <option value='undefined'>-Select-</option>
+                                    <option *ngFor="let resource of lstResourceType" [value]="resource.id">
+                                      {{resource.name}}
+                                    </option>
+                                  </select>
+                                </td>
+                                <td> <input name="numberOfResource{{i}}" type="number" [(ngModel)]="rDetail.NumberOfResource" name="Number"
+                                    name="10" class="form-control" /></td>
+                                <td> <input name="wife{{i}}" type="number" [(ngModel)]="rDetail.Wife" name="Wife" class="form-control"></td>
+                                <td><input name="childrenAbove12{{i}}" type="number" [(ngModel)]="rDetail.ChildrenAbove12" name="ChildrenAbv12"
+                                    class="form-control" placeholder="number of Child"></td>
+                                <td><input name="childrenBellow12{{i}}" type="number" [(ngModel)]="rDetail.ChildrenBellow12" name="ChildrenBlw10"
+                                    class="form-control" placeholder="number of Child"></td>
+                                <td> <input name="childrenBellow3{{i}}" type="number" [(ngModel)]="rDetail.ChildrenBellow3" name="ChildrenBlw3"
+                                    class="form-control" placeholder="number of Child"></td>
+                                <!-- <td>
+                                  <div class="checkbox">
+                                    <label>
+                                      <input name="withFamlily{{i}}" type="checkbox" [(ngModel)]="rDetail.withFamlily" name="withFamily">With
+                                      Family
+                                    </label>
+                                  </div>
+                                </td> -->
+                                <td>
+                                  <button (click)="addResource()" class="btn"> <img src="../../../assets/image/plus.svg" alt="">
+                                  </button> 
+                                </td>
+                                <td> 
+                                    <button (click)="removeResource()" class="btn"><img src="../../../assets/image/minus.svg" alt="">
+                                    </button>
+                                  </td>
+                              </tr>
+                            </table>
+                          </div>
+                          </div>
+                        </div>
+                        <div class="container">
+                        <div class="row">
+                        <div class="col-md-12 text-right" style="padding-top:15px">
+                          <button [disabled]='!unitForm.valid' (click)="saveUnit()" class="btn btn-primary"> Save
+                          </button>
+                          <button class="btn btn-success" (click)="close()">Close</button>
+                        </div>
+                        </div>
+                        </div>
+                      </form>
+                  </div>
+                  </div>
+          </div>
+  
+          
+   
+      </div>
+    </div>
+  </div>
+   <div [hidden]="showEntry" class="container content100vh"> 
+      <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                      <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/smsDashboard" title="Back"><img style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+                      <h3 class="center-heading text-center">ইউনিট</h3>
+                      <span class="pull-right clickable"> <a class="btn btn-success add-new-btn"  (click)="addNew()">Add New</a></span>
+                </div>
+                <div class="panel-body">   
+          <div class="table-responsive">
+            <table class="table table-hover" style="border: 1px solid #565656;">
+              <tr>
+                <th>Unit Name</th>
+                <th>Address</th>
+                <th>Responsible</th>
+                <th>Action</th>
+    
+              </tr>
+              <tr *ngFor="let vmUnit of lstVMUnit">
+                <td>{{vmUnit.Unit.UnitName}}</td>
+                <td>{{vmUnit.Unit.Address}}</td>
+                <td>{{vmUnit.Unit.Responsible}}</td>
+                <td>
+                  <a title="Edit" (click)="editUnit(vmUnit)" class="edit"><i class='fa fa-check-square' style="font-size: 20px; margin-right:20px"></i></a>
+                  <a title="Delete" (click)="deleteUnit(vmUnit)" class="delete"><i class="fa fa-trash" style="font-size: 20px"></i></a>
+                </td>
+              </tr>
+            </table>
+          </div>
+          </div>
+          </div>
+        </div>
+      </div>
+ 

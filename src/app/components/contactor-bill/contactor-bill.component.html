@@ -1,0 +1,159 @@
+<div class="content100vh">
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/adminReports" title="Back"><img
+                  style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+            <h3 class="center-heading text-center">Contractor Bill Reports</h3>
+
+          </div>
+          <div class="panel-body contactorBill">
+            <form #searchForm="ngForm">
+              <div class="row">
+                <div class="form-group">
+                  <label class="col-md-1 text-right" for="pwd">Contractor Name</label>
+                  <div class="col-md-3">
+                    <select [(ngModel)]="objQueryObject.ContractorID" required name="contractorID" class="form-control">
+                      <option value='undefined'>-Select-</option>
+                      <option *ngFor="let vmContractor of lstVMContractor" [value]="vmContractor.Contactor.ContactorID">
+                        {{vmContractor.Contactor.ContractorName}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-1 text-right" for="pwd">Item Type</label>
+                  <div class="col-md-3">
+                    <select [(ngModel)]="objQueryObject.ItemTypeID" (change)="getAllProduct()" required name="ItemType"
+                      class="form-control">
+                      <option value='undefined'>-Select-</option>
+                      <option *ngFor="let itemType of lstItemType" [value]="itemType.ItemTypeID">
+                        {{itemType.TypeName}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-1 text-right" for="pwd">Item Name</label>
+                  <div class="col-md-3">
+                    <select [(ngModel)]="objQueryObject.ItemID" required name="itemID" class="form-control">
+                      <option value='undefined'>-Select-</option>
+                      <option *ngFor="let item of lstAllItemByType" [value]="item.ItemID">
+                        {{item.ItemName}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group">
+                  <label class="col-md-1 text-right" for="pwd">হইতেঃ</label>
+                  <div class="col-md-3">
+                    <input type="date" required [ngModel]="objQueryObject.FromDate | date:'yyyy-MM-dd'"
+                      (ngModelChange)="objQueryObject.FromDate = $event" class="form-control" name="fromDate">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-1 text-right" for="pwd">প্রতিঃ</label>
+                  <div class="col-md-3">
+                    <input type="date" required [ngModel]="objQueryObject.ToDate | date:'yyyy-MM-dd'"
+                      (ngModelChange)="objQueryObject.ToDate = $event" class="form-control" name="toDate">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-4" style="margin-top: 7px;">
+                    <button [disabled]='!searchForm.valid' (click)="getContractorBill()"
+                      class="btn btn-success search-btn" type="submit">Serach</button>
+                  </div>
+                </div>
+              </div>
+
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="modal fade" id="contractorBillModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <!-- <h5 class="modal-title" id="exampleModalLabel">Unit Demand Approval</h5> -->
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="printConductorBill">
+        <div style="text-decoration: underline">
+          <p><b>{{objContractor.ContractorName}} </b></p>
+        </div>
+
+        <p style="font-size:13px;">ব্যাংকার : সোনালী ব্যাংক লিঃ , শহীদ সালাউদ্দিন সেনানিবাস শাখা ,ঘাটাইল ,টাঙ্গাইল ,চলতি
+          হিসাব নং -৩৩০০১৯৭৬ এর অনুকূ-ল প্রেরণ করার জন্য অনুরোধ করা হ-লা ।</p>
+        <table class="table movie-table">
+          <thead>
+            <tr class="movie-table-head">
+              <th style="font-size:13px;border: 1px solid #ddd">সমর্থিত রশিদ সংখ্যা</th>
+              <th style="font-size:13px;border: 1px solid #ddd">ইউনিট এর নাম</th>
+              <th style="font-size:13px;border: 1px solid #ddd">সরবারহকৃত দ্রব্যের বর্ণনা</th>
+              <th style="font-size:13px;border: 1px solid #ddd">গ্রহণকৃত পরিমান অথবা সংখ্যা (সংখ্যায় এবং কোথায় দেখতে
+                হবে )</th>
+              <th style="font-size:13px;border: 1px solid #ddd">মূল্য/ হার</th>
+              <th style="font-size:13px;text-align:right;border: 1px solid #ddd">মোট মূল্য</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr *ngFor="let objButcherDetail of lstVMContractorBill; let i=index" class="dark-row">
+
+              <td style="font-size:13px;border: 1px solid #ddd">
+
+
+                বিএএফএস-১৫২০ বিডি নং  
+
+                <input class="form-control" type="text"/>
+
+              </td>
+              <td style="font-size:13px;border: 1px solid #ddd">SSD Ghatail
+              </td>
+              <td style="font-size:13px;border: 1px solid #ddd">
+                {{objButcherDetail.ItemName}}
+              </td>
+              <td style="font-size:13px;border: 1px solid #ddd">
+                {{objButcherDetail.Quantity | number:'2.2'}}
+              </td>
+              <td style="font-size:13px;border: 1px solid #ddd">
+                {{ objButcherDetail.Price | number:'2.2'}}</td>
+              <td style="font-size:13px;border: 1px solid #ddd;text-align:right;">
+                {{objButcherDetail.Total | number:'2.2'}}
+              </td>
+            </tr>
+
+            <tr>
+              <td colspan="6" style="font-size:13px;text-align:right; font-weight:bold;border: 1px solid #ddd;">সর্বমোট
+                প্রাপ্য টাকের পরিমান
+                সমর্থিক সংখ্যা : {{totalValue | number:'2.2'}}</td>
+            </tr>
+          </tbody>
+
+        </table>
+        <p style="font-size:13px;text-align: center">প্রত্যয়ন করা যাচ্ছে যে , এই বিলে দেখানো মালামালের সংখ্যা পরিমানের
+          সহিত ইউনিট এর রক্ষিত মালামাল লেজার / রেকর্ডের সহিত হুবহু মিল রয়েছে</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" >Save</button>
+        <button type="button" class="btn btn-primary printMe">Print</button>
+      </div>
+    </div>
+  </div>
+</div>

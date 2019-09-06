@@ -1,0 +1,55 @@
+ <div class="limiter">
+  <div class="container-login100">
+    <div class="wrap-login100">
+      <div class="login100-form-title" style="background-image: url(../../assets/image/bg-01.jpg);">
+        <span class="login100-form-title-1">
+            <img style="position: absolute;width: 40px;top: 4px; right: 0; left: 0; text-align: center;margin: 0 auto" src="../../assets/image/login.svg" alt=""> <br>
+         Transport Management System Login
+        </span>
+        <!-- <div class="panel-title"> <img width="150px"src="./assets/image/QS-Logo.png"></div> -->
+      </div>
+
+      <form #loginForm="ngForm" class="login100-form validate-form">
+        <div class="wrap-input100 validate-input m-b-26" data-validate="Username is required">
+          <span class="label-input100">Username</span>
+          <input name="email" [(ngModel)]="objUser.UserID" required class="input100" type="text" name="username" placeholder="Enter username">
+          <span class="focus-input100"></span>
+        </div>
+
+        <div class="wrap-input100 validate-input m-b-18" data-validate = "Password is required">
+          <span class="label-input100">Password</span>
+          <input name="password" [(ngModel)]="objUser.Password" required class="input100" type="password" name="pass" placeholder="Enter password">
+          <span class="focus-input100"></span>
+        </div>
+
+        <div class="flex-sb-m w-full p-b-30">
+          <div class="contact100-form-checkbox">
+            <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
+            <label class="label-checkbox100" for="ckb1">
+              Remember me
+            </label>
+          </div>
+
+          <div>
+            <a routerLink="/forgetPassword"  class="txt1">
+              Forgot Password?
+            </a>
+          </div>
+        </div>
+
+        <div class="container-login100-form-btn">
+           <!-- <div class="homePage">
+                <a   [routerLink]="['/home']"> <img width="42px" src="../../../assets/img/home.png" alt=""> </a>
+           </div> -->
+          <button [disabled]="!loginForm.valid" id="btnLogin" (click)="onSubmit(loginForm)" type="submit" class="login100-form-btn">
+            Login
+          </button> 
+          <div class="register">
+            <a class="login100-form-btn" [routerLink]="['/user']">Registration</a>
+          </div>
+        </div>
+        
+      </form>
+    </div>
+  </div>
+</div>

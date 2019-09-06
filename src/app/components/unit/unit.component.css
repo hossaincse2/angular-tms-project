@@ -1,0 +1,22 @@
+.eampty_speach{
+	height:50px;
+}
+.officer tr td{
+	padding: 8px;
+}
+.checkbox{
+	margin-top:25px;
+}
+.checkbox button{
+	margin-left:8px;
+	padding: 5px 15px;
+}
+.p0{
+	padding: 0px;
+}
+.pr0{
+	padding-right:0px; 
+}
+.actionUnit{
+	display: inline-block;
+}

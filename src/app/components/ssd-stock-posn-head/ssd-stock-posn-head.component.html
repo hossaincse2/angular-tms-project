@@ -1,0 +1,64 @@
+<div class="container content100vh">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/smsDashboard" title="Back"><img
+                  style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+            <h3 class="center-heading text-center">SSD Stock Possition Report</h3>
+  
+          </div>
+          <div class="panel-body">
+            <form #searchForm="ngForm" class="form-inline">
+  
+              <div class="form-group">
+                <label for="pwd">BSD/SSD Name</label>
+                <select class="form-control" name="toSSDID">
+                  <option value="undefined">--Select--</option>
+                    <option *ngFor="let ssd of lstSSDList" [value]="ssd.id">
+                      {{ssd.name}}
+                    </option>
+                  </select> 
+              </div>
+              <div class="form-group">
+                <label for="pwd">তারিখ হইতেঃ</label>
+                <input type="date" required [ngModel]="objQueryObject.FromDate | date:'yyyy-MM-dd'"
+                (ngModelChange)="objQueryObject.FromDate = $event" class="form-control" name="fromDate">
+              </div>
+              <div class="form-group">
+                <label for="pwd">তারিখ প্রতিঃ</label>
+                <input type="date" required [ngModel]="objQueryObject.ToDate | date:'yyyy-MM-dd'"
+                  (ngModelChange)="objQueryObject.ToDate = $event" class="form-control" name="toDate">
+              </div>
+              <div class="form-group">
+                <button [disabled]='!searchForm.valid' class="btn btn-success search-btn" (click)="getFilteredStock()"
+                  type="submit">Serach</button>
+  
+              </div>
+            </form>
+            <div class="table-responsive">
+              <table class="table table-hover" style="border: 1px solid #565656;">
+                <tr>
+                  <th>Serial No</th>
+                  <th>Ton/KG</th>
+                  <th>Item Name</th>
+                  <th>Stock Held</th>
+                  <th>ADC</th>
+                  <th>Total Number of Days</th>
+                  <th>Date of Stock Exhausted</th>
+                </tr>
+                <tr *ngFor="let stock of lstVMStock ; let i=index">
+                  <td>{{i+1}}</td>
+                  <td>{{stock.ItemName}}</td>
+                  <td>{{stock.UnitOfMeasureName}}</td>
+                  <td>{{stock.Balance}}</td>
+                  <td>{{stock.ADC}}</td>
+                  <td>{{stock.HouMuchDayWillContinue}}</td>
+                  <td>{{stock.Remarks}}</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>

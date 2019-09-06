@@ -1,0 +1,228 @@
+<div class="header_section"> </div>
+<div [hidden]="!showEntry" class="settings unit">
+  <div class="container content100vh">
+    <div class="row">
+      <form class="form-inlines" #unitForm="ngForm">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="panel panel-primary">
+                <div class="panel-heading">
+                  <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/polManagement"
+                      title="Back"><img style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+                  <h3 class="center-heading text-center">পি ও এল অ্যালটমেন্ট</h3>
+                  <span class="pull-right clickable"><i class="glyphicon glyphicon-minus"></i></span>
+                </div>
+                <div class="panel-body pol-allotment">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <div class="row">
+                          <label class="col-md-4" for="email">ইউনিটঃ</label>
+                          <div class="col-md-8">
+                            <select  [(ngModel)]="objPOLAllotment.UnitID" required name="fromUnitID"
+                              class="form-control w250">
+                              <option value=''>-Select-</option>
+                              <option *ngFor="let vmUnit of lstVMUnit" [value]="vmUnit.Unit.UnitID">
+                                {{vmUnit.Unit.UnitName}}
+                              </option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="row">
+                          <label class="col-md-4" for="email">অ্যালটমেন্ট টাইপ</label>
+                          <div class="col-md-8">
+                            <select class="form-control w250" [(ngModel)]="objPOLAllotment.AllotmentType"
+                              name="allotmentType" id="allotmentType">
+                              <option value=''>-Select-</option>
+                              <option *ngFor="let type of allotmentType" [value]="type.id">
+                                {{type.name}}
+                              </option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <div class="row">
+                          <label class="col-md-5 text-right" for="allotmentDate">তারিখ</label>
+                          <div class="col-md-7">
+                            <input type="date" name="allotmentDate"[ngModel]="objPOLAllotment.AllotmentDate| date:'yyyy-MM-dd'"
+                            (ngModelChange)="objPOLAllotment.AllotmentDate = $event" class="form-control" id="allotmentDate">
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <div class="row">
+                          <label class="col-md-5 text-right" for="demandAuthority">ডিমান্ড অথোরিটি</label>
+                          <div class="col-md-7">
+                            <input type="text" [(ngModel)]="objPOLAllotment.DemandAuthority" class="form-control"
+                              name="demandAuthority">
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <div class="row">
+                          <label class="col-md-4 text-right" for="pwd">মন্তব্যঃ</label>
+                          <div class="col-md-8">
+                            <textarea [(ngModel)]="objPOLAllotment.Remarks" name="remarks" class="form-control" id=""
+                              cols="18" rows="2"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <table class="table" style="width:100%">
+                <tr>
+                  <th>পণ্যের নাম</th>
+                  <th>একক</th>
+                  <th>মূল্য</th>
+                  <th>পরিমাণ</th>
+                  <th>মোট পরিমাণ</th>
+                  <th>মন্তব্য</th>
+                  <th colspan="2">Action</th>
+                </tr>
+                <tr *ngFor="let rDetail of lstPOLAllotmentDetail; let i = index;">
+                  <td>
+                    <select name="itemID{{i}}" [(ngModel)]="rDetail.ItemID"   class="form-control">
+                      <option value='undefined'>-Select-</option>
+                      <option *ngFor="let item of lstPOLItem" [value]="item.ItemID">
+                        {{item.ItemName}}
+                      </option>
+                    </select>
+                  </td>
+                  <td>
+                    <select name="Unit{{i}}" [(ngModel)]="rDetail.UnitOfMeasureName" class="form-control">
+                      <option value='undefined'>-Select-</option>
+                      <option *ngFor="let unit of lstUnitOfMeasure" [value]="unit.UnitOfMeasureID">
+                        {{unit.Name}}
+                      </option>
+                    </select>
+                  </td>
+                  <td>
+                    <input name="price{{i}}" type="number" (change)="calculateTotal()" [(ngModel)]="rDetail.Price" name="10" class="form-control" />
+                  </td>
+                  <td> <input name="quantity{{i}}" type="number" (change)="calculateTotal()" [(ngModel)]="rDetail.Quantity" name="Number" name="10"
+                      class="form-control" /></td>
+                  <td> <input name="totalQuantity{{i}}" type="number" [(ngModel)]="rDetail.TotalQuantity"
+                      class="form-control"></td>
+                  <td> <textarea class="form-control" [(ngModel)]="rDetail.Remarks" name="remarks{{i}}" id="" cols="20" rows="1"></textarea>
+
+                  <td>
+                    <button (click)="addItem()" class="btn"> <img src="../../../assets/image/plus.svg" alt="">
+                    </button>
+                  </td>
+                  <td>
+                    <button (click)="removeItem()" class="btn"><img src="../../../assets/image/minus.svg" alt="">
+                    </button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12 text-right" style="padding-top:15px">
+              <button [disabled]='!unitForm.valid' (click)="saveAllotment()" class="btn btn-primary"> Save
+              </button>
+              <button class="btn btn-success" (click)="close()">Close</button>
+            </div>
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<div [hidden]="showEntry" class="container">
+  <div class="row content100vh">
+    <div class="col-md-12">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title pull-left"> <a class="btn btn-success" routerLink="/smsDashboard" title="Back"><img
+                style="width: 24px;" src="./../../assets/image/back.svg"></a></h3>
+          <h3 class="center-heading text-center">পি ও এল অ্যালটমেন্ট</h3>
+          <!-- <span class="pull-right clickable"> <a class="btn btn-success add-new-btn" (click)="addNew()">Add
+              New</a></span> -->
+        </div>
+        <div class="panel-body">
+          <form action="" class="form-inline">
+            <div class="form-group">
+              <label for="email">ইউনিটঃ</label>
+              <select [(ngModel)]="objQueryObject.UnitID" required name="unitID" class="form-control w250">
+                <option value=''>-Select-</option>
+                <option *ngFor="let vmUnit of lstVMUnit" [value]="vmUnit.Unit.UnitID">
+                  {{vmUnit.Unit.UnitName}}
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+                <label for="pwd">তারিখ হইতেঃ</label>               
+                <input type="date" required 
+                [ngModel]="objQueryObject.FromDate | date:'yyyy-MM-dd'"
+                (ngModelChange)="objQueryObject.FromDate = $event" class="form-control"
+                name="fromDate">
+              </div>
+              <div class="form-group">
+                <label for="pwd">তারিখ প্রতিঃ</label>               
+                <input type="date" required
+                [ngModel]="objQueryObject.ToDate | date:'yyyy-MM-dd'"
+                (ngModelChange)="objQueryObject.ToDate = $event" class="form-control" name="toDate">
+              </div>
+            <div class="form-group">
+              <button class="btn btn-success search-btn" (click)="getFilteredPOLAllotment()" type="submit">Serach</button>
+              <button class="btn btn-success search-btn" (click)="addNew()" type="submit">Add
+                  New</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover" style="border: 1px solid #565656;">
+          <tr>
+            <th>Unit Name</th>
+            <th>Allotment Date</th>
+            <th>Allotment Type Name</th>
+            <th>Responsible</th>
+            <th>Remarks</th>
+            <th>Action</th>
+
+          </tr>
+          <tr *ngFor="let vmPOLAllotment of lstVMPOLAllotment">
+            <td>{{vmPOLAllotment.POLAllotment.UnitName}}</td>
+            <td>{{vmPOLAllotment.POLAllotment.AllotmentDate| date:'yyyy-MM-dd'}}</td>
+            <td>{{vmPOLAllotment.POLAllotment.AllotmentTypeName}}</td>
+            <td>{{vmPOLAllotment.POLAllotment.DemandAuthority}}</td>
+            <td>{{vmPOLAllotment.POLAllotment.Remarks}}</td>
+            <td>
+                <a title="Approve" [hidden]="vmPOLAllotment.POLAllotment.Status==2" (click)="apovePOLAllotment(vmPOLAllotment)" class="edit"><i class='fa fa-check-square'
+                  style="font-size: 20px; margin-right:20px"></i></a>
+              <a title="Edit" [hidden]="vmPOLAllotment.POLAllotment.Status==2" (click)="editPOLAllotment(vmPOLAllotment)" class="edit"><i class='fa fa-edit'
+                  style="font-size: 20px; margin-right:20px"></i></a>
+              <!-- <a title="Delete" (click)="deleteUnit(vmPOLAllotment)" class="delete"><i class="fa fa-trash"
+                  style="font-size: 20px"></i></a> -->
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  </div>
